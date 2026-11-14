@@ -690,6 +690,173 @@
   .reward p { font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
   .unlock-close { margin-top: 10px; }
 
+
+  /* ---------- app shell: boot splash, views, tab bar ---------- */
+  .booting .hero, .booting .hero * { animation-play-state: paused !important; }
+  .splash {
+    position: fixed; inset: 0; z-index: 30; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 30%, #12402f, var(--night-deep) 70%);
+    display: grid; place-items: center; text-align: center;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+  }
+  .splash-inner { width: min(100%, 380px); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .splash-stage { position: relative; width: 120px; height: 150px; }
+  .splash-ball { position: absolute; left: 28px; bottom: 18px; width: 64px; height: 64px; animation: s-drop 1.5s cubic-bezier(.3, 0, .7, 1) both; filter: drop-shadow(0 0 18px rgba(220, 238, 78, .45)); }
+  .splash-ball svg { width: 100%; height: 100%; display: block; animation: s-spin 1.5s linear both; }
+  @keyframes s-drop {
+    0% { transform: translateY(-62vh); } 38% { transform: translateY(0) scale(1.08, .86); }
+    52% { transform: translateY(-74px) scale(.96, 1.04); } 66% { transform: translateY(0) scale(1.05, .9); }
+    78% { transform: translateY(-26px); } 88% { transform: translateY(0) scale(1.02, .96); } 100% { transform: translateY(0); }
+  }
+  @keyframes s-spin { to { transform: rotate(540deg); } }
+  .splash-shadow { position: absolute; left: 30px; bottom: 10px; width: 60px; height: 10px; border-radius: 50%; background: rgba(0, 0, 0, .45); filter: blur(3px); animation: s-shadow 1.5s cubic-bezier(.3, 0, .7, 1) both; }
+  @keyframes s-shadow { 0% { transform: scale(.2); opacity: 0; } 38%, 66%, 88%, 100% { transform: scale(1); opacity: 1; } 52% { transform: scale(.5); opacity: .5; } }
+  .splash h1 { font: 900 clamp(44px, 14vw, 60px)/.94 var(--display); letter-spacing: -.025em; }
+  .splash h1 em { font-style: italic; color: var(--ball); }
+  .splash .w:nth-child(1) > * { animation-delay: .9s; }
+  .splash .w:nth-child(2) > * { animation-delay: 1s; }
+  .splash .w:nth-child(3) > * { animation-delay: 1.15s; }
+  .splash .eyebrow { animation-delay: .7s; }
+  .splash-form { width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 8px; }
+  .splash-form label { font: 700 22px/1.1 var(--display); color: var(--snow); }
+  .splash-help { font-size: 14px; color: var(--mist); }
+  .splash-hello { font: 700 24px/1.2 var(--display); color: var(--snow); }
+  .splash-hello b { color: var(--ball); font-style: italic; }
+  .splash-skip { font-size: 13px; color: var(--mist); }
+
+  .view { display: flex; flex-direction: column; gap: 30px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 104px); }
+  #view-start { padding-bottom: 0; }
+  #view-start .drift { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 100px); }
+  .vhead { position: relative; z-index: 2; padding-block: 70px 0; display: flex; flex-direction: column; gap: 8px; }
+  .vhead h1 { font: 900 clamp(40px, 12vw, 54px)/.96 var(--display); letter-spacing: -.025em; text-wrap: balance; }
+  .vhead h1 em { font-style: italic; color: var(--ball); }
+  .vlead { color: var(--mist); max-width: 36ch; }
+
+  .tabbar {
+    position: fixed; z-index: 7; left: 0; right: 0; bottom: 0;
+    padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 6px) max(10px, env(safe-area-inset-left, 0px));
+    background: rgba(4, 18, 16, .84); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line); display: flex; justify-content: center;
+    transition: transform .4s var(--out), opacity .3s;
+  }
+  .tabbar-in { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; width: 100%; max-width: 460px; }
+  .tab {
+    position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    min-height: 54px; padding: 6px 2px; border-radius: 14px; color: var(--mist); text-decoration: none;
+    font: 600 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; transition: color .3s;
+  }
+  .tab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--spring); }
+  .tab[aria-current="page"] { color: var(--ink); }
+  .tab[aria-current="page"] svg { transform: translateY(-1px) scale(1.1); }
+  .tab:active svg { transform: scale(.85); }
+  .tab-ind { position: absolute; z-index: 0; top: 2px; bottom: 2px; left: 0; width: 0; border-radius: 14px; background: var(--ball); box-shadow: 0 4px 18px rgba(220, 238, 78, .3); transition: transform .5s var(--spring), width .5s var(--spring); }
+  .tab .dot { position: absolute; top: 4px; left: calc(50% + 6px); min-width: 17px; height: 17px; padding: 0 4px; border-radius: 99px; background: var(--gold); color: var(--ink); font: 700 11px/17px var(--score); letter-spacing: 0; }
+  .tab .live-dot { position: absolute; top: 7px; left: calc(50% + 9px); width: 9px; height: 9px; border-radius: 50%; background: var(--berry-lit); box-shadow: 0 0 10px var(--berry-lit); animation: bulb .8s ease-in-out infinite alternate; }
+  html.playing .tabbar { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  html.playing .hunt-badge { opacity: 0; pointer-events: none; }
+
+  .hello {
+    display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px;
+    padding: 12px 12px 12px 12px; border-radius: 16px; border: 1px solid var(--line);
+    background: rgba(6, 26, 21, .6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; font: 700 13px/1 var(--score); color: var(--ink); text-transform: uppercase; }
+  .avatar.big { width: 46px; height: 46px; font-size: 20px; }
+  .hello-hi { font: 700 20px/1.15 var(--display); }
+  .hello-hi b { color: var(--ball); font-style: italic; }
+  .hello-sub { font-size: 14px; color: var(--mist); }
+  .navcards { display: flex; flex-direction: column; gap: 10px; }
+  .navcard {
+    display: grid; grid-template-columns: 50px minmax(0, 1fr) 18px; align-items: center; gap: 12px;
+    padding: 14px 14px 14px 12px; border-radius: 16px; text-decoration: none; color: var(--snow);
+    border: 1px solid var(--line); background: linear-gradient(135deg, rgba(17, 70, 54, .9), rgba(13, 58, 44, .75));
+    box-shadow: 0 14px 30px rgba(2, 10, 8, .35); transition: transform .2s var(--out);
+  }
+  .navcard:active { transform: scale(.98); }
+  .navcard.gold { border-style: dashed; border-color: rgba(240, 195, 90, .65); background: linear-gradient(135deg, rgba(240, 195, 90, .16), rgba(240, 195, 90, .04)); }
+  .navcard .ico { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 14px; background: rgba(2, 10, 8, .35); }
+  .navcard .ico svg { width: 30px; height: 30px; }
+  .navcard.gold .ico { background: none; }
+  .navcard.gold .ico svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; }
+  .navcard strong { display: block; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; }
+  .navcard .sub { display: block; margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--mist); }
+  .navcard .chev { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .live-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 9px; border-radius: 99px; background: rgba(255, 90, 110, .16); color: #ffc2ca; font: 700 12px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; }
+  .live-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--berry-lit); animation: bulb .8s infinite alternate; }
+
+  /* ---------- hunt page ---------- */
+  .hunt-card { display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(180deg, #11402f, #0a2a21 60%); box-shadow: 0 18px 40px rgba(2, 10, 8, .4); }
+  .hunt-rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .hunt-rule { padding: 10px 12px; border-radius: 12px; background: rgba(2, 10, 8, .35); font-size: 14px; line-height: 1.35; color: var(--mist); }
+  .hunt-rule b { display: block; font: 700 16px/1.2 var(--score); letter-spacing: .06em; text-transform: uppercase; color: var(--snow); }
+
+  /* ---------- game ---------- */
+  .card { display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(180deg, #114636, var(--board)); box-shadow: 0 18px 40px rgba(2, 10, 8, .4); }
+  .card h2 { font: 800 24px/1.1 var(--display); letter-spacing: -.01em; }
+  .card-label { font: 700 13px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+  .rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .rule { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(2, 10, 8, .4); font: 600 15px/1.2 var(--score); letter-spacing: .04em; }
+  .rule canvas { width: 30px; height: 30px; flex: none; }
+  .rule b { margin-left: auto; font-size: 18px; color: var(--ball); }
+  .rule b.neg { color: #ff8b9a; }
+  .people { display: flex; flex-wrap: wrap; gap: 6px; }
+  .person { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 4px; border-radius: 99px; background: rgba(242, 247, 243, .08); font: 500 14px/1 var(--body); }
+  .person.me { box-shadow: inset 0 0 0 1.5px var(--ball); }
+  .person small { font: 700 10px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .cta.wide { flex: 1 1 auto; }
+  .notice { font-size: 14px; line-height: 1.45; color: var(--mist); padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line); }
+  .notice b { color: var(--snow); font-weight: 600; }
+  .stage-wrap { position: relative; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 20px 44px rgba(0, 0, 0, .45); touch-action: none; -webkit-user-select: none; user-select: none; }
+  #stage { display: block; width: 100%; touch-action: none; cursor: none; }
+  .live-top { display: flex; gap: 6px; flex-wrap: wrap; min-height: 30px; }
+  .live-top .person b { font: 700 15px/1 var(--score); color: var(--ball); margin-left: 2px; }
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 8px; margin-top: 4px; }
+  .pod { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+  .pod .who { font: 600 14px/1.2 var(--body); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pod .bar { width: 100%; border-radius: 12px 12px 4px 4px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 8px; color: var(--ink); }
+  .pod .bar b { font: 900 26px/1 var(--display); }
+  .pod .bar span { font: 700 13px/1 var(--score); letter-spacing: .08em; }
+  .pod.p1 .bar { height: 104px; background: linear-gradient(#fff1c4, #e2b04d); }
+  .pod.p2 .bar { height: 78px; background: linear-gradient(#ffffff, #b9c6cb); }
+  .pod.p3 .bar { height: 58px; background: linear-gradient(#f5c9a4, #b97a4b); }
+  .pod.empty .bar { background: rgba(242, 247, 243, .08); color: var(--mist); }
+  .rank { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+  .rank li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(2, 10, 8, .35); }
+  .rank li.me { box-shadow: inset 0 0 0 1.5px var(--ball); }
+  .rank .pos { width: 22px; font: 700 15px/1 var(--score); color: var(--mist); }
+  .rank .pts { margin-left: auto; font: 700 19px/1 var(--score); color: var(--ball); font-variant-numeric: tabular-nums; }
+
+  /* ---------- Mikołaj's panel ---------- */
+  .plist { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+  .plist li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 12px; background: rgba(2, 10, 8, .35); }
+  .plist .nm { font: 600 15px/1.2 var(--body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .plist .meta { display: block; font-size: 12px; color: var(--mist); margin-top: 2px; }
+  .plist .val { font: 700 16px/1 var(--score); color: var(--gold); text-align: right; }
+  .plist .online { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5be38f; margin-right: 5px; box-shadow: 0 0 8px #5be38f; }
+  .plist li.bad { box-shadow: inset 3px 0 0 var(--berry-lit); }
+  .plist .val.bad { color: #ff8b9a; font-size: 20px; }
+  .guesses { display: block; font: 500 12px/1.4 ui-monospace, Menlo, monospace; color: #ffc2ca; margin-top: 3px; overflow-wrap: anywhere; }
+
+  /* ---------- modal + the elf ---------- */
+  .modal-back { position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); background: rgba(2, 9, 7, .72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .modal { width: min(100%, 360px); display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(180deg, #11402f, #0a2a21); box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
+  .modal h2 { font: 800 26px/1.1 var(--display); }
+  .modal p { font-size: 15px; color: var(--mist); }
+  .modal .field { letter-spacing: .2em; font: 700 22px/1 var(--score); text-align: center; }
+  .elf-back { position: fixed; inset: 0; z-index: 12; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); background: radial-gradient(circle at 50% 40%, rgba(31, 122, 82, .45), rgba(2, 9, 7, .92) 72%); }
+  .elf-card { width: min(100%, 360px); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .elf { width: 230px; height: auto; transform-origin: 50% 92%; animation: cackle .28s ease-in-out infinite alternate; }
+  @keyframes cackle { from { transform: rotate(-5deg) translateY(0); } to { transform: rotate(5deg) translateY(-7px); } }
+  .elf-pom { transform-box: fill-box; transform-origin: 10% 10%; animation: pom .5s ease-in-out infinite alternate; }
+  @keyframes pom { from { transform: rotate(-14deg); } to { transform: rotate(16deg); } }
+  .elf-bubble { font: 900 38px/1 var(--display); color: var(--ball); transform: rotate(-4deg); text-shadow: 0 4px 0 #0a231e; }
+  .elf-bubble span { display: inline-block; animation: hop .42s ease-in-out infinite alternate; }
+  .elf-bubble span:nth-child(2) { animation-delay: .14s; } .elf-bubble span:nth-child(3) { animation-delay: .28s; }
+  @keyframes hop { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-9px) rotate(4deg); } }
+  .elf-text { font-size: 16px; line-height: 1.45; color: var(--snow); max-width: 30ch; }
+  .elf-count { font: 700 14px/1 var(--score); letter-spacing: .14em; text-transform: uppercase; color: #ff8b9a; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .par-moon, .par-far, .par-team { transform: none; }
@@ -726,38 +893,70 @@
 <div id="fx" aria-hidden="true"></div>
 <button type="button" class="hunt-badge" id="hunt-badge" aria-label="Złote piłki: postęp i kupon"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg><span id="hunt-count">0</span><span class="of">/7</span></button>
 <div class="toast" id="toast" role="status" hidden></div>
-<div class="sheet-back" id="sheet-back" hidden></div>
-<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
-  <div class="sheet-grip" aria-hidden="true"></div>
-  <div class="sheet-head">
-    <h2 id="sheet-title">Złote piłki Mikołaja</h2>
-    <button type="button" class="x" id="sheet-close" aria-label="Zamknij"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13"/></svg></button>
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="splash-ball"><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div>
+    <p class="eyebrow">List Huberta do Mikołaja</p>
+    <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
+    <form class="splash-form" id="splash-form" hidden>
+      <label for="visitor-name">Jak masz na imię?</label>
+      <p class="splash-help">Wpisz imię albo pseudonim. Dzięki temu Mikołaj będzie wiedział, kto zbiera złote piłki i kto wygrywa w grze.</p>
+      <div class="field-row"><input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" required><button class="cta" type="submit">Wchodzę</button></div>
+    </form>
+    <p class="splash-hello" id="splash-hello" hidden></p>
+    <p class="splash-skip" id="splash-skip" hidden>Stuknij, żeby wejść</p>
   </div>
-  <div class="slots" id="slots" aria-hidden="true"></div>
-  <p class="sheet-status" id="sheet-status"></p>
-  <div class="hint-row" id="hint-row">
-    <button type="button" class="tool" id="hint-btn">Podpowiedź</button>
-    <p class="hint-note" id="hint-note"></p>
-    <p class="hint-text" id="hint-text" hidden></p>
+</div>
+<div class="modal-back" id="host-modal" hidden>
+  <form class="modal" id="host-form">
+    <h2>Kod Mikołaja</h2>
+    <p>Rundę dla wszystkich może rozpocząć tylko Mikołaj. Wpisz tajny kod.</p>
+    <input class="field" id="host-code" name="host-code" type="password" autocomplete="off" maxlength="40" required>
+    <div class="actions"><button type="button" class="tool quiet" id="host-cancel">Anuluj</button><button class="cta wide" type="submit">Sprawdź</button></div>
+    <p class="pin-err" id="host-err" role="alert"></p>
+  </form>
+</div>
+<div class="elf-back" id="elf" hidden>
+  <div class="elf-card" role="alertdialog" aria-labelledby="elf-bubble" aria-describedby="elf-text">
+    <svg class="elf" viewBox="0 0 220 236" aria-hidden="true">
+      <path d="M50 116C22 98 10 74 12 56 30 72 46 86 62 100Z" fill="#f3c9a6"/><path d="M48 108C32 96 24 84 22 72 34 84 44 92 56 100Z" fill="#e8a789"/>
+      <path d="M170 116C198 98 210 74 208 56 190 72 174 86 158 100Z" fill="#f3c9a6"/><path d="M172 108C188 96 196 84 198 72 186 84 176 92 164 100Z" fill="#e8a789"/>
+      <path d="M58 180Q110 210 162 180L176 236H44Z" fill="#c62a41"/>
+      <path d="M54 180 66 196 78 184 90 200 110 186 130 200 142 184 154 196 166 180Q110 204 54 180Z" fill="#1f7a52"/>
+      <circle cx="78" cy="190" r="4" fill="#f0c35a"/><circle cx="110" cy="196" r="4" fill="#f0c35a"/><circle cx="142" cy="190" r="4" fill="#f0c35a"/>
+      <ellipse cx="110" cy="128" rx="56" ry="58" fill="#f3c9a6"/>
+      <path d="M52 108C54 60 92 28 136 26 166 25 188 42 200 70 188 62 174 62 166 68 162 56 148 50 134 54 152 72 164 90 168 108Z" fill="#1f7a52"/>
+      <path d="M96 40C110 32 124 28 136 28 130 40 120 50 104 56Z" fill="#2c9466" opacity=".7"/>
+      <path d="M46 110Q110 88 174 110L174 122Q110 100 46 122Z" fill="#f2f7f3"/>
+      <g class="elf-pom"><circle cx="202" cy="74" r="12" fill="#f2f7f3"/><circle cx="198" cy="70" r="4" fill="#fff"/></g>
+      <path d="M70 108 96 117M150 108 124 117" stroke="#5a3a2a" stroke-width="6" stroke-linecap="round"/>
+      <path d="M74 128Q85 116 96 128M124 128Q135 116 146 128" fill="none" stroke="#2a1d17" stroke-width="4.5" stroke-linecap="round"/>
+      <ellipse cx="72" cy="148" rx="11" ry="7.5" fill="#ff7c7c" opacity=".55"/><ellipse cx="148" cy="148" rx="11" ry="7.5" fill="#ff7c7c" opacity=".55"/>
+      <ellipse cx="110" cy="141" rx="8" ry="7" fill="#e8a07e"/>
+      <path d="M76 154Q110 198 144 154Q110 166 76 154Z" fill="#6b1a24"/>
+      <path d="M80 156Q110 166 140 156L138 163Q110 172 82 163Z" fill="#fff"/>
+      <ellipse cx="110" cy="178" rx="13" ry="6" fill="#e05a6a"/>
+      <g fill="#c98666"><circle cx="64" cy="138" r="1.6"/><circle cx="70" cy="134" r="1.4"/><circle cx="152" cy="136" r="1.6"/><circle cx="158" cy="141" r="1.4"/></g>
+    </svg>
+    <p class="elf-bubble" id="elf-bubble"><span>Hi</span> <span>hi</span> <span>hi!</span></p>
+    <p class="elf-count" id="elf-count"></p>
+    <p class="elf-text" id="elf-text"></p>
+    <button type="button" class="cta" id="elf-close">No dobra…</button>
   </div>
-  <div id="coupon-area" style="display:flex;flex-direction:column;gap:12px"></div>
-  <div class="sheet-links">
-    <button type="button" class="tool quiet" id="rename" hidden>Zmień imię</button>
-    <button type="button" class="tool quiet" id="hunt-reset">Zacznij zabawę od nowa</button>
-  </div>
-</section>
+</div>
 <section class="unlock" id="unlock" aria-labelledby="unlock-title" hidden>
   <div class="unlock-inner gutter">
     <p class="eyebrow" id="unlock-eyebrow">Kupon od Mikołaja</p>
     <h2 id="unlock-title"></h2>
     <p class="unlock-sub" id="unlock-sub"></p>
     <div class="unlock-body" id="unlock-body"></div>
-    <button type="button" class="tool quiet unlock-close" id="unlock-close">Wróć do listy prezentów</button>
+    <button type="button" class="tool quiet unlock-close" id="unlock-close">Wróć na stronę</button>
   </div>
 </section>
 
+<script>if (location.hash.indexOf('#kupon-') !== 0) document.documentElement.classList.add('booting');</script>
 <main class="page">
-
+  <section class="view" id="view-start" data-view="start">
   <header class="hero">
     <div class="scene-wrap">
       <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -1053,12 +1252,11 @@
   </header>
 
   <div class="layer gutter">
-    <button type="button" class="hunt-intro" id="hunt-intro">
-      <span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
-      <span><strong>Mikołaj zgubił 7 złotych piłek</strong>
-      <span class="sub" id="hunt-sub">Są ukryte na tej stronie. Znajdź 3, a dostaniesz srebrny kupon na prezent. Znajdź wszystkie, a złoty.</span></span>
-      <svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg>
-    </button>
+    <div class="hello" data-rv>
+      <span class="avatar big" id="hello-av" aria-hidden="true"></span>
+      <div><p class="hello-hi">Cześć, <b id="hello-name"></b>!</p><p class="hello-sub" id="hello-sub">Miło Cię widzieć na Biegunie Północnym.</p></div>
+      <button type="button" class="tool quiet" id="change-name">Zmień</button>
+    </div>
   </div>
 
   <div class="layer gutter">
@@ -1078,20 +1276,14 @@
     </section>
   </div>
 
-  <section class="wishes layer gutter" aria-labelledby="wishes-title">
-    <div class="wishes-head" data-rv>
-      <h2 id="wishes-title">Lista życzeń</h2>
-      <p class="count" id="count" aria-live="polite"></p>
-    </div>
-    <p class="wishes-note" data-rv>Każdy prezent jest zapakowany. Stuknij w paczkę, a piłka tenisowa ją rozpakuje.</p>
-    <div class="seg" id="seg" data-rv role="group" aria-label="Filtruj prezenty"></div>
-    <div class="tools" data-rv>
-      <button type="button" class="tool" id="open-all"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>Odpakuj wszystkie</button>
-      <button type="button" class="tool quiet" id="rewrap" hidden>Zapakuj od nowa</button>
-    </div>
-    <ul class="tags" id="gift-list"></ul>
-    <p class="wishes-foot">Na razie to przykładowe pomysły z orientacyjnymi cenami. Właściwa lista z linkami do sklepów pojawi się tu wkrótce.</p>
-  </section>
+  <nav class="navcards layer gutter" aria-label="Co dalej">
+    <a class="navcard" href="#prezenty" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg></span>
+      <span><strong>Lista życzeń Huberta</strong><span class="sub" id="card-gifts-sub">12 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+    <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
+      <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Znajdź 3, a dostaniesz kupon na prezent.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+    <a class="navcard" href="#gra" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
+      <span><strong>Złap prezenty</strong><span class="sub" id="card-game-sub">Gra na żywo dla całej rodziny. Rundę rozpoczyna Mikołaj.</span><span class="live-pill" id="card-game-live" hidden><i></i>Runda trwa</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+  </nav>
 
   <footer class="layer">
     <div class="outro gutter" data-rv>
@@ -1192,9 +1384,130 @@
     </svg>
       <button type="button" class="gold-spot" data-g="g6" style="left:29.19%;top:47.5%" aria-label="Złota bombka na choince"></button>
     </div>
-    <p class="drift gutter">Do zobaczenia przy wigilijnym st<span class="g-letter" data-gold="g7"><button type="button" class="gold-letter" data-g="g7" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span></span>le!</p>
+    <p class="drift gutter">Do zobaczenia przy wigilijnym stole!</p>
   </footer>
+  </section>
+
+  <section class="view" id="view-prezenty" data-view="prezenty" hidden>
+    <header class="vhead gutter">
+      <p class="eyebrow">Prezenty</p>
+      <h1>Lista życzeń <em>Huberta</em></h1>
+      <p class="vlead">Każdy prezent jest zapakowany. Stuknij w paczkę, a piłka tenisowa ją rozpakuje.</p>
+    </header>
+  <section class="wishes layer gutter" aria-labelledby="wishes-title">
+    <div class="wishes-head" data-rv>
+      <h2 id="wishes-title" class="sr">Prezenty</h2>
+      <p class="count" id="count" aria-live="polite"></p>
+    </div>
+    <div class="seg" id="seg" data-rv role="group" aria-label="Filtruj prezenty"></div>
+    <div class="tools" data-rv>
+      <button type="button" class="tool" id="open-all"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>Odpakuj wszystkie</button>
+      <button type="button" class="tool quiet" id="rewrap" hidden>Zapakuj od nowa</button>
+    </div>
+    <ul class="tags" id="gift-list"></ul>
+    <p class="wishes-foot">Na razie to przykładowe pomysły z orientacyjnymi cenami. Właściwa lista z linkami do sklepów pojawi się tu wkrótce.</p>
+  </section>
+  </section>
+
+  <section class="view" id="view-szukanie" data-view="szukanie" hidden>
+    <header class="vhead gutter">
+      <p class="eyebrow">Szukanie</p>
+      <h1>Złote piłki <em>Mikołaja</em></h1>
+      <p class="vlead">Mikołaj zgubił 7 złotych piłek. Są ukryte na Starcie, w Prezentach i w Grze, a jedna co jakiś czas spada z nieba.</p>
+    </header>
+    <div class="layer gutter">
+      <div class="hunt-card">
+        <div class="hunt-rules">
+          <p class="hunt-rule"><b>3 piłki</b>srebrny kupon na prezent</p>
+          <p class="hunt-rule"><b>7 piłek</b>złoty kupon na prezent</p>
+        </div>
+        <div class="slots" id="slots" aria-hidden="true"></div>
+        <p class="sheet-status" id="sheet-status"></p>
+        <div class="hint-row" id="hint-row">
+          <button type="button" class="tool" id="hint-btn">Podpowiedź</button>
+          <p class="hint-note" id="hint-note"></p>
+          <p class="hint-text" id="hint-text" hidden></p>
+        </div>
+        <div id="coupon-area" style="display:flex;flex-direction:column;gap:12px"></div>
+        <div class="sheet-links">
+          <button type="button" class="tool quiet" id="hunt-reset">Zacznij zabawę od nowa</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-gra" data-view="gra" hidden>
+    <header class="vhead gutter">
+      <p class="eyebrow">Gra na żywo</p>
+      <h1>Złap <em>prezenty!</em></h1>
+      <p class="vlead">Kt<span class="g-letter" data-gold="g7"><button type="button" class="gold-letter" data-g="g7" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span></span> złapie najwięcej w 30 sekund, wygrywa. Wszyscy grają w tej samej chwili, a ranking widać na żywo.</p>
+    </header>
+    <div class="layer gutter" id="game-lobby">
+      <div class="card">
+        <p class="card-label">Punkty</p>
+        <div class="rules">
+          <p class="rule"><canvas data-icon="gift" width="60" height="60"></canvas>Prezent<b>+1</b></p>
+          <p class="rule"><canvas data-icon="ball" width="60" height="60"></canvas>Piłka<b>+2</b></p>
+          <p class="rule"><canvas data-icon="gold" width="60" height="60"></canvas>Złota piłka<b>+5</b></p>
+          <p class="rule"><canvas data-icon="coal" width="60" height="60"></canvas>Węgielek<b class="neg">−3</b></p>
+        </div>
+        <p class="card-label" id="people-label">Na stronie teraz</p>
+        <div class="people" id="game-people"></div>
+        <p class="notice" id="game-status">Czekamy, aż Mikołaj rozpocznie rundę.</p>
+        <div class="actions" id="host-actions" hidden>
+          <button type="button" class="cta wide" id="start-round">Rozpocznij rundę dla wszystkich</button>
+        </div>
+        <div class="actions">
+          <button type="button" class="tool" id="practice">Trening</button>
+          <button type="button" class="tool quiet" id="i-am-host">Jestem Mikołajem</button>
+        </div>
+      </div>
+    </div>
+    <div class="layer gutter" id="game-play" hidden>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="live-top" id="live-top" aria-live="polite"></div>
+        <div class="stage-wrap"><canvas id="stage" aria-label="Plansza gry. Przesuwaj palcem rakietę i łap spadające prezenty."></canvas></div>
+      </div>
+    </div>
+    <div class="layer gutter" id="game-results" hidden>
+      <div class="card">
+        <p class="card-label" id="res-label">Wyniki rundy</p>
+        <h2 id="res-title">Podium</h2>
+        <div class="podium" id="podium"></div>
+        <ol class="rank" id="rank"></ol>
+        <div class="actions">
+          <button type="button" class="cta wide" id="res-again" hidden>Nowa runda</button>
+          <button type="button" class="tool" id="res-back">Wróć do poczekalni</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-panel" data-view="panel" hidden>
+    <header class="vhead gutter">
+      <p class="eyebrow">Tylko dla Mikołaja</p>
+      <h1>Panel <em>Mikołaja</em></h1>
+      <p class="vlead">Kto jest na stronie, kto ile znalazł i kto próbował złamać Twój kod.</p>
+    </header>
+    <div class="layer gutter"><div class="card"><p class="card-label">Teraz na stronie</p><div class="people" id="panel-online"></div></div></div>
+    <div class="layer gutter"><div class="card"><p class="card-label">Próby złamania kodu</p><ul class="plist" id="panel-attempts"></ul></div></div>
+    <div class="layer gutter"><div class="card"><p class="card-label">Goście i złote piłki</p><ul class="plist" id="panel-players"></ul></div></div>
+  </section>
+
+
+
+
 </main>
+<nav class="tabbar" id="tabbar" aria-label="Zakładki">
+  <div class="tabbar-in" id="tabbar-in">
+    <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
+    <a class="tab" href="#start" data-tab="start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg>Start</a>
+    <a class="tab" href="#prezenty" data-tab="prezenty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg>Prezenty</a>
+    <a class="tab" href="#szukanie" data-tab="szukanie"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M5 6.5c4 3 4 8 0 11M19 6.5c-4 3-4 8 0 11"/></svg>Szukanie<b class="dot" id="tab-hunt" hidden></b></a>
+    <a class="tab" href="#gra" data-tab="gra"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg>Gra<i class="live-dot" id="tab-live" hidden></i></a>
+    <a class="tab" href="#panel" data-tab="panel" id="tab-panel" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg>Panel</a>
+  </div>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
@@ -1515,11 +1828,11 @@
   };
   /* hints exist for five balls only; the last two (the "Na żywo" dot and the letter in the closing line) have none */
   var HINTS = {
-    g1: 'Przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.',
+    g1: 'Na Starcie przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.',
     g2: 'Na końcu kortu, przy lewym rogu, coś wystaje ze śniegu.',
     g3: 'Co jakiś czas z nieba spada złota piłka. Złap ją palcem.',
-    g5: 'Jeden prezent ma w środku niespodziankę. Rozpakuj paczkę numer 07.',
-    g6: 'Na choince na dole strony jedna bombka ma inny kolor niż reszta.'
+    g5: 'W Prezentach jedna paczka ma w środku niespodziankę. Rozpakuj paczkę numer 07.',
+    g6: 'Na choince na dole zakładki Start jedna bombka ma inny kolor niż reszta.'
   };
   var HINT_ORDER = ['g1', 'g2', 'g3', 'g5', 'g6'];
   var ORDER = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7'];
@@ -1587,6 +1900,8 @@
     });
     if (next) next.classList.add('next');
     count.textContent = 'Odpakowane ' + n + ' z ' + GIFTS.length;
+    var cgs = byId('card-gifts-sub');
+    if (cgs) cgs.textContent = n === GIFTS.length ? 'Wszystkie prezenty odpakowane. Brawo!' : (n ? 'Odpakowane ' + n + ' z ' + GIFTS.length + '. Reszta czeka.' : GIFTS.length + ' zapakowanych prezentów czeka na rozpakowanie.');
     rewrapBtn.hidden = n === 0;
     openAllBtn.hidden = n === GIFTS.length;
   }
@@ -1956,7 +2271,7 @@
 
   /* ---------- Golden ball hunt: finding, counter, sheet, coupon ---------- */
   var badge = byId('hunt-badge'), countEl = byId('hunt-count'), live = byId('live');
-  var sheet = byId('sheet'), back = byId('sheet-back'), toastEl = byId('toast');
+  var toastEl = byId('toast'), gameActive = false;
   var lastFocus = null, toastTimer = 0;
 
   function markTaken(id) {
@@ -1977,11 +2292,13 @@
     countEl.textContent = n;
     badge.classList.toggle('has-coupon', n >= SILVER_AT);
     badge.setAttribute('aria-label', 'Złote piłki: ' + n + ' z ' + HUNT_TOTAL + '. Pokaż postęp i kupon.');
-    var sub = byId('hunt-sub');
-    if (n === 0) sub.textContent = 'Są ukryte na tej stronie. Znajdź 3, a dostaniesz srebrny kupon na prezent. Znajdź wszystkie, a złoty.';
+    var sub = byId('card-hunt-sub');
+    if (n === 0) sub.textContent = 'Są ukryte na wszystkich zakładkach. Znajdź 3, a dostaniesz kupon na prezent.';
     else if (n < SILVER_AT) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + '. Do srebrnego kuponu brakuje ' + (SILVER_AT - n) + '.';
     else if (n < HUNT_TOTAL) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + ' i srebrny kupon. Znajdź resztę, a zmieni się na złoty.';
-    else sub.textContent = 'Wszystkie znalezione! Stuknij, żeby zobaczyć złoty kupon.';
+    else sub.textContent = 'Wszystkie znalezione! Zobacz swój złoty kupon.';
+    var td = byId('tab-hunt');
+    td.textContent = n; td.hidden = n === 0;
     if (bump && !still) badge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.28)' }, { transform: 'scale(1)' }], { duration: 520, easing: SPRING });
   }
   updateBadge(false);
@@ -2013,6 +2330,7 @@
     found.push(id);
     store('mikolaj-zlote', found);
     markTaken(id);
+    syncFound();
     try { if (navigator.vibrate) navigator.vibrate([10, 40, 18]); } catch (e) {}
     if (!still) shards(x, y, ['#f0c35a', '#fff4c7', '#ffffff']);
     flyToBadge(x, y, function () {
@@ -2057,7 +2375,7 @@
   function scheduleDrop(ms) { if (found.indexOf('g3') === -1) setTimeout(dropGold, ms); }
   function dropGold() {
     if (found.indexOf('g3') !== -1 || fx.querySelector('.fall-gold')) return;
-    if (document.hidden || !sheet.hidden || !byId('unlock').hidden) { scheduleDrop(5000); return; }
+    if (document.hidden || gameActive || !byId('unlock').hidden || !byId('splash').hidden) { scheduleDrop(5000); return; }
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'fall-gold'; b.setAttribute('data-g', 'g3');
     b.setAttribute('aria-label', 'Złota piłka spada z nieba. Złap ją!');
@@ -2195,27 +2513,14 @@
 
     var area = byId('coupon-area');
     area.innerHTML = '';
-    byId('rename').hidden = !(n >= SILVER_AT && holder);
     if (n < SILVER_AT) {
       area.innerHTML = '<div class="locked-coupon"><strong>Kupon zablokowany</strong>Znajdź jeszcze ' + (SILVER_AT - n) + ', a odblokujesz srebrny kupon na prezent od Mikołaja.</div>';
       return;
     }
-    if (!holder) {
-      area.innerHTML = '<form class="name-form" id="name-form"><p>Brawo! Wpisz swoje imię, żeby Mikołaj wiedział, dla kogo jest kupon.</p>' +
-        '<label for="hunt-name">Twoje imię</label><div class="field-row"><input class="field" id="hunt-name" name="hunt-name" maxlength="24" autocomplete="given-name" required>' +
-        '<button class="cta" type="submit">Odbierz</button></div></form>';
-      byId('name-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        var v = byId('hunt-name').value.replace(/\s+/g, ' ').trim().slice(0, 24);
-        if (!v) return;
-        holder = { name: v, date: new Date().toISOString() };
-        store('mikolaj-kupon', holder);
-        renderSheet();
-        var cp = area.querySelector('.coupon');
-        if (cp && !still) cp.animate([{ opacity: 0, transform: 'translateY(20px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: SPRING });
-      });
-      return;
-    }
+    var hname = visitorName() || (holder && holder.name) || 'Gość';
+    if (!holder) holder = { name: hname, date: new Date().toISOString() };
+    if (holder.name !== hname) holder.name = hname;
+    store('mikolaj-kupon', holder);
     var tier = n >= HUNT_TOTAL ? 'z' : 's', cp = couponFor(holder.name, tier);
     var when = new Date(holder.date);
     area.innerHTML = '<p class="shot-tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>Zrób zrzut ekranu tego kuponu</p>' +
@@ -2232,34 +2537,9 @@
     drawQR(byId('coupon-qr'), cp.url);
   }
 
-  function openSheet() {
-    if (!sheet.hidden) { renderSheet(); return; }
-    renderSheet();
-    lastFocus = document.activeElement;
-    sheet.hidden = false; back.hidden = false;
-    document.documentElement.style.overflow = 'hidden';
-    if (!still) {
-      sheet.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: 520, easing: OUT });
-      back.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320 });
-    }
-    byId('sheet-close').focus({ preventScroll: true });
-  }
-  function closeSheet() {
-    if (sheet.hidden) return;
-    function done() {
-      sheet.hidden = true; back.hidden = true;
-      document.documentElement.style.overflow = '';
-      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
-    }
-    if (still) { done(); return; }
-    sheet.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(100%)' }], { duration: 300, easing: 'cubic-bezier(.5,0,.75,0)' }).onfinish = done;
-    back.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).onfinish = function () { this.cancel(); };
-  }
+  function openSheet() { go('szukanie'); }
+  function closeSheet() {}
   badge.addEventListener('click', openSheet);
-  byId('hunt-intro').addEventListener('click', openSheet);
-  byId('sheet-close').addEventListener('click', closeSheet);
-  back.addEventListener('click', closeSheet);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
   byId('hint-btn').addEventListener('click', function () {
     var next = HINT_ORDER.filter(function (id) { return found.indexOf(id) === -1; })[0];
     var ht = byId('hint-text');
@@ -2267,7 +2547,6 @@
     ht.hidden = false;
     if (!still) ht.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: OUT });
   });
-  byId('rename').addEventListener('click', function () { holder = null; store('mikolaj-kupon', null); renderSheet(); var f = byId('hunt-name'); if (f) f.focus(); });
   var resetArmed = false;
   byId('hunt-reset').addEventListener('click', function () {
     var btn = byId('hunt-reset');
@@ -2275,7 +2554,7 @@
     resetArmed = false; btn.textContent = 'Zacznij zabawę od nowa';
     found = []; holder = null;
     store('mikolaj-zlote', found); store('mikolaj-kupon', null);
-    unmarkAll(); updateBadge(false); renderSheet();
+    unmarkAll(); updateBadge(false); renderSheet(); syncFound();
     if (!still) scheduleDrop(6000);
     toast('Złote piłki wróciły na swoje miejsca.');
   });
@@ -2316,7 +2595,8 @@
       byId('pin-err').textContent = 'To nie ten kod. Spróbuj jeszcze raz.';
       if (!still) byId('pin').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(9px)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 380 });
     });
-    /* the owner of the page skips the PIN */
+    /* Mikołaj skips the PIN: on GitHub Pages after entering his code, in Claude as the artifact owner */
+    if (isHost) { showGift(true); return; }
     try {
       if (window.claude && typeof window.claude.use === 'function') {
         window.claude.use('user').then(function (u) { return u ? u.isOwner() : false; }).then(function (own) {
@@ -2366,16 +2646,594 @@
     document.documentElement.style.overflow = '';
     current = null;
   }
-  function route() {
-    if (location.hash.indexOf('#kupon-') === 0) showUnlock(parseCoupon(location.hash));
-    else hideUnlock();
+  /* =================================================================== visitor, splash and views */
+  var html = document.documentElement, splash = byId('splash'), splashDone = false;
+  var visitor = restore('mikolaj-gosc', null);
+  if (!visitor || typeof visitor.name !== 'string' || !visitor.name.trim()) visitor = null;
+  function visitorName() { return visitor ? visitor.name : ''; }
+  var AV = ['#dcee4e', '#f0c35a', '#ff8b9a', '#9be7ff', '#b9f0c9', '#f6b7ff', '#ffd27a'];
+  function avColor(str) { var h = 0; for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return AV[h % AV.length]; }
+  function avatarHTML(name) { name = name || '?'; return '<span class="avatar" style="background:' + avColor(name) + '" aria-hidden="true">' + esc(name.charAt(0)) + '</span>'; }
+  function listNames(a) {
+    if (a.length === 1) return a[0];
+    if (a.length === 2) return a[0] + ' i ' + a[1];
+    if (a.length === 3) return a[0] + ', ' + a[1] + ' i ' + a[2];
+    return a[0] + ', ' + a[1] + ' i ' + (a.length - 2) + ' inne osoby';
   }
-  byId('unlock-close').addEventListener('click', function () {
-    hideUnlock();
-    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+  function renderHello() {
+    var n = visitorName() || 'Gościu', av = byId('hello-av');
+    byId('hello-name').textContent = n;
+    av.textContent = n.charAt(0); av.style.background = avColor(n);
+    var sub = byId('hello-sub');
+    if (!FB) { sub.textContent = 'Miło Cię widzieć na Biegunie Północnym.'; return; }
+    var others = onlineList().filter(function (p) { return p.uid !== myUid; }).map(function (p) { return p.name; });
+    sub.textContent = others.length ? 'Teraz na stronie są też: ' + listNames(others) + '.' : 'Na razie jesteś tu sam. Mikołaj czasem zagląda.';
+  }
+
+  function closeSplash() {
+    if (splashDone) return;
+    splashDone = true;
+    splash.onclick = null;
+    if (still || !splash.animate) { splash.hidden = true; html.classList.remove('booting'); return; }
+    var a = splash.animate([{ clipPath: 'circle(150% at 50% 40%)' }, { clipPath: 'circle(0% at 50% 40%)' }], { duration: 900, easing: 'cubic-bezier(.7,0,.3,1)', fill: 'forwards' });
+    setTimeout(function () { html.classList.remove('booting'); }, 260);
+    a.onfinish = function () { splash.hidden = true; a.cancel(); };
+    setTimeout(function () { if (pendingRound && visitor) { var st = pendingRound; pendingRound = null; onGameState(st); } }, 960);
+  }
+  function appear(el) {
+    el.hidden = false;
+    if (!still) el.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: OUT });
+  }
+  function startSplash(formOnly) {
+    var form = byId('splash-form'), hello = byId('splash-hello'), skip = byId('splash-skip');
+    splashDone = false; splash.hidden = false; form.hidden = true; hello.hidden = true; skip.hidden = true;
+    if (formOnly) {
+      if (!still) splash.animate([{ clipPath: 'circle(0% at 50% 40%)' }, { clipPath: 'circle(150% at 50% 40%)' }], { duration: 700, easing: 'cubic-bezier(.7,0,.3,1)' });
+      byId('visitor-name').value = visitorName();
+      appear(form);
+      setTimeout(function () { byId('visitor-name').focus(); }, 300);
+      return;
+    }
+    if (visitor) {
+      hello.innerHTML = 'Cześć, <b></b>!';
+      hello.querySelector('b').textContent = visitor.name;
+      setTimeout(function () { appear(hello); appear(skip); }, still ? 0 : 1500);
+      var t = setTimeout(closeSplash, still ? 900 : 3200);
+      splash.onclick = function () { clearTimeout(t); closeSplash(); };
+    } else {
+      setTimeout(function () { appear(form); }, still ? 0 : 1500);
+    }
+  }
+  byId('splash-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = byId('visitor-name').value.replace(/\s+/g, ' ').trim().slice(0, 20);
+    if (!v) return;
+    visitor = { name: v, since: (visitor && visitor.since) || new Date().toISOString() };
+    store('mikolaj-gosc', visitor);
+    renderHello(); syncPlayer(); renderLobby();
+    if (currentView === 'szukanie') renderSheet();
+    closeSplash();
+    if (pendingRound) { var st = pendingRound; pendingRound = null; onGameState(st); }
   });
+  byId('change-name').addEventListener('click', function () { startSplash(true); });
+
+  var VIEWS = ['start', 'prezenty', 'szukanie', 'gra', 'panel'], currentView = null;
+  function go(v) { if (location.hash !== '#' + v) location.hash = v; else showView(v); }
+  function moveInd() {
+    var t = document.querySelector('.tab[aria-current="page"]'), ind = byId('tab-ind');
+    if (!t) { ind.style.width = '0'; return; }
+    ind.style.width = t.offsetWidth + 'px';
+    ind.style.transform = 'translateX(' + t.offsetLeft + 'px)';
+  }
+  window.addEventListener('resize', moveInd);
+  window.addEventListener('load', moveInd);
+  function showView(v) {
+    if (VIEWS.indexOf(v) === -1) v = 'start';
+    if (v === 'panel' && !isHost) v = 'start';
+    var changed = v !== currentView;
+    currentView = v;
+    Array.prototype.forEach.call(document.querySelectorAll('.view'), function (el) { el.hidden = el.getAttribute('data-view') !== v; });
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
+      if (t.getAttribute('data-tab') === v) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+    });
+    moveInd();
+    if (changed) {
+      window.scrollTo(0, 0);
+      var el = byId('view-' + v);
+      if (!still && el.animate) el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 440, easing: OUT });
+    }
+    if (v === 'szukanie') renderSheet();
+    if (v === 'gra') { drawIcons(); renderLobby(); }
+    if (v === 'panel') renderPanel();
+  }
+  function route() {
+    var h = location.hash;
+    if (h.indexOf('#kupon-') === 0) { showUnlock(parseCoupon(h)); return; }
+    hideUnlock();
+    showView(h.replace('#', '') || 'start');
+  }
+  byId('unlock-close').addEventListener('click', function () { hideUnlock(); go('start'); });
+
+  /* =================================================================== Firebase: presence, progress, game */
+  /* Paste the firebaseConfig object from the Firebase console here. null keeps the page offline. */
+  var FIREBASE_CONFIG = null;
+  var FB = null, myUid = null, isHost = false, players = {}, offset = 0, gameState = null, attempts = {}, pendingRound = null;
+  function noop() {}
+  function serverNow() { return Date.now() + offset; }
+  function R(path) { return FB.D.ref(FB.db, path); }
+  function onlineList() {
+    return Object.keys(players).filter(function (u) { return players[u] && players[u].online && players[u].name; })
+      .map(function (u) { return { uid: u, name: players[u].name }; });
+  }
+  function fbInit() {
+    if (!FIREBASE_CONFIG) { renderLobby(); return; }
+    var base = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-database.js')]).then(function (m) {
+      var app = m[0].initializeApp(FIREBASE_CONFIG);
+      return m[1].signInAnonymously(m[1].getAuth(app)).then(function (cred) {
+        FB = { D: m[2], db: m[2].getDatabase(app) };
+        myUid = cred.user.uid;
+        fbStart();
+      });
+    }).catch(function (e) {
+      if (window.console) console.warn('Gra na żywo niedostępna:', e && e.message);
+      FB = null; renderLobby();
+    });
+  }
+  function fbStart() {
+    var D = FB.D, me = 'players/' + myUid;
+    D.onValue(R('.info/serverTimeOffset'), function (s) { offset = s.val() || 0; });
+    D.onValue(R('.info/connected'), function (s) {
+      if (s.val() !== true) return;
+      D.onDisconnect(R(me + '/online')).set(false);
+      D.onDisconnect(R(me + '/lastSeen')).set(D.serverTimestamp());
+      D.set(R(me + '/online'), true).catch(noop);
+      syncPlayer();
+    });
+    D.get(R(me + '/found')).then(function (s) {
+      var rf = s.val() || {}, added = false;
+      Object.keys(rf).forEach(function (id) {
+        if (ORDER.indexOf(id) !== -1 && found.indexOf(id) === -1) { found.push(id); markTaken(id); added = true; }
+      });
+      if (added) { store('mikolaj-zlote', found); updateBadge(false); if (currentView === 'szukanie') renderSheet(); }
+      syncFound();
+    }).catch(noop);
+    D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
+    D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); }, noop);
+    D.onValue(R('game/state'), function (s) { onGameState(s.val()); }, noop);
+  }
+  function couponTier() { return found.length >= HUNT_TOTAL ? 'złoty' : found.length >= SILVER_AT ? 'srebrny' : ''; }
+  function syncPlayer() {
+    if (!FB || !myUid || !visitor) return;
+    FB.D.update(R('players/' + myUid), { name: visitor.name, lastSeen: FB.D.serverTimestamp(), foundCount: found.length, coupon: couponTier() }).catch(noop);
+  }
+  function syncFound() {
+    if (!FB || !myUid) return;
+    var map = {};
+    found.forEach(function (id) { map[id] = true; });
+    FB.D.update(R('players/' + myUid), { found: found.length ? map : null, foundCount: found.length, coupon: couponTier() }).catch(noop);
+  }
+
+  /* ---------- Mikołaj's code: checked by the database rules, never stored in this page ---------- */
+  var tries = +restore('mikolaj-proby', 0) || 0, lockUntil = 0;
+  function becomeHost(silent) {
+    isHost = true;
+    byId('tab-panel').hidden = false;
+    setTimeout(moveInd, 30);
+    byId('host-actions').hidden = false;
+    byId('i-am-host').hidden = true;
+    moveInd();
+    FB.D.onValue(R('attempts'), function (s) { attempts = s.val() || {}; renderPanel(); }, noop);
+    renderLobby();
+    if (!silent) toast('Witaj, Mikołaju! Możesz rozpocząć rundę.');
+  }
+  function openHost() {
+    var m = byId('host-modal');
+    byId('host-err').textContent = ''; byId('host-code').value = '';
+    m.hidden = false;
+    if (!still) m.querySelector('.modal').animate([{ opacity: 0, transform: 'translateY(20px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: SPRING });
+    setTimeout(function () { byId('host-code').focus(); }, 60);
+  }
+  function closeHost() { byId('host-modal').hidden = true; }
+  byId('i-am-host').addEventListener('click', openHost);
+  byId('host-cancel').addEventListener('click', closeHost);
+  byId('host-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var code = byId('host-code').value.trim(), err = byId('host-err');
+    if (!code) return;
+    if (Date.now() < lockUntil) { err.textContent = 'Psotek trzyma klawiaturę jeszcze ' + Math.ceil((lockUntil - Date.now()) / 1000) + ' s.'; return; }
+    if (!FB) { err.textContent = 'Kod działa tylko na stronie wrobhu.github.io/swieta, z połączeniem z internetem.'; return; }
+    err.textContent = 'Sprawdzam…';
+    FB.D.set(R('hosts/' + myUid), code).then(function () { closeHost(); becomeHost(false); }, function () { wrongCode(code); });
+  });
+  function wrongCode(code) {
+    tries++;
+    store('mikolaj-proby', tries);
+    if (tries % 3 === 0) lockUntil = Date.now() + 30000;
+    closeHost();
+    if (FB) FB.D.push(R('attempts'), { uid: myUid, name: visitorName() || 'Bez imienia', guess: code.slice(0, 40), at: FB.D.serverTimestamp() }).catch(noop);
+    showElf();
+  }
+  function showElf() {
+    var el = byId('elf'), n = tries, who = visitorName() || 'tajemniczy gościu';
+    var lines = [
+      'Pudło! Psotek wszystko widział i już leci z donosem do Mikołaja.',
+      'Znowu? To już druga próba. Mikołaj dostanie pełny raport.',
+      n + ' prób i nic! Psotek zapisał każdą. Mikołaj wie, że to Ty, ' + who + '.'
+    ];
+    byId('elf-count').textContent = 'Nieudana próba nr ' + n;
+    byId('elf-text').textContent = lines[Math.min(n, 3) - 1] + (Date.now() < lockUntil ? ' Za karę 30 sekund bez prób.' : '');
+    el.hidden = false;
+    if (!still) {
+      el.querySelector('.elf').animate([{ transform: 'translateY(110%) scale(.5)' }, { transform: 'translateY(-8%) scale(1.06)', offset: .7 }, { transform: 'none' }], { duration: 760, easing: 'cubic-bezier(.3,1.3,.5,1)' });
+      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260 });
+      document.querySelector('main').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-12px)' }, { transform: 'translateX(10px)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 420 });
+    }
+    try { if (navigator.vibrate) navigator.vibrate([60, 40, 60, 40, 140]); } catch (e) {}
+  }
+  byId('elf-close').addEventListener('click', function () { byId('elf').hidden = true; });
+
+  /* ---------- the game: Złap prezenty ---------- */
+  var stage = byId('stage'), sctx = stage.getContext('2d'), SW = 0, SH = 0, G = null, bgStars = null;
+  var paddle = { x: .5, tx: .5 }, roundScores = {}, scoresSub = null, resultsFor = 0, lastJoined = 0;
+  var PTS = { gift: 1, ball: 2, gold: 5, coal: -3 };
+  var GIFT_COLS = [['#c62a41', '#f0c35a'], ['#1f7a52', '#f2f7f3'], ['#e5b14a', '#c62a41'], ['#2f6bd1', '#f2f7f3']];
+  function mulberry(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  /* everyone in a round gets the same items at the same moments */
+  function schedule(seed, dur) {
+    var r = mulberry(seed), list = [], t = 700;
+    while (t < dur - 900) {
+      var q = r(), type = q < .05 ? 'gold' : q < .2 ? 'coal' : q < .44 ? 'ball' : 'gift';
+      list.push({ t: t, x: .08 + r() * .84, type: type, v: .34 + r() * .16 + (t / dur) * .3, rot: r() * 6.28, spin: (r() - .5) * 4, col: Math.floor(r() * 4) });
+      t += (760 - 430 * (t / dur)) * (.55 + r() * .8);
+    }
+    return list;
+  }
+  function rrect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y); c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+    c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r);
+    c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y); c.closePath();
+  }
+  function drawItem(c, type, x, y, s, rot, col) {
+    c.save(); c.translate(x, y); c.rotate(rot);
+    if (type === 'gift') {
+      var gc = GIFT_COLS[col % 4], h = s / 2;
+      c.fillStyle = gc[0]; rrect(c, -h, -h * .62, s, s * .82, s * .08); c.fill();
+      c.fillStyle = 'rgba(0,0,0,.16)'; c.fillRect(h * .4, -h * .62, h * .6, s * .82);
+      c.fillStyle = gc[0]; rrect(c, -h * 1.1, -h * .95, s * 1.1, s * .26, s * .06); c.fill();
+      c.fillStyle = 'rgba(255,255,255,.2)'; rrect(c, -h * 1.1, -h * .95, s * 1.1, s * .26, s * .06); c.fill();
+      c.fillStyle = gc[1]; c.fillRect(-s * .07, -h * .95, s * .14, s * 1.13);
+      c.beginPath(); c.ellipse(-s * .15, -h * 1.05, s * .15, s * .09, -.5, 0, 6.284); c.ellipse(s * .15, -h * 1.05, s * .15, s * .09, .5, 0, 6.284); c.fill();
+    } else if (type === 'ball' || type === 'gold') {
+      var r = s * .42, gr = c.createRadialGradient(-r * .35, -r * .4, r * .1, 0, 0, r);
+      if (type === 'gold') { gr.addColorStop(0, '#fff4c7'); gr.addColorStop(.5, '#f5cc5e'); gr.addColorStop(1, '#b07f22'); c.shadowColor = 'rgba(240,195,90,.95)'; c.shadowBlur = s * .6; }
+      else { gr.addColorStop(0, '#f6ffb0'); gr.addColorStop(.5, '#dcee4e'); gr.addColorStop(1, '#93a823'); }
+      c.fillStyle = gr; c.beginPath(); c.arc(0, 0, r, 0, 6.284); c.fill();
+      c.shadowBlur = 0;
+      c.save(); c.beginPath(); c.arc(0, 0, r, 0, 6.284); c.clip();
+      c.strokeStyle = '#fffbe8'; c.lineWidth = Math.max(1.2, r * .14); c.beginPath();
+      c.moveTo(-r * .85, -r * .6); c.quadraticCurveTo(-r * .22, 0, -r * .85, r * .6);
+      c.moveTo(r * .85, -r * .6); c.quadraticCurveTo(r * .22, 0, r * .85, r * .6); c.stroke();
+      c.restore();
+    } else {
+      var k = s * .4, pts = [1, .82, 1.05, .9, 1, .78, .95, .86];
+      c.fillStyle = '#1c1e20'; c.beginPath();
+      for (var i = 0; i < pts.length; i++) { var a = i / pts.length * 6.284; c[i ? 'lineTo' : 'moveTo'](Math.cos(a) * k * pts[i], Math.sin(a) * k * pts[i] * .85); }
+      c.closePath(); c.fill();
+      c.fillStyle = 'rgba(255,255,255,.22)'; c.beginPath(); c.ellipse(-k * .3, -k * .3, k * .28, k * .14, -.6, 0, 6.284); c.fill();
+      c.fillStyle = 'rgba(255,110,60,.55)'; c.beginPath(); c.arc(k * .3, k * .25, k * .09, 0, 6.284); c.fill();
+    }
+    c.restore();
+  }
+  function drawIcons() {
+    Array.prototype.forEach.call(document.querySelectorAll('canvas[data-icon]'), function (cv) {
+      if (cv._drawn) return;
+      var c = cv.getContext('2d');
+      c.clearRect(0, 0, 60, 60);
+      drawItem(c, cv.getAttribute('data-icon'), 30, 34, 44, 0, 0);
+      cv._drawn = true;
+    });
+  }
+  function sizeStage() {
+    var w = stage.parentNode.clientWidth || 340, h = Math.round(Math.min(window.innerHeight * .64, 560, w * 1.45));
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    stage.width = Math.round(w * dpr); stage.height = Math.round(h * dpr);
+    stage.style.height = h + 'px';
+    SW = w; SH = h; bgStars = null;
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function drawBg() {
+    var c = sctx, g = c.createLinearGradient(0, 0, 0, SH);
+    g.addColorStop(0, '#061a15'); g.addColorStop(1, '#10392d');
+    c.fillStyle = g; c.fillRect(0, 0, SW, SH);
+    if (!bgStars) { bgStars = []; var r = mulberry(7); for (var i = 0; i < 46; i++) bgStars.push([r() * SW, r() * SH * .8, r() * 1.2 + .3]); }
+    c.fillStyle = 'rgba(242,247,243,.45)';
+    bgStars.forEach(function (st) { c.beginPath(); c.arc(st[0], st[1], st[2], 0, 6.284); c.fill(); });
+    c.strokeStyle = 'rgba(242,247,243,.07)'; c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(SW * .5, SH * .35); c.lineTo(SW * .5, SH - 30); c.moveTo(SW * .12, SH - 30); c.lineTo(SW * .3, SH * .35); c.moveTo(SW * .88, SH - 30); c.lineTo(SW * .7, SH * .35); c.stroke();
+    c.fillStyle = '#e6f2ec'; c.beginPath(); c.moveTo(0, SH - 22);
+    c.quadraticCurveTo(SW * .25, SH - 34, SW * .5, SH - 24); c.quadraticCurveTo(SW * .75, SH - 14, SW, SH - 28); c.lineTo(SW, SH); c.lineTo(0, SH); c.closePath(); c.fill();
+  }
+  function drawRacket(x, y, rw, tilt) {
+    var c = sctx, rx = rw / 2, ry = rw * .2, i;
+    c.save(); c.translate(x, y); c.rotate(Math.max(-.32, Math.min(.32, tilt * 2.2)));
+    c.strokeStyle = '#c9a26b'; c.lineCap = 'round'; c.lineWidth = rw * .09;
+    c.beginPath(); c.moveTo(0, ry * .9); c.lineTo(0, ry + rw * .4); c.stroke();
+    c.strokeStyle = '#3b2a22'; c.lineWidth = 1.2;
+    for (i = 1; i < 4; i++) { c.beginPath(); c.moveTo(-rw * .045, ry + rw * .1 * i); c.lineTo(rw * .045, ry + rw * .1 * i + 3); c.stroke(); }
+    c.fillStyle = 'rgba(10,35,30,.5)'; c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.284); c.fill();
+    c.save(); c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.284); c.clip();
+    c.strokeStyle = 'rgba(242,247,243,.55)'; c.lineWidth = 1;
+    for (i = -rx; i <= rx; i += rw * .075) { c.beginPath(); c.moveTo(i, -ry); c.lineTo(i, ry); c.stroke(); }
+    for (i = -ry; i <= ry; i += ry * .34) { c.beginPath(); c.moveTo(-rx, i); c.lineTo(rx, i); c.stroke(); }
+    c.restore();
+    c.strokeStyle = '#f2f7f3'; c.lineWidth = Math.max(3, rw * .05); c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.284); c.stroke();
+    c.strokeStyle = '#cf2e45'; c.lineWidth = Math.max(2, rw * .03); c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 3.6, 5.8); c.stroke();
+    c.restore();
+  }
+  function setRacket(clientX) {
+    var r = stage.getBoundingClientRect();
+    paddle.tx = Math.max(.07, Math.min(.93, (clientX - r.left) / r.width));
+  }
+  stage.addEventListener('pointerdown', function (e) { setRacket(e.clientX); try { stage.setPointerCapture(e.pointerId); } catch (x) {} });
+  stage.addEventListener('pointermove', function (e) { setRacket(e.clientX); });
+  document.addEventListener('keydown', function (e) {
+    if (!G || G.done) return;
+    if (e.key === 'ArrowLeft') { paddle.tx = Math.max(.07, paddle.tx - .08); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { paddle.tx = Math.min(.93, paddle.tx + .08); e.preventDefault(); }
+  });
+
+  function startGame(opt) {
+    byId('game-lobby').hidden = true; byId('game-results').hidden = true; byId('game-play').hidden = false;
+    byId('live-top').hidden = !!opt.practice;
+    sizeStage();
+    G = { opt: opt, items: schedule(opt.seed, opt.duration), score: 0, pops: [], sent: -1, lastSend: 0, done: false, prev: 0 };
+    paddle.x = paddle.tx = .5;
+    gameActive = true; html.classList.add('playing');
+    renderLiveTop();
+    setTimeout(function () { byId('game-play').scrollIntoView({ block: 'center', behavior: still ? 'auto' : 'smooth' }); }, 60);
+    requestAnimationFrame(frame);
+  }
+  function sendScore() {
+    if (!FB || !G || G.opt.practice) return;
+    G.sent = G.score;
+    FB.D.set(R('game/scores/' + G.opt.round + '/' + myUid), { name: visitorName() || 'Gość', score: G.score, at: FB.D.serverTimestamp() }).catch(noop);
+  }
+  function frame() {
+    if (!G || G.done) return;
+    var o = G.opt, now = o.clock(), t = now - o.startAt, dt = G.prev ? Math.min(.05, (now - G.prev) / 1000) : 0, c = sctx, i;
+    G.prev = now;
+    paddle.x += (paddle.tx - paddle.x) * Math.min(1, dt * 16);
+    drawBg();
+    var rw = Math.max(72, Math.min(118, SW * .27)), ry = SH - 60, sz = Math.max(28, Math.min(42, SW * .09));
+    if (t >= 0) {
+      for (i = 0; i < G.items.length; i++) {
+        var it = G.items[i];
+        if (it.done) continue;
+        var age = t - it.t;
+        if (age < 0) break;
+        var y = -sz + age / 1000 * it.v * SH, x = it.x * SW;
+        if (y > SH + sz) { it.done = true; continue; }
+        if (y > ry - sz * .55 && y < ry + 14 && Math.abs(x - paddle.x * SW) < rw / 2 + sz * .3) {
+          it.done = true;
+          var pts = PTS[it.type];
+          G.score = Math.max(0, G.score + pts);
+          G.pops.push({ x: x, y: ry - 24, t: now, txt: (pts > 0 ? '+' : '−') + Math.abs(pts), col: it.type === 'coal' ? '#ff8b9a' : it.type === 'gold' ? '#f0c35a' : '#dcee4e' });
+          if (it.type === 'coal') {
+            if (!still) stage.parentNode.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 260 });
+            try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) {}
+          }
+          continue;
+        }
+        drawItem(c, it.type, x, y, sz, it.rot + it.spin * age / 1000, it.col);
+      }
+    }
+    drawRacket(paddle.x * SW, ry, rw, paddle.tx - paddle.x);
+    G.pops = G.pops.filter(function (pp) {
+      var life = (now - pp.t) / 750;
+      if (life >= 1) return false;
+      c.globalAlpha = 1 - life; c.fillStyle = pp.col; c.textAlign = 'center';
+      c.font = '800 24px Fraunces, Georgia, serif'; c.fillText(pp.txt, pp.x, pp.y - life * 44);
+      c.globalAlpha = 1;
+      return true;
+    });
+    var remain = Math.max(0, Math.ceil((o.duration - Math.max(0, t)) / 1000));
+    c.fillStyle = 'rgba(242,247,243,.12)'; c.fillRect(0, 0, SW, 4);
+    c.fillStyle = remain <= 5 ? '#ff8b9a' : '#dcee4e'; c.fillRect(0, 0, SW * Math.max(0, Math.min(1, 1 - Math.max(0, t) / o.duration)), 4);
+    c.textAlign = 'left'; c.fillStyle = '#a8c3b7'; c.font = '600 12px "Barlow Condensed", "Arial Narrow", sans-serif'; c.fillText('PUNKTY', 14, 24);
+    c.fillStyle = '#dcee4e'; c.font = '900 36px Fraunces, Georgia, serif'; c.fillText(String(G.score), 14, 60);
+    c.textAlign = 'right'; c.fillStyle = '#a8c3b7'; c.font = '600 12px "Barlow Condensed", "Arial Narrow", sans-serif'; c.fillText(o.practice ? 'TRENING' : 'RUNDA ' + o.round, SW - 14, 24);
+    c.fillStyle = remain <= 5 ? '#ff8b9a' : '#f2f7f3'; c.font = '800 30px "Barlow Condensed", "Arial Narrow", sans-serif'; c.fillText('0:' + pad(remain), SW - 14, 56);
+    if (t < 0) {
+      var n = Math.ceil(-t / 1000), f = (-t % 1000) / 1000;
+      c.fillStyle = 'rgba(2,9,7,.5)'; c.fillRect(0, 0, SW, SH);
+      c.textAlign = 'center';
+      if (n > 3) { c.fillStyle = '#f2f7f3'; c.font = '800 30px Fraunces, Georgia, serif'; c.fillText('Przygotuj się…', SW / 2, SH * .42); }
+      else { c.save(); c.translate(SW / 2, SH * .42); var sc = 1 + f * .7; c.scale(sc, sc); c.globalAlpha = .35 + .65 * (1 - f * .6); c.fillStyle = '#dcee4e'; c.font = '900 110px Fraunces, Georgia, serif'; c.fillText(String(n), 0, 38); c.restore(); c.globalAlpha = 1; }
+      c.fillStyle = '#a8c3b7'; c.font = '500 16px "DM Sans", system-ui, sans-serif'; c.fillText('Przesuwaj palcem rakietę', SW / 2, SH * .42 + 80);
+    }
+    if (!o.practice && t >= 0 && G.sent !== G.score && now - G.lastSend > 600) { G.lastSend = now; sendScore(); }
+    if (t > o.duration) { finishGame(); return; }
+    requestAnimationFrame(frame);
+  }
+  function finishGame() {
+    var o = G.opt, score = G.score, c = sctx;
+    G.done = true;
+    if (!o.practice) sendScore();
+    gameActive = false; html.classList.remove('playing');
+    c.fillStyle = 'rgba(2,9,7,.62)'; c.fillRect(0, 0, SW, SH);
+    c.textAlign = 'center'; c.fillStyle = '#f2f7f3'; c.font = '800 34px Fraunces, Georgia, serif'; c.fillText('Koniec!', SW / 2, SH * .4);
+    c.fillStyle = '#dcee4e'; c.font = '900 60px Fraunces, Georgia, serif'; c.fillText(score + ' pkt', SW / 2, SH * .4 + 66);
+    setTimeout(function () {
+      G = null;
+      byId('game-play').hidden = true;
+      if (o.practice) showPractice(score); else showResults(o.round);
+    }, 1600);
+  }
+  byId('practice').addEventListener('click', function () {
+    startGame({ seed: Math.floor(Math.random() * 1e9), duration: 30000, startAt: Date.now() + 3200, clock: Date.now, practice: true });
+  });
+  byId('start-round').addEventListener('click', function () {
+    if (!FB || !isHost) return;
+    var st = { round: ((gameState && gameState.round) || 0) + 1, startAt: serverNow() + 4600, duration: 30000, seed: Math.floor(Math.random() * 2147483646) + 1, by: visitorName() || 'Mikołaj' };
+    FB.D.set(R('game/state'), st).catch(function () { toast('Nie udało się rozpocząć rundy. Sprawdź połączenie.'); });
+  });
+  byId('res-again').addEventListener('click', function () { byId('start-round').click(); });
+  byId('res-back').addEventListener('click', function () { byId('game-results').hidden = true; byId('game-lobby').hidden = false; renderLobby(); });
+
+  function roundLive(st) { return !!(st && st.startAt && serverNow() < st.startAt + st.duration + 1500); }
+  function onGameState(st) {
+    gameState = st;
+    var live = roundLive(st);
+    byId('tab-live').hidden = !live;
+    byId('card-game-live').hidden = !live;
+    if (st && st.round) listenScores(st.round);
+    if (live && st.round !== lastJoined && byId('unlock').hidden) {
+      if (!visitor || !splash.hidden) { pendingRound = st; }
+      else {
+        lastJoined = st.round;
+        if (currentView !== 'gra') go('gra');
+        if (st.startAt - serverNow() > 0) toast((st.by || 'Mikołaj') + ' rozpoczyna rundę ' + st.round + '!');
+        startGame({ seed: st.seed, duration: st.duration, startAt: st.startAt, clock: serverNow, round: st.round });
+      }
+    }
+    if (live) setTimeout(function () { if (gameState === st) onGameState(st); }, st.startAt + st.duration + 1600 - serverNow());
+    renderLobby();
+  }
+  function listenScores(round) {
+    if (scoresSub && scoresSub.round === round) return;
+    if (scoresSub) scoresSub.off();
+    scoresSub = { round: round, off: FB.D.onValue(R('game/scores/' + round), function (s) {
+      roundScores = s.val() || {};
+      renderLiveTop();
+      if (resultsFor === round && !byId('game-results').hidden) renderResults(round);
+      if (currentView === 'gra' && !byId('game-lobby').hidden) renderLobby();
+    }, noop) };
+  }
+  function sortedScores() {
+    return Object.keys(roundScores).map(function (u) { var e = roundScores[u] || {}; return { uid: u, name: e.name || 'Gość', score: +e.score || 0 }; })
+      .sort(function (a, b) { return b.score - a.score; });
+  }
+  function renderLiveTop() {
+    var el = byId('live-top');
+    if (!G || G.opt.practice) return;
+    el.innerHTML = sortedScores().slice(0, 4).map(function (e, i) {
+      return '<span class="person' + (e.uid === myUid ? ' me' : '') + '">' + avatarHTML(e.name) + (i + 1) + '. ' + esc(e.name) + ' <b>' + e.score + '</b></span>';
+    }).join('');
+  }
+  function podHTML(e, place) {
+    if (!e) return '<div class="pod p' + place + ' empty"><span class="who">—</span><div class="bar"><b>' + place + '</b></div></div>';
+    return '<div class="pod p' + place + '">' + avatarHTML(e.name) + '<span class="who">' + esc(e.name) + '</span><div class="bar"><b>' + place + '</b><span>' + e.score + ' pkt</span></div></div>';
+  }
+  function renderResults(round) {
+    var list = sortedScores();
+    byId('res-label').textContent = 'Wyniki rundy ' + round;
+    byId('res-title').textContent = list.length ? 'Wygrywa ' + list[0].name + '!' : 'Nikt nie zdobył punktów';
+    byId('podium').innerHTML = podHTML(list[1], 2) + podHTML(list[0], 1) + podHTML(list[2], 3);
+    byId('rank').innerHTML = list.map(function (e, i) {
+      return '<li class="' + (e.uid === myUid ? 'me' : '') + '"><span class="pos">' + (i + 1) + '.</span>' + avatarHTML(e.name) + '<span>' + esc(e.name) + '</span><span class="pts">' + e.score + '</span></li>';
+    }).join('');
+    byId('res-again').hidden = !isHost;
+  }
+  function showResults(round) {
+    resultsFor = round;
+    byId('game-lobby').hidden = true; byId('game-results').hidden = false;
+    renderResults(round);
+    setTimeout(function () {
+      if (resultsFor !== round) return;
+      renderResults(round);
+      var list = sortedScores();
+      if (!still && list[0] && list[0].uid === myUid) {
+        var cols = ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e', '#ffffff'];
+        shards(window.innerWidth * .5, window.innerHeight * .35, cols);
+        setTimeout(function () { shards(window.innerWidth * .25, window.innerHeight * .4, cols); shards(window.innerWidth * .75, window.innerHeight * .4, cols); }, 180);
+        toast('Wygrywasz tę rundę!');
+      }
+    }, 1200);
+    byId('game-results').scrollIntoView({ block: 'start', behavior: still ? 'auto' : 'smooth' });
+  }
+  function showPractice(score) {
+    var best = Math.max(+restore('mikolaj-trening', 0) || 0, score);
+    store('mikolaj-trening', best);
+    resultsFor = 0;
+    byId('game-lobby').hidden = true; byId('game-results').hidden = false;
+    byId('res-label').textContent = 'Trening';
+    byId('res-title').textContent = 'Twój wynik: ' + score + ' pkt';
+    byId('podium').innerHTML = '';
+    byId('rank').innerHTML = '<li class="me"><span class="pos">★</span><span>Twój najlepszy trening</span><span class="pts">' + best + '</span></li>';
+    byId('res-again').hidden = true;
+  }
+  function renderLobby() {
+    var ppl = byId('game-people'), status = byId('game-status'), label = byId('people-label');
+    if (!FB) {
+      ppl.innerHTML = ''; label.hidden = true;
+      status.innerHTML = FIREBASE_CONFIG
+        ? 'Łączę się z serwerem gry… Jeśli to trwa długo, sprawdź internet i odśwież stronę. <b>Trening</b> działa zawsze.'
+        : 'Gra na żywo działa na stronie <b>wrobhu.github.io/swieta</b>. Tutaj możesz zagrać <b>trening</b>.';
+      return;
+    }
+    label.hidden = false;
+    var on = onlineList();
+    ppl.innerHTML = on.map(function (pp) {
+      return '<span class="person' + (pp.uid === myUid ? ' me' : '') + '">' + avatarHTML(pp.name) + esc(pp.name) + (pp.uid === myUid ? ' <small>Ty</small>' : '') + '</span>';
+    }).join('') || '<span class="hello-sub">Nikogo jeszcze nie ma.</span>';
+    var st = gameState;
+    if (roundLive(st)) status.innerHTML = '<b>Runda ' + st.round + ' trwa!</b> Dołączasz automatycznie.';
+    else if (st && st.round) {
+      var best = sortedScores()[0];
+      status.innerHTML = 'Ostatnia runda: ' + (best ? 'najlepiej <b>' + esc(best.name) + '</b>, ' + best.score + ' pkt.' : 'bez punktów.') +
+        (isHost ? ' Możesz rozpocząć następną.' : ' Czekamy, aż Mikołaj rozpocznie następną.');
+    } else status.textContent = isHost ? 'Wszyscy gotowi? Rozpocznij pierwszą rundę.' : 'Czekamy, aż Mikołaj rozpocznie rundę.';
+  }
+
+  /* ---------- Mikołaj's panel ---------- */
+  function rel(ts) {
+    if (!ts) return 'dawno';
+    var d = (serverNow() - ts) / 1000;
+    if (d < 60) return 'przed chwilą';
+    if (d < 3600) return Math.floor(d / 60) + ' min temu';
+    if (d < 86400) return Math.floor(d / 3600) + ' godz. temu';
+    return new Date(ts).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
+  }
+  function renderPanel() {
+    if (!isHost) return;
+    var on = onlineList();
+    byId('panel-online').innerHTML = on.map(function (pp) { return '<span class="person">' + avatarHTML(pp.name) + esc(pp.name) + '</span>'; }).join('') || '<span class="hello-sub">Nikogo nie ma na stronie.</span>';
+    var g = {};
+    Object.keys(attempts).forEach(function (k) {
+      var a = attempts[k]; if (!a) return;
+      var key = a.uid || k, e = g[key] || (g[key] = { name: a.name || 'Bez imienia', n: 0, last: 0, guesses: [] });
+      e.n++; e.guesses.push(a.guess || '');
+      if ((a.at || 0) >= e.last) { e.last = a.at || 0; e.name = a.name || e.name; }
+    });
+    var rows = Object.keys(g).map(function (k) { return g[k]; }).sort(function (a, b) { return b.n - a.n || b.last - a.last; });
+    byId('panel-attempts').innerHTML = rows.length ? rows.map(function (e) {
+      return '<li class="bad">' + avatarHTML(e.name) + '<span><span class="nm">' + esc(e.name) + '</span><span class="meta">ostatnio ' + rel(e.last) + '</span><span class="guesses">' + e.guesses.slice(-6).map(esc).join(' · ') + '</span></span><span class="val bad">' + e.n + '×</span></li>';
+    }).join('') : '<li><span></span><span class="nm">Nikt jeszcze nie próbował. Na razie.</span><span></span></li>';
+    var all = Object.keys(players).filter(function (u) { return players[u] && players[u].name; }).map(function (u) { var o = players[u]; o.uid = u; return o; })
+      .sort(function (a, b) { return (b.online ? 1 : 0) - (a.online ? 1 : 0) || (b.foundCount || 0) - (a.foundCount || 0); });
+    byId('panel-players').innerHTML = all.map(function (pp) {
+      return '<li>' + avatarHTML(pp.name) + '<span><span class="nm">' + (pp.online ? '<i class="online"></i>' : '') + esc(pp.name) + '</span><span class="meta">' + (pp.online ? 'na stronie teraz' : 'ostatnio ' + rel(pp.lastSeen)) + (pp.coupon ? ' · kupon ' + esc(pp.coupon) : '') + '</span></span><span class="val">' + (pp.foundCount || 0) + '/7</span></li>';
+    }).join('') || '<li><span></span><span class="nm">Nikt jeszcze nie odwiedził strony.</span><span></span></li>';
+  }
+  window.addEventListener('resize', function () { if (G && !G.done) sizeStage(); });
+
+  renderHello();
+  updateBadge(false);
   window.addEventListener('hashchange', route);
   route();
+  if (location.hash.indexOf('#kupon-') === 0) { splash.hidden = true; html.classList.remove('booting'); }
+  else startSplash(false);
+  fbInit();
 })();
 </script>
 </body>
