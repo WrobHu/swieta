@@ -1,20 +1,21 @@
 # Gem, set, Święta!
 
-Świąteczna, tenisowa lista życzeń do Mikołaja, przygotowana pod telefon.
+Świąteczna zabawa dla całej rodziny z tenisem w tle, przygotowana pod telefon.
 
 Strona: https://wrobhu.github.io/swieta/
 
-- padający śnieg, sanie Mikołaja i księżyc w kształcie piłki tenisowej,
+- intro z saniami Mikołaja, padający śnieg i zaśnieżony kort,
 - odliczanie do Wigilii,
-- lista prezentów rozpakowywanych uderzeniem piłki,
-- zabawa „Złote piłki Mikołaja”: 7 ukrytych piłek, srebrny kupon za 3, złoty za 7, kupon z kodem QR do pokazania w Święta.
+- list Huberta do Mikołaja z podpisem i lista prezentów rozpakowywanych uderzeniem piłki,
+- „Złote piłki Mikołaja”: każdy gość ma 7 piłek ukrytych w innych miejscach (z 22 możliwych). Za 3 jest brązowy kupon, za 5 srebrny, za 7 złoty, każdy z kodem QR do pokazania w Święta,
+- turniej na żywo: pięć mini-gier i gra bonusowa, wszyscy grają w tej samej chwili, a wejście jest przez sejf Mikołaja i znak turnieju.
 
-Cała strona to jeden plik `index.html` bez zależności poza czcionkami Google i biblioteką do kodów QR.
+Cała strona to jeden plik `index.html` bez zależności poza czcionkami Google, biblioteką do kodów QR i Firebase.
 
 ## Gra na żywo (Firebase)
 
-Ranking, lista osób na stronie i raport prób złamania kodu działają przez Firebase (darmowy plan Spark).
+Turniej, lista osób na stronie i panel Mikołaja działają przez Firebase (darmowy plan Spark wystarcza na kilkanaście osób naraz).
 
 1. W konsoli Firebase włącz logowanie **Anonimowe** i utwórz **Realtime Database**.
-2. W zakładce **Reguły** bazy wklej zawartość `firebase-rules.json` i wpisz swój tajny kod w miejsce `TU-WPISZ-SWOJ-TAJNY-KOD`. Kod jest sprawdzany przez serwer, więc nie ma go w kodzie strony.
-3. Wklej obiekt `firebaseConfig` w `index.html`, w miejscu `var FIREBASE_CONFIG = null;`.
+2. W zakładce **Reguły** bazy wklej zawartość `firebase-rules.json` i wpisz swój 4-cyfrowy kod w miejsce `TU-WPISZ-4-CYFRY`. Kod sprawdza serwer, więc nie ma go w kodzie strony.
+3. Obiekt `firebaseConfig` projektu jest w `index.html`, w `var FIREBASE_CONFIG`.
