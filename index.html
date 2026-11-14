@@ -321,12 +321,12 @@
 
   .seg {
     --i: 0;
-    position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
+    position: relative; display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
     padding: 4px; border: 1px solid var(--line); border-radius: 999px;
     background: rgba(6, 26, 21, .94);
   }
   .thumb {
-    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 4);
+    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / var(--n, 4));
     border-radius: 999px; background: var(--ball);
     box-shadow: 0 4px 18px rgba(220, 238, 78, .28);
     transform: translateX(calc(var(--i) * 100%));
@@ -340,6 +340,18 @@
     transition: color .3s, transform .2s var(--out);
   }
   .seg button[aria-pressed="true"] { color: var(--ink); }
+  @media (max-width: 400px) { .seg button { font-size: 13px; letter-spacing: .02em; } }
+  /* gift tiers: the TOP present shines gold, wrapped and opened */
+  .gtier {
+    font: 700 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase;
+    padding: 4px 9px; border-radius: 999px; color: #3d2a00;
+    background: linear-gradient(135deg, #fff1b8, #f0c35a 55%, #c4912c); box-shadow: 0 2px 6px rgba(176, 127, 34, .35);
+  }
+  li.tier-top .tag { background: linear-gradient(180deg, #fffdf3, #fff4d2 60%, #f6e3ae); }
+  li.tier-top .tag::before { border-color: #c4912c; }
+  li.tier-top .tag-icon { background: linear-gradient(135deg, #fff1b8, #f0c35a); }
+  li.tier-top .wrap { box-shadow: 0 0 0 2px #f0c35a, 0 0 22px rgba(240, 195, 90, .55); }
+  .wrap-no b.wt-top { color: #fff1b8; text-shadow: 0 0 8px rgba(240, 195, 90, .9); }
   .seg button:active { transform: scale(.94); }
   :focus-visible { outline: 2px solid var(--ball); outline-offset: 3px; }
 
@@ -2515,8 +2527,13 @@
 
 
   /* ---------- Gifts: edit this list. Put a shop address in `url` to turn "Link wkrótce" into a button. ---------- */
-  var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze' };
+  var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze', gra: 'Gaming' };
+  /* gift tiers: the label shown on the wrapping and the tag; 'top' is the most wanted */
+  var GIFT_TIERS = { top: 'TOP prezent' };
   var GIFTS = [
+    { cat: 'gra', icon: 'mouse', tier: 'top', name: 'Myszka Logitech G PRO X2 SUPERSTRIKE',
+      desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. PS Nie mówcie Domi: nowa myszka to trochę mniej czasu dla niej.',
+      price: 'ok. 769 zł', url: 'https://www.logitechg.com/pl-pl/shop/p/pro-x2-superstrike-mouse.910-007776' },
     { cat: 'kort', icon: 'racket', ace: true, name: 'Nowa rakieta',
       desc: 'Lekka rakieta do regularnej gry. Na przykład Wilson Blade 100 albo Babolat Pure Aero.',
       price: 'ok. 900–1200 zł', url: '' },
@@ -2556,6 +2573,7 @@
   ];
 
   var ICONS = {
+    mouse: '<rect x="6.5" y="2.5" width="11" height="19" rx="5.5"/><path d="M12 2.5v6.5M6.5 9.5h11"/><path d="M12 5.2v1.6" stroke-width="2.4"/>',
     racket: '<ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21M6.5 6l6 5.5M5.5 9.5l5 4.5M9.5 3.5l5 5"/>',
     balls: '<rect x="7" y="2.5" width="10" height="19" rx="3"/><circle cx="12" cy="7.3" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="16.7" r="2.2"/>',
     spool: '<circle cx="11" cy="11" r="7.5"/><circle cx="11" cy="11" r="2.5"/><path d="M16.5 16.2c1.5 1.8 3 2.8 5 3.3"/>',
@@ -2619,7 +2637,7 @@
   var SPOT_INFO = {
     sky: { tab: 'any', rank: 1, admin: 'Złota piłka, która co 15–25 s spada z nieba na dowolnej zakładce. Trzeba ją złapać palcem.', hint: 'Co jakiś czas z nieba spada złota piłka. Złap ją palcem.' },
     rim: { tab: 'bar', rank: 2, gen: 'Złota piłka wciśnięta w śnieg na górnej krawędzi dolnego paska zakładek (jedno z 4 miejsc).', admin: function (L) { return 'W śniegu na górnej krawędzi dolnego paska, ' + RIM_DESC[L.rim % RIM_DESC.length] + '. Widać ją na każdej zakładce.'; }, hint: 'Spójrz na śnieg na górnej krawędzi dolnego paska z zakładkami.' },
-    gift: { tab: 'prezenty', rank: 3, gen: 'Złota naklejka w jednym z 12 prezentów pod listem w zakładce List (numer losowany dla każdego).', admin: function (L) { return 'Naklejka w rozpakowanym prezencie nr ' + pad(L.gift % 12 + 1) + ' (zakładka List, pod listem).'; }, hint: function (L) { return 'W zakładce List, pod listem, rozpakuj paczkę numer ' + pad(L.gift % 12 + 1) + '.'; } },
+    gift: { tab: 'prezenty', rank: 3, gen: 'Złota naklejka w jednym z prezentów pod listem w zakładce List (numer losowany dla każdego).', admin: function (L) { return 'Naklejka w rozpakowanym prezencie nr ' + pad(L.gift % 12 + 1) + ' (zakładka List, pod listem).'; }, hint: function (L) { return 'W zakładce List, pod listem, rozpakuj paczkę numer ' + pad(L.gift % 12 + 1) + '.'; } },
     tree: { tab: 'start', rank: 4, gen: 'Złota bombka na choince w stopce Startu (jedna z 11 bombek).', admin: function (L) { return 'Złota bombka na choince w stopce Startu (bombka ' + (L.tree % 11 + 1) + ' z 11, licząc od góry).'; }, hint: 'Na samym dole Startu stoi choinka. Jedna bombka ma inny kolor niż reszta.' },
     net: { tab: 'start', rank: 5, gen: 'Jedna z lampek na siatce kortu na Starcie (każdy ma inną).', admin: function (L) { return 'Lampka nr ' + (L.net + 1) + ' z 19 na siatce kortu na Starcie, licząc od lewej.'; }, hint: 'Na Starcie przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.' },
     snowman: { tab: 'start', rank: 6, gen: 'Jeden z guzików bałwana w stopce Startu.', admin: function (L) { return ['Górny', 'Środkowy', 'Dolny'][L.snowman % 3] + ' guzik bałwana w stopce Startu.'; }, hint: 'Bałwan na dole Startu ma guziki. Jeden z nich wcale nie jest guzikiem.' },
@@ -2783,7 +2801,7 @@
   function wrapHTML(i, g) {
     return '<button type="button" class="wrap w' + (i % 3) + '" aria-label="Odpakuj prezent ' + (i + 1) + ', ' + CATS[g.cat] + '">' +
       '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span>' + BOW +
-      '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.ace ? ' · <b>wymarzony</b>' : '') + '</span>' +
+      '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.tier ? ' · <b class="wt-' + g.tier + '">' + GIFT_TIERS[g.tier] + '</b>' : g.ace ? ' · <b>wymarzony</b>' : '') + '</span>' +
       '<span class="wrap-cat">' + CATS[g.cat] + '</span></span>' +
       '<span class="wrap-ball">' + BALL + '</span></button>';
   }
@@ -2793,10 +2811,11 @@
       ? '<a class="shop" href="' + esc(g.url) + '" target="_blank" rel="noopener">Zobacz w sklepie ' + ARROW + '</a>'
       : '<span class="soon">Link wkrótce</span>';
     var isOpen = openedBefore.indexOf(g.name) !== -1;
-    return '<li data-rv data-i="' + i + '" data-cat="' + g.cat + '" data-name="' + esc(g.name) + '" class="' + (isOpen ? 'open' : 'wrapped') +
+    return '<li data-rv data-i="' + i + '" data-cat="' + g.cat + '" data-name="' + esc(g.name) + '" class="' + (isOpen ? 'open' : 'wrapped') + (g.tier ? ' tier-' + g.tier : '') +
       '" style="view-transition-name:gift-' + i + '"><div class="reveal"><article class="tag" tabindex="-1">' +
       '<div class="tag-main">' +
         '<p class="tag-meta"><span class="tag-cat">' + CATS[g.cat] + '</span>' +
+          (g.tier ? '<span class="gtier ' + g.tier + '">★ ' + GIFT_TIERS[g.tier] + '</span>' : '') +
           (g.ace ? '<span class="ace">Wymarzony</span>' : '') +
           (hunts('gift') && i === HUNT.gift % GIFTS.length ? '<button type="button" class="gold-btn gold-sticker" data-g="gift" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('gift') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
         '<h3>' + esc(g.name) + '</h3>' +
@@ -2942,6 +2961,7 @@
   /* ---------- Filter: sliding thumb + cards that morph between states ---------- */
   var seg = byId('seg');
   var filters = [['all', 'Wszystko']].concat(Object.keys(CATS).map(function (k) { return [k, CATS[k]]; }));
+  seg.style.setProperty('--n', filters.length);
   seg.innerHTML = '<span class="thumb" aria-hidden="true"></span>' + filters.map(function (f, i) {
     return '<button type="button" id="seg-' + f[0] + '" data-filter="' + f[0] + '" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + f[1] + '</button>';
   }).join('');
