@@ -161,6 +161,16 @@
   }
 
   .pines-far { fill: var(--pine-far); }
+  .smoke circle { fill: #c9d8d2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: smoke 6s ease-out infinite; }
+  @keyframes smoke { 0% { opacity: 0; transform: translate(0, 0) scale(.6); } 15% { opacity: .38; } 100% { opacity: 0; transform: translate(12px, -30px) scale(1.9); } }
+  .cone { animation: cone 4.5s ease-in-out infinite alternate; }
+  @keyframes cone { from { opacity: .7; } to { opacity: 1; } }
+  .win { animation: flicker 3.4s ease-in-out infinite alternate; }
+  @keyframes flicker { 0%, 100% { opacity: 1; } 40% { opacity: .82; } 60% { opacity: .95; } }
+  .rays { transform-box: fill-box; transform-origin: center; animation: rays 26s linear infinite; }
+  @keyframes rays { to { transform: rotate(360deg); } }
+  .twk { animation: bulb 1.6s ease-in-out infinite alternate; }
+  .glint { transform-box: fill-box; transform-origin: center; opacity: 0; animation: spark 4.2s ease-in-out infinite; }
   .pines-near { fill: var(--pine-near); }
   .pine-snow { fill: none; stroke: #e6f2ec; stroke-linecap: round; stroke-opacity: .4; }
   .court-line { fill: none; stroke: var(--snow); stroke-linecap: round; opacity: .92; }
@@ -410,7 +420,7 @@
   .glow:nth-of-type(2n) { animation-delay: -.9s; }
   .glow:nth-of-type(3n) { animation-delay: -1.4s; }
   .bounce { animation: bounce .62s cubic-bezier(.3, .6, .5, 1) infinite alternate; }
-  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-30px); } }
   .bounce-shadow { transform-box: fill-box; transform-origin: center; animation: shadow .62s cubic-bezier(.3, .6, .5, 1) infinite alternate; }
   @keyframes shadow { from { transform: scale(1); opacity: .22; } to { transform: scale(.45); opacity: .08; } }
   .drift { background: var(--snow); color: var(--ink-soft); font-size: 14px; padding-block: 4px 28px; }
@@ -787,8 +797,8 @@
             <stop offset="1" stop-color="#1d443a"/>
           </linearGradient>
           <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#6a968a"/>
-            <stop offset="1" stop-color="#2a5248"/>
+            <stop offset="0" stop-color="#cfe2da"/>
+            <stop offset="1" stop-color="#7ea397"/>
           </linearGradient>
           <linearGradient id="courtGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#17604b"/>
@@ -815,6 +825,30 @@
             <feComposite in="c" in2="SourceGraphic" operator="in"/>
           </filter>
           <clipPath id="moon-clip"><circle cx="195" cy="165" r="92"/></clipPath>
+          <linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1f5144"/><stop offset="1" stop-color="#0f3329"/>
+          </linearGradient>
+          <linearGradient id="mtnNear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#143f34"/><stop offset="1" stop-color="#0a271f"/>
+          </linearGradient>
+          <linearGradient id="fog" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#bfe3d4" stop-opacity="0"/><stop offset=".65" stop-color="#bfe3d4" stop-opacity=".2"/><stop offset="1" stop-color="#bfe3d4" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="snowField" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e6f2ec"/><stop offset="1" stop-color="#9fbfb4"/>
+          </linearGradient>
+          <linearGradient id="coneL" gradientUnits="userSpaceOnUse" x1="61" y1="274" x2="118" y2="382">
+            <stop offset="0" stop-color="#fff4d2" stop-opacity=".5"/><stop offset="1" stop-color="#fff4d2" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="coneR" gradientUnits="userSpaceOnUse" x1="329" y1="274" x2="272" y2="382">
+            <stop offset="0" stop-color="#fff4d2" stop-opacity=".5"/><stop offset="1" stop-color="#fff4d2" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="pool">
+            <stop offset="0" stop-color="#fff4d2" stop-opacity=".22"/><stop offset="1" stop-color="#fff4d2" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="winGlow">
+            <stop offset="0" stop-color="#ffcf70" stop-opacity=".8"/><stop offset="1" stop-color="#ffcf70" stop-opacity="0"/>
+          </radialGradient>
           <linearGradient id="driftFade" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#fff"/>
             <stop offset=".42" stop-color="#fff"/>
@@ -896,10 +930,65 @@
         </g>
 
         <g class="par-far">
-          <path class="pines-far" id="pines-far" d=""/>
-          <path d="M-10 338C40 312 96 322 150 318S262 306 300 314 370 316 400 326V356H-10Z" fill="url(#hillGrad)"/>
-          <path d="M-10 338C40 312 96 322 150 318S262 306 300 314 370 316 400 326" fill="none" stroke="#eef8f3" stroke-opacity=".7" stroke-width="1.6"/>
+          <!-- far range: the moon rises behind it -->
+          <path d="M-10 312 18 290 34 298 62 266 84 284 104 276 132 250 160 280 178 272 208 290 236 268 262 246 290 276 312 266 340 284 364 262 400 290V345H-10Z" fill="url(#mtnFar)"/>
+          <g fill="#d6e8e1" fill-opacity=".9">
+            <path d="M62 266 53.5 274.5 58 273.5 61 277 64.5 273 68 275.5 71 275.5Z"/>
+            <path d="M132 250 120.5 262 126 260.5 129.5 265 133.5 259.5 138 263 143 261.5Z"/>
+            <path d="M262 246 249.5 259 255 257.5 259 262 263 256.5 267.5 260.5 273.5 258.5Z"/>
+            <path d="M364 262 354 272 359 270.5 362 274.5 365.5 270 369.5 273 374 271Z"/>
+          </g>
+          <g fill="#7aa598" fill-opacity=".35">
+            <path d="M132 250 143 261.5 160 280 146 274Z"/><path d="M262 246 273.5 258.5 290 276 277 269Z"/>
+          </g>
+          <!-- near range -->
+          <path d="M-10 330 24 304 48 318 80 294 112 316 150 298 188 318 222 300 258 314 296 292 330 312 364 298 400 316V345H-10Z" fill="url(#mtnNear)"/>
+          <g fill="#c6ddd4" fill-opacity=".75">
+            <path d="M80 294 72 301 76 300.5 79 303.5 82 300 86 302 88 300.5Z"/>
+            <path d="M296 292 288 299.5 292 299 295 302 298.5 298.5 302 301 304.5 299Z"/>
+            <path d="M150 298 143.5 304 147 303.5 149.5 306 152.5 303 156 305Z"/>
+          </g>
+          <rect x="-10" y="282" width="410" height="66" fill="url(#fog)"/>
+          <g id="far-firs"></g>
+          <!-- moonlit snow field behind the court -->
+          <path d="M-10 337C60 323 130 331 195 327S330 323 400 335V352H-10Z" fill="url(#snowField)"/>
+          <path d="M-10 337C60 323 130 331 195 327S330 323 400 335" fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="1.2"/>
+          <!-- clubhouse -->
+          <g transform="translate(9 0)">
+            <ellipse cx="123" cy="340" rx="34" ry="3.6" fill="#0b2620" opacity=".3"/>
+            <circle class="win" cx="110" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
+            <circle class="win" cx="136" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
+            <rect x="136" y="303" width="6.5" height="13" fill="#4a3226"/>
+            <rect x="135" y="301.5" width="8.5" height="3.2" rx="1.4" fill="#eef6f2"/>
+            <g class="smoke"><circle cx="139" cy="297" r="2.6"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-2s"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-4s"/></g>
+            <rect x="102" y="319" width="42" height="21" fill="#3b2a22"/>
+            <path d="M102 323.5H144M102 328H144M102 332.5H144M102 337H144" stroke="#2a1d17" stroke-width=".8"/>
+            <rect x="102" y="319" width="42" height="21" fill="#000" opacity=".12"/>
+            <path d="M96 322 123 302 150 322Z" fill="#4a2f25"/>
+            <path d="M94 323.5 123 299.5 152 323.5Q148 327 144 323.8 139 327.5 134 323.8 129 327.5 123 323.8 117 327.5 112 323.8 107 327.5 102 323.8 98 327 94 323.5Z" fill="#eef6f2"/>
+            <path d="M123 299.5 152 323.5Q148 327 144 323.8 139 327.5 134 323.8 129 327.5 123 323.8Z" fill="#c4d9d1"/>
+            <rect class="win" x="106" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
+            <rect class="win" x="132" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
+            <path d="M110 325.5V332.5M106 329H114M136 325.5V332.5M132 329H140" stroke="#5a3a2a" stroke-width=".8"/>
+            <rect x="119" y="327" width="8" height="13" fill="#24170f"/>
+            <circle cx="123" cy="330.8" r="2.4" fill="none" stroke="#2c7a58" stroke-width="1.5"/>
+            <circle cx="123" cy="333" r=".9" fill="#ff5a6e"/>
+            <path d="M101 340.5Q123 336 145 340.5" fill="none" stroke="#eef6f2" stroke-width="2.4" stroke-linecap="round"/>
+            <ellipse cx="110" cy="343" rx="12" ry="2.4" fill="#ffd27a" opacity=".22"/>
+            <ellipse cx="136" cy="343" rx="12" ry="2.4" fill="#ffd27a" opacity=".22"/>
+          </g>
         </g>
+
+        <!-- floodlights -->
+        <g class="cone">
+          <path d="M58 277 65 276 152 378 82 386Z" fill="url(#coneL)"/>
+          <path d="M325 276 332 277 308 386 238 378Z" fill="url(#coneR)"/>
+        </g>
+        <path d="M60.5 344V274M329.5 344V274" stroke="#0b1f1a" stroke-width="2.2"/>
+        <rect x="56" y="270.5" width="11" height="4.5" rx="1.2" fill="#e8f0ec" transform="rotate(14 61.5 272.8)"/>
+        <rect x="323" y="270.5" width="11" height="4.5" rx="1.2" fill="#e8f0ec" transform="rotate(-14 328.5 272.8)"/>
+        <circle cx="62" cy="274" r="11" fill="url(#lampGlow)"/>
+        <circle cx="328" cy="274" r="11" fill="url(#lampGlow)"/>
 
         <!-- snowy ground, the court in perspective, snow lying on it -->
         <rect x="-10" y="338" width="410" height="190" fill="url(#groundGrad)"/>
@@ -909,11 +998,11 @@
         <path class="court-line" stroke-width="1.5" d="M79 370H311"/>
         <path class="court-line" stroke-width="1.9" d="M60.5 345 -82 520M329.5 345 472 520M94.1 345 -13 520M295.9 345 403 520M195 370V472"/>
         <path class="court-line" stroke-width="2.8" d="M16.4 472H373.6"/>
-        <g clip-path="url(#court-clip)"><g mask="url(#driftMask)">
-          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowdrift)" opacity=".82"/>
-          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".32"/>
-        </g></g>
-        <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".18" mask="url(#driftMask)"/>
+        <ellipse cx="118" cy="386" rx="62" ry="13" fill="url(#pool)"/>
+        <ellipse cx="272" cy="386" rx="62" ry="13" fill="url(#pool)"/>
+        <g clip-path="url(#court-clip)">
+          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".16"/>
+        </g>
         <!-- snow banks swept to the edges -->
         <path d="M-10 340 58 344C52 356 41 365 37 378 30 393 15 404 10 421 4 441-6 452-10 471Z" fill="url(#bankGrad)" opacity=".92"/>
         <path d="M400 340 332 344C338 356 349 365 353 378 360 393 375 404 380 421 386 441 396 452 400 471Z" fill="url(#bankGrad)" opacity=".92"/>
@@ -926,8 +1015,7 @@
         <circle cx="287" cy="451.5" r="6.2" fill="#dcee4e"/>
         <path d="M281.2 450.2A6.2 6.2 0 0 1 292.8 450.2C289.5 447.9 284.5 447.9 281.2 450.2Z" fill="#fff"/>
 
-        <path class="pines-near" id="pines-near" d=""/>
-        <path class="pine-snow" id="pines-near-snow" stroke-width="1.5" d=""/>
+        <g id="near-firs"></g>
         <ellipse cx="18" cy="359" rx="54" ry="7" fill="#dcebe4"/>
         <ellipse cx="372" cy="359" rx="54" ry="7" fill="#dcebe4"/>
         <!-- golden ball 2: half buried at the back corner of the court -->
@@ -1010,50 +1098,99 @@
       <h2>Wesołych Świąt i <em>samych trafionych prezentów!</em></h2>
     </div>
     <div class="hill-wrap">
-    <svg class="hill" viewBox="0 0 390 170" role="img" aria-label="Zaśnieżone wzgórze z choinką ozdobioną piłkami tenisowymi, prezentami i rakietą opartą o paczkę">
+    <svg class="hill" viewBox="10 0 370 200" role="img" aria-label="Zaśnieżone wzgórze z choinką ozdobioną piłkami tenisowymi, prezentami i bałwanem z rakietą tenisową">
       <defs>
-        <radialGradient id="bauble">
-          <stop offset="0" stop-color="#dcee4e" stop-opacity=".75"/>
-          <stop offset="1" stop-color="#dcee4e" stop-opacity="0"/>
-        </radialGradient>
         <radialGradient id="starGlow">
-          <stop offset="0" stop-color="#f0c35a" stop-opacity=".8"/>
+          <stop offset="0" stop-color="#f0c35a" stop-opacity=".85"/>
           <stop offset="1" stop-color="#f0c35a" stop-opacity="0"/>
         </radialGradient>
+        <radialGradient id="bulbGlow">
+          <stop offset="0" stop-color="#fff2c4" stop-opacity=".8"/>
+          <stop offset="1" stop-color="#fff2c4" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="snowBall" cx=".36" cy=".3" r=".8">
+          <stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e4efea"/><stop offset="1" stop-color="#a9c4ba"/>
+        </radialGradient>
+        <radialGradient id="ornLime" cx=".35" cy=".3" r=".8">
+          <stop offset="0" stop-color="#f6ffb0"/><stop offset=".5" stop-color="#dcee4e"/><stop offset="1" stop-color="#93a823"/>
+        </radialGradient>
+        <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#b8d3c9"/><stop offset="1" stop-color="#6f978b"/>
+        </linearGradient>
+        <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f2f7f3"/>
+        </linearGradient>
       </defs>
-      <path class="trees" id="ft-pines" d=""/>
-      <path class="pine-snow" id="ft-pines-snow" stroke-width="1.5" d=""/>
-      <path class="back" d="M0 112C80 82 160 98 240 90S350 72 390 86V170H0Z"/>
-      <path class="front" d="M0 128C70 104 150 110 215 122S340 128 390 108V170H0Z"/>
+      <g id="ft-firs"></g>
+      <path d="M0 120C60 100 140 110 210 104S330 96 390 108V200H0Z" fill="url(#hillBack)"/>
+      <path d="M0 120C60 100 140 110 210 104S330 96 390 108" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="1.2"/>
+      <path d="M0 152C70 138 150 144 220 150S340 152 390 140V200H0Z" fill="url(#hillFront)"/>
+      <path d="M40 160C80 156 120 158 150 163 120 165 80 166 40 160Z" fill="#c9dcd5" opacity=".7"/>
+      <path d="M250 162C280 158 320 158 350 162 320 166 280 166 250 162Z" fill="#c9dcd5" opacity=".7"/>
 
-      <ellipse cx="100" cy="117" rx="40" ry="5" fill="#0d2a22" opacity=".12"/>
-      <path class="xmas" id="ft-tree" d=""/>
-      <path class="pine-snow" id="ft-tree-snow" stroke-width="2.4" d=""/>
-      <circle cx="96" cy="15" r="16" fill="url(#starGlow)"/>
-      <path d="M96 5 98.9 11.3 105.8 12.1 100.7 16.8 102.1 23.6 96 20.2 89.9 23.6 91.3 16.8 86.2 12.1 93.1 11.3Z" fill="#f0c35a"/>
-      <g id="ft-baubles"></g>
-
-      <!-- racket leaning on the gifts -->
-      <path d="M140 118 135 99" stroke="#c9a26b" stroke-width="3.4" stroke-linecap="round"/>
-      <path d="M135.5 100 131 92M135.5 100 138 91" stroke="#f2f7f3" stroke-width="1.6" stroke-linecap="round"/>
-      <ellipse cx="132" cy="80" rx="9" ry="12.5" transform="rotate(-12 132 80)" fill="#0a231e" fill-opacity=".3" stroke="#f2f7f3" stroke-width="2.2"/>
-      <path d="M126 73 139 86M124.5 79 137 91M129 69 141 81M137 70 126 90M141 75 131 92M132 68 123.5 84" stroke="#f2f7f3" stroke-opacity=".6" stroke-width=".5"/>
-
-      <rect x="147" y="94" width="34" height="25" rx="1.5" fill="#cf2e45"/>
-      <rect x="145" y="89" width="38" height="7" rx="1.5" fill="#9a1b30"/>
-      <rect x="161.5" y="89" width="5" height="30" fill="#f0c35a"/>
-      <path d="M164 89C158 81 153 86 160 89M164 89C170 81 175 86 168 89" fill="none" stroke="#f0c35a" stroke-width="2.2" stroke-linecap="round"/>
-      <rect x="178" y="104" width="25" height="17" rx="1.5" fill="#f0c35a"/>
-      <rect x="176.5" y="100" width="28" height="6" rx="1.5" fill="#d9a53c"/>
-      <rect x="188.5" y="100" width="4" height="21" fill="#cf2e45"/>
-
-      <ellipse class="bounce-shadow" cx="306" cy="128" rx="9" ry="2.4" fill="#0d2a22"/>
-      <g class="bounce">
-        <circle cx="306" cy="119" r="7.5" fill="#dcee4e"/>
-        <path d="M301 114.5C305 116.5 306 120.5 304.5 124" fill="none" stroke="#0d2a22" stroke-opacity=".55" stroke-width="1.1" stroke-linecap="round"/>
+      <!-- the tree -->
+      <g id="ft-tree"></g>
+      <g id="ft-garland"></g>
+      <g id="ft-orn"></g>
+      <g class="rays">
+        <path d="M100 -6V34M80 14H120M86 0 114 28M114 0 86 28" stroke="#f0c35a" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
       </g>
+      <circle cx="100" cy="14" r="20" fill="url(#starGlow)"/>
+      <path d="M100 4 102.9 10.3 109.8 11.1 104.7 15.8 106.1 22.6 100 19.2 93.9 22.6 95.3 15.8 90.2 11.1 97.1 10.3Z" fill="#f6cf6a"/>
+      <path d="M100 4 102.9 10.3 109.8 11.1 104.7 15.8 100 13.6Z" fill="#fff0bd" opacity=".7"/>
+
+      <!-- presents -->
+      <g>
+        <rect x="160" y="121" width="24" height="35" fill="#1f7a52"/>
+        <rect x="178" y="121" width="6" height="35" fill="#000" opacity=".15"/>
+        <rect x="158" y="116" width="28" height="7" rx="1.2" fill="#2c9466"/>
+        <rect x="169.5" y="116" width="5" height="40" fill="#e9f1ed"/>
+        <path d="M172 116C164 106 158 112 167 116M172 116C180 106 186 112 177 116" fill="none" stroke="#e9f1ed" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+      <g>
+        <rect x="128" y="132" width="34" height="25" fill="#c62a41"/>
+        <rect x="154" y="132" width="8" height="25" fill="#000" opacity=".16"/>
+        <rect x="126" y="127" width="38" height="7.5" rx="1.4" fill="#e0465c"/>
+        <rect x="142.5" y="127" width="5" height="30" fill="#f0c35a"/>
+        <rect x="126" y="129.5" width="38" height="2.6" fill="#f0c35a" opacity=".9"/>
+        <path d="M145 127C136 115 129 122 140 127M145 127C154 115 161 122 150 127" fill="none" stroke="#f0c35a" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="145" cy="126.6" r="2.2" fill="#f6cf6a"/>
+      </g>
+      <g>
+        <rect x="186" y="143" width="24" height="15" fill="#e5b14a"/>
+        <rect x="204" y="143" width="6" height="15" fill="#000" opacity=".12"/>
+        <rect x="184.5" y="139.5" width="27" height="5" rx="1" fill="#f3c867"/>
+        <rect x="196" y="139.5" width="4" height="18.5" fill="#cf2e45"/>
+        <path d="M198 139.5C192 132 188 136 194.5 139.5M198 139.5C204 132 208 136 201.5 139.5" fill="none" stroke="#cf2e45" stroke-width="2" stroke-linecap="round"/>
+      </g>
+
+      <!-- snowman with a racket -->
+      <ellipse cx="300" cy="160" rx="34" ry="5" fill="#0d2a22" opacity=".14"/>
+      <path d="M287 104 268 94M276 98.5 270 104M272 96 268 89" fill="none" stroke="#5a3a2a" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="300" cy="140" r="22" fill="url(#snowBall)"/>
+      <circle cx="300" cy="108" r="16" fill="url(#snowBall)"/>
+      <circle cx="300" cy="82" r="12" fill="url(#snowBall)"/>
+      <path d="M287 92Q300 100 313 92L313.5 97.5Q300 105.5 286.5 97.5Z" fill="#cf2e45"/>
+      <path d="M291 97 288 113 294.5 113.5 296.5 99Z" fill="#b3233a"/>
+      <path d="M290 102.5 295.5 103M289.5 107.5 295 108" stroke="#fff" stroke-width="1.1" opacity=".8"/>
+      <path d="M288.2 75.5Q300 70.5 311.8 75.5L311.6 80.2Q300 75.4 288.4 80.2Z" fill="#cf2e45"/>
+      <path d="M288.6 77.6Q300 72.8 311.4 77.6" fill="none" stroke="#fff" stroke-width=".9" opacity=".9"/>
+      <circle cx="296" cy="82.5" r="1.4" fill="#16201c"/>
+      <circle cx="304.5" cy="82.5" r="1.4" fill="#16201c"/>
+      <path d="M300.5 85.6 314 87.6 300.5 89Z" fill="#f08a24"/>
+      <g fill="#16201c"><circle cx="295" cy="90.2" r=".8"/><circle cx="297.8" cy="91.4" r=".8"/><circle cx="300.8" cy="91.6" r=".8"/><circle cx="303.6" cy="90.8" r=".8"/></g>
+      <g><circle cx="300" cy="106" r="2.6" fill="url(#ornLime)"/><circle cx="300" cy="115" r="2.6" fill="url(#ornLime)"/><circle cx="300" cy="133" r="3" fill="url(#ornLime)"/></g>
+      <path d="M313 103 326 89M322 93 327 96" fill="none" stroke="#5a3a2a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M326 89 331 77" stroke="#c9a26b" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="335" cy="64" rx="7.5" ry="11" transform="rotate(22 335 64)" fill="#0a231e" fill-opacity=".25" stroke="#f2f7f3" stroke-width="2"/>
+      <path d="M330 57 341 69M328.5 62 338.5 72.5M332.5 53 342.5 64M339 55 330 73M342 60 334 75M335.5 54 328 68" stroke="#f2f7f3" stroke-opacity=".55" stroke-width=".5"/>
+      <g class="bounce">
+        <circle cx="340" cy="38" r="4.6" fill="url(#ornLime)"/>
+        <path d="M336.8 35.2C339.4 36.6 340 39.2 339.2 41.4" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width=".8" stroke-linecap="round"/>
+      </g>
+      <g fill="#ffffff" id="ft-glints"></g>
     </svg>
-      <button type="button" class="gold-spot" data-g="g6" style="left:29.23%;top:54.7%" aria-label="Złota bombka na choince"></button>
+      <button type="button" class="gold-spot" data-g="g6" style="left:29.19%;top:47.5%" aria-label="Złota bombka na choince"></button>
     </div>
     <p class="drift gutter">Do zobaczenia przy wigilijnym st<span class="g-letter" data-gold="g7"><button type="button" class="gold-letter" data-g="g7" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span></span>le!</p>
   </footer>
@@ -1076,29 +1213,53 @@
   }
 
   /* ---------- Scene details drawn by script: firs with snow, stars, net lights, baubles, reindeer ---------- */
-  function pine(x, b, h, w) {
-    var n = Math.max(3, Math.round(h / 11)), L = [], R = [], s = '', i, y, hw;
-    var py = b - h, plx = x, prx = x;             /* where the current tier starts on each side */
-    for (i = 1; i <= n; i++) {
-      y = b - h + h * .96 * i / n;
-      hw = w * .5 * (.22 + .78 * i / n);
-      L.push((x - hw).toFixed(1) + ' ' + y.toFixed(1));
-      R.unshift((x + hw).toFixed(1) + ' ' + y.toFixed(1));
-      /* snow lying along the top edge of this tier */
-      s += 'M' + plx.toFixed(1) + ' ' + py.toFixed(1) + 'L' + (x - hw * .86).toFixed(1) + ' ' + (y - 1.4).toFixed(1) +
-           'M' + prx.toFixed(1) + ' ' + py.toFixed(1) + 'L' + (x + hw * .86).toFixed(1) + ' ' + (y - 1.4).toFixed(1);
-      if (i < n) {
-        plx = x - hw * .42; prx = x + hw * .42; py = y - 1.2;
-        L.push(plx.toFixed(1) + ' ' + py.toFixed(1));
-        R.unshift(prx.toFixed(1) + ' ' + py.toFixed(1));
+  function f1(n) { return n.toFixed(1); }
+  /* a layered fir: scalloped tiers, an optional lit half, snow on the branch tips and a cap on top */
+  function fir(x, b, h, w, side, tiers) {
+    tiers = tiers || Math.max(3, Math.round(h / 16));
+    var trunkH = h * .09, crown = h - trunkH, dark = '', lit = '', snow = '', i, j, k = 4;
+    for (i = 0; i < tiers; i++) {
+      var ya = b - h + crown * (i / tiers) * .78;
+      var yb = b - trunkH - crown * (1 - (i + 1) / tiers) * .98;
+      var hw = w / 2 * (.34 + .66 * (i + 1) / tiers), dr = Math.max(.6, hw * .1), seg = 2 * hw / k;
+      var my = ya + (yb - ya) * .62;
+      var edgeR = 'Q' + f1(x + hw * .42) + ' ' + f1(my) + ' ' + f1(x + hw) + ' ' + f1(yb);
+      var edgeL = 'Q' + f1(x - hw * .42) + ' ' + f1(my) + ' ' + f1(x) + ' ' + f1(ya);
+      var bottom = '';
+      for (j = 0; j < k; j++) { var a1 = x + hw - seg * j, a2 = a1 - seg; bottom += 'Q' + f1((a1 + a2) / 2) + ' ' + f1(yb + dr * 2) + ' ' + f1(a2) + ' ' + f1(yb); }
+      dark += 'M' + f1(x) + ' ' + f1(ya) + edgeR + bottom + edgeL + 'Z';
+      if (side) {
+        var half = '', c1, c2;
+        for (j = 0; j < k / 2; j++) {
+          c1 = x + side * (hw - seg * j); c2 = c1 - side * seg;
+          half += 'Q' + f1((c1 + c2) / 2) + ' ' + f1(yb + dr * 2) + ' ' + f1(c2) + ' ' + f1(yb);
+        }
+        lit += 'M' + f1(x) + ' ' + f1(ya) + 'Q' + f1(x + side * hw * .42) + ' ' + f1(my) + ' ' + f1(x + side * hw) + ' ' + f1(yb) + half + 'Z';
       }
+      var th = Math.max(1, hw * .17), sp = 'M' + f1(x - hw * .95) + ' ' + f1(yb - .4);
+      for (j = 0; j < k; j++) {
+        var s1 = x - hw + seg * j, s2 = Math.min(s1 + seg, x + hw * .95);
+        sp += 'Q' + f1((s1 + s2) / 2) + ' ' + f1(yb + dr * 1.5) + ' ' + f1(s2) + ' ' + f1(yb - .4);
+      }
+      sp += 'Q' + f1(x + hw * .72) + ' ' + f1(yb - th * 1.5) + ' ' + f1(x + hw * .36) + ' ' + f1(yb - th) +
+            'Q' + f1(x) + ' ' + f1(yb - th * 1.9) + ' ' + f1(x - hw * .36) + ' ' + f1(yb - th) +
+            'Q' + f1(x - hw * .72) + ' ' + f1(yb - th * 1.5) + ' ' + f1(x - hw * .95) + ' ' + f1(yb - .4) + 'Z';
+      snow += sp;
     }
-    var ty = (b - h * .04).toFixed(1), t = Math.max(1, w * .05);
-    return {
-      d: 'M' + x.toFixed(1) + ' ' + (b - h).toFixed(1) + 'L' + L.join('L') +
-        'L' + (x - t).toFixed(1) + ' ' + ty + 'V' + b + 'H' + (x + t).toFixed(1) + 'V' + ty + 'L' + R.join('L') + 'Z',
-      s: s
-    };
+    var cap = Math.min(h * .1, 7), top = b - h;
+    snow += 'M' + f1(x) + ' ' + f1(top - .4) + 'L' + f1(x + cap * .5) + ' ' + f1(top + cap) + 'Q' + f1(x) + ' ' + f1(top + cap * .7) + ' ' + f1(x - cap * .5) + ' ' + f1(top + cap) + 'Z';
+    var tw = Math.max(1.1, w * .06);
+    var trunk = 'M' + f1(x - tw) + ' ' + f1(b - trunkH - 1.5) + 'H' + f1(x + tw) + 'V' + f1(b) + 'H' + f1(x - tw) + 'Z';
+    return { dark: dark, lit: lit, snow: snow, trunk: trunk };
+  }
+  function firs(target, list, c) {
+    list.forEach(function (q) {
+      var t = fir(q[0], q[1], q[2], q[3], q[4] || 0, q[5]);
+      target.appendChild(svg('path', { d: t.trunk, fill: c.trunk || c.dark }));
+      target.appendChild(svg('path', { d: t.dark, fill: c.dark }));
+      if (t.lit) target.appendChild(svg('path', { d: t.lit, fill: c.lit }));
+      target.appendChild(svg('path', { d: t.snow, fill: c.snow, 'fill-opacity': c.snowOp || 1 }));
+    });
   }
   function deerSVG(x, y, delay, lead) {
     var dl = ' style="animation-delay:' + delay + 's"';
@@ -1113,25 +1274,67 @@
     '</g></g>';
   }
   (function () {
-    var d = '', s = '', x, h, p, i;
-    for (x = -6; x < 398; x += 6 + rnd() * 7) { h = 18 + rnd() * 26; d += pine(x, 338, h, h * .5).d; }
-    byId('pines-far').setAttribute('d', d);
-    d = '';
-    [[-4, 124], [13, 86], [30, 104], [47, 60], [394, 116], [377, 92], [360, 72], [344, 50]].forEach(function (q) {
-      h = q[1] + rnd() * 10; p = pine(q[0] + rnd() * 3, 356, h, h * .44); d += p.d; s += p.s;
-    });
-    byId('pines-near').setAttribute('d', d);
-    byId('pines-near-snow').setAttribute('d', s);
+    var x, h, i, list;
+    /* hero: a hazy far forest and framing firs on both sides, lit from the moon */
+    list = [];
+    for (x = -6; x < 398; x += 7 + rnd() * 8) { h = 16 + rnd() * 22; list.push([x, 340 + rnd() * 3, h, h * .52, 0, 3]); }
+    firs(byId('far-firs'), list, { dark: '#0d3028', snow: '#b9d6cb', snowOp: .55 });
+    list = [[47, 356, 60, 0, 1], [30, 356, 104, 0, 1], [13, 356, 86, 0, 1], [-4, 356, 124, 0, 1],
+            [344, 356, 50, 0, -1], [360, 356, 72, 0, -1], [377, 356, 92, 0, -1], [394, 356, 116, 0, -1]];
+    list = list.map(function (q) { var hh = q[2] + rnd() * 10; return [q[0] + rnd() * 3, q[1], hh, hh * .5, q[4]]; });
+    list.sort(function (a, c) { return a[2] - c[2]; });
+    firs(byId('near-firs'), list, { dark: '#061a14', lit: '#113d31', snow: '#e3efea', trunk: '#120c09' });
 
-    d = ''; s = '';
-    [[14, 44], [34, 62], [222, 40], [246, 58], [268, 38], [344, 52], [366, 70], [384, 46]].forEach(function (q) {
-      p = pine(q[0], 106, q[1], q[1] * .5); d += p.d; s += p.s;
+    /* footer: distant firs on the hill and the big Christmas tree */
+    list = [];
+    for (x = -4; x < 396; x += 16 + rnd() * 14) {
+      if (x > 62 && x < 140) continue;
+      h = 34 + rnd() * 24; list.push([x, 116 + rnd() * 4, h, h * .5, 0, 3]);
+    }
+    firs(byId('ft-firs'), list, { dark: '#1d4a3e', snow: '#cfe0d9', snowOp: .6 });
+    var TX = 100, TB = 152, TH = 132, TW = 96, TT = 6;
+    firs(byId('ft-tree'), [[TX, TB, TH, TW, 1, TT]], { dark: '#14523f', lit: '#1f6c53', snow: '#f2f7f3', trunk: '#4a3226' });
+
+    /* garlands of lights sagging across the tree */
+    var gar = byId('ft-garland'), crown = TH * .91, trunkH = TH * .09, warm = ['#ffd27a', '#ff6b7e', '#fff3c4', '#9be7ff', '#dcee4e'], n = 0;
+    for (i = 1; i < TT; i++) {
+      var ya = TB - TH + crown * (i / TT) * .78, yb = TB - trunkH - crown * (1 - (i + 1) / TT) * .98;
+      var hw = TW / 2 * (.34 + .66 * (i + 1) / TT), y0 = ya + (yb - ya) * .55, half = hw * .62 * .86;
+      var p0x = TX - half, p0y = y0 - 3 + (i % 2) * 6, p2x = TX + half, p2y = y0 + 3 - (i % 2) * 6, cx = TX, cy = y0 + 9;
+      gar.appendChild(svg('path', { d: 'M' + f1(p0x) + ' ' + f1(p0y) + 'Q' + cx + ' ' + f1(cy) + ' ' + f1(p2x) + ' ' + f1(p2y), fill: 'none', stroke: '#0d3a2c', 'stroke-width': .7, 'stroke-opacity': .8 }));
+      var count = 3 + i;
+      for (var k = 1; k <= count; k++) {
+        var t = k / (count + 1), bx = (1 - t) * (1 - t) * p0x + 2 * (1 - t) * t * cx + t * t * p2x, by = (1 - t) * (1 - t) * p0y + 2 * (1 - t) * t * cy + t * t * p2y;
+        var gl = svg('g', { 'class': 'twk' });
+        gl.style.animationDelay = (-rnd() * 2).toFixed(2) + 's';
+        gl.style.animationDuration = (1 + rnd() * 1.4).toFixed(2) + 's';
+        gl.appendChild(svg('circle', { cx: f1(bx), cy: f1(by), r: 4.2, fill: 'url(#bulbGlow)' }));
+        gl.appendChild(svg('circle', { cx: f1(bx), cy: f1(by + .8), r: 1.5, fill: warm[n++ % warm.length] }));
+        gar.appendChild(gl);
+      }
+    }
+
+    /* tennis-ball ornaments; one of them is golden ball 6 */
+    var orn = byId('ft-orn');
+    [[90, 55], [110, 57], [80, 75], [116, 73], [96, 92], [118, 95], [77, 114], [108, 112], [66, 134], [92, 132], [124, 130]].forEach(function (q, k) {
+      var gold = k === 5, r = k > 7 ? 4.6 : 4;
+      var g = svg('g', gold ? { 'class': 'g-swap', 'data-gold': 'g6' } : {});
+      g.appendChild(svg('path', { d: 'M' + q[0] + ' ' + (q[1] - r - 3) + 'V' + (q[1] - r), stroke: '#c9b27a', 'stroke-width': .6 }));
+      g.appendChild(svg('circle', { 'class': gold ? 'gfill' : '', cx: q[0], cy: q[1], r: r, fill: gold ? 'url(#goldGrad)' : 'url(#ornLime)' }));
+      g.appendChild(svg('path', { d: 'M' + f1(q[0] - r * .62) + ' ' + f1(q[1] - r * .7) + 'q' + f1(r * .75) + ' ' + f1(r * .7) + ' 0 ' + f1(r * 1.4), fill: 'none', stroke: '#fffbe8', 'stroke-width': .8, 'stroke-linecap': 'round' }));
+      g.appendChild(svg('circle', { cx: f1(q[0] - r * .35), cy: f1(q[1] - r * .4), r: f1(r * .25), fill: '#fff', 'fill-opacity': .7 }));
+      if (gold) g.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (q[0] + 7) + ' ' + (q[1] - 10) + 'l1 3 3 1-3 1-1 3-1-3-3-1 3-1z', fill: '#fff' }));
+      orn.appendChild(g);
     });
-    byId('ft-pines').setAttribute('d', d);
-    byId('ft-pines-snow').setAttribute('d', s);
-    p = pine(96, 117, 100, 70);
-    byId('ft-tree').setAttribute('d', p.d);
-    byId('ft-tree-snow').setAttribute('d', p.s);
+
+    /* glints on the snow */
+    var gl2 = byId('ft-glints');
+    [[30, 170], [70, 182], [140, 176], [210, 168], [240, 186], [330, 176], [370, 160], [190, 160]].forEach(function (q) {
+      var st = svg('path', { 'class': 'glint', d: 'M' + q[0] + ' ' + (q[1] - 3) + 'l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z' });
+      st.style.animationDelay = (-rnd() * 4).toFixed(2) + 's';
+      st.style.animationDuration = (3 + rnd() * 3).toFixed(2) + 's';
+      gl2.appendChild(st);
+    });
 
     /* reindeer: parsed inside an <svg> wrapper so they land in the SVG namespace */
     var tmp = document.createElement('div');
@@ -1177,21 +1380,6 @@
       bulbs.appendChild(g);
     }
 
-    var baubles = byId('ft-baubles');
-    [[90, 46], [105, 59], [83, 71], [100, 79], [114, 93], [77, 97], [95, 101]].forEach(function (q, k) {
-      if (k === 4) {   /* golden ball 6: one bauble is golden */
-        var gb = svg('g', { 'class': 'g-swap', 'data-gold': 'g6' });
-        gb.appendChild(svg('circle', { 'class': 'glow', cx: q[0], cy: q[1], r: 10, fill: 'url(#bauble)' }));
-        gb.appendChild(svg('circle', { 'class': 'gfill', cx: q[0], cy: q[1], r: 4.2, fill: 'url(#goldGrad)' }));
-        gb.appendChild(svg('path', { d: 'M' + (q[0] - 3) + ' ' + (q[1] - 3.4) + 'q3.8 3 2 7.2', fill: 'none', stroke: '#fffbe8', 'stroke-width': .9, 'stroke-linecap': 'round' }));
-        gb.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (q[0] + 8) + ' ' + (q[1] - 12) + 'l1 3 3 1-3 1-1 3-1-3-3-1 3-1z', fill: '#fff' }));
-        baubles.appendChild(gb);
-        return;
-      }
-      baubles.appendChild(svg('circle', { 'class': 'glow', cx: q[0], cy: q[1], r: 10, fill: 'url(#bauble)' }));
-      baubles.appendChild(svg('circle', { cx: q[0], cy: q[1], r: 4.2, fill: '#dcee4e' }));
-      baubles.appendChild(svg('path', { d: 'M' + (q[0] - 2.6) + ' ' + (q[1] - 3) + 'q3.4 2.6 1.8 6.4', fill: 'none', stroke: '#f2f7f3', 'stroke-width': .8, 'stroke-linecap': 'round' }));
-    });
   })();
 
   /* ---------- Film grain ---------- */
