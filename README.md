@@ -8,7 +8,7 @@ Strona: https://wrobhu.github.io/swieta/
 - odliczanie do Wigilii,
 - list Huberta do Mikołaja z podpisem i lista prezentów rozpakowywanych uderzeniem piłki,
 - „Złote piłki Mikołaja”: każdy gość ma 7 piłek ukrytych w innych miejscach (z 22 możliwych). Za 3 jest brązowy kupon, za 5 srebrny, za 7 złoty, każdy z kodem QR do pokazania w Święta,
-- turniej na żywo: pięć mini-gier i gra bonusowa, wszyscy grają w tej samej chwili, a wejście jest przez sejf Mikołaja i znak turnieju.
+- turniej na żywo: siedem mini-gier (m.in. Wieża z prezentów i Świąteczne memory) i gra bonusowa, wszyscy grają w tej samej chwili, a wejście jest przez sejf Mikołaja i znak turnieju.
 
 Cała strona to jeden plik `index.html` bez zależności poza czcionkami Google, biblioteką do kodów QR i Firebase.
 

@@ -1138,6 +1138,19 @@
   .quiz-pot { min-height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center; font-size: 14px; color: var(--mist); }
   .quiz-pot b { font: 800 18px/1 var(--score); letter-spacing: .04em; color: var(--snow); }
   .quiz-pot.live b { color: var(--ball); }
+  .mem { position: absolute; left: 12px; right: 12px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); perspective: 800px; }
+  .mem-card { position: relative; min-width: 0; min-height: 0; border: 0; padding: 0; background: none; cursor: pointer; border-radius: 12px; transform-style: preserve-3d; transition: transform .34s cubic-bezier(.3, .7, .3, 1); -webkit-tap-highlight-color: transparent; }
+  .mem-card .mc-b, .mem-card .mc-f { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 12px; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+  .mem-card .mc-b {
+    background: linear-gradient(90deg, transparent 44%, #f0c35a 44% 56%, transparent 56%), linear-gradient(180deg, transparent 44%, #f0c35a 44% 56%, transparent 56%), linear-gradient(160deg, #d8394f, #9a1b30);
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .2), 0 4px 10px rgba(0, 0, 0, .35);
+  }
+  .mem-card .mc-b::after { content: ""; width: 34%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff4c7, #f0c35a 55%, #b07f22); box-shadow: 0 2px 4px rgba(0, 0, 0, .3); }
+  .mem-card .mc-f { transform: rotateY(180deg); background: linear-gradient(180deg, #17503f, #0b2f25); box-shadow: inset 0 0 0 1.5px rgba(240, 195, 90, .55), 0 4px 10px rgba(0, 0, 0, .35); }
+  .mem-card .mc-f svg { width: 62%; height: auto; max-height: 72%; }
+  .mem-card.up, .mem-card.done { transform: rotateY(180deg); cursor: default; }
+  .mem-card.done .mc-f { box-shadow: inset 0 0 0 2px #5be38f, 0 0 16px rgba(91, 227, 143, .5); opacity: .55; transition: opacity .5s .45s; }
+  @media (prefers-reduced-motion: reduce) { .mem-card, .mem-card.done .mc-f { transition: none; } }
   .stage-wrap.short .quiz { gap: 7px; padding: 66px 12px 12px; }
   .stage-wrap.short .quiz-q { font-size: 18px; line-height: 1.22; }
   .stage-wrap.short .quiz-a { gap: 6px; margin-top: 2px; }
@@ -1913,7 +1926,7 @@
     <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
       <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard" href="#turniej" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
-      <span><strong>Turniej świąteczny</strong><span class="sub" id="card-game-sub">Pięć gier na żywo i niespodzianka na koniec. Wejście przez złoty puchar na dole.</span><span class="live-pill" id="card-game-live" hidden><i></i>Gra trwa</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+      <span><strong>Turniej świąteczny</strong><span class="sub" id="card-game-sub">Siedem gier na żywo i niespodzianka na koniec. Wejście przez złoty puchar na dole.</span><span class="live-pill" id="card-game-live" hidden><i></i>Gra trwa</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
   </nav>
 
   <footer class="layer">
@@ -2120,7 +2133,7 @@
     <header class="vhead gutter">
       <p class="eyebrow">Turniej na żywo</p>
       <h1>Turniej <em>świąteczny</em></h1>
-      <p class="vlead">Pięć krótkich gier i niespodzianka na koniec. Wszyscy grają w tej samej chwili, każdy na swoim telefonie. Kto zbierze najwięcej punktów, zostaje Mistrzem Świąt.</p>
+      <p class="vlead">Siedem krótkich gier i niespodzianka na koniec. Wszyscy grają w tej samej chwili, każdy na swoim telefonie. Kto zbierze najwięcej punktów, zostaje Mistrzem Świąt.</p>
     </header>
     <div class="layer gutter" id="game-lobby">
       <div style="display:flex;flex-direction:column;gap:16px">
@@ -2239,7 +2252,7 @@
     });
     Object.keys(O_SPOTS).forEach(function (k) { o[k] = pick(97); });
     return { seed: seed, ids: ids, o: o, gift: pick(12), tree: pick(11), star: pick(STAR_POS.length), net: NET_SLOTS[pick(NET_SLOTS.length)],
-      snow: pick(2), lamp: pick(2), house: pick(2), snowman: pick(3), gifts: pick(3), rim: pick(RIM_POS.length), game: pick(5) };
+      snow: pick(2), lamp: pick(2), house: pick(2), snowman: pick(3), gifts: pick(3), rim: pick(RIM_POS.length), game: pick(7) };
   }
   var HUNT = (function () {
     var h = restore('mikolaj-uklad', null);
@@ -2610,7 +2623,7 @@
     net: { tab: 'start', rank: 5, gen: 'Jedna z lampek na siatce kortu na Starcie (każdy ma inną).', admin: function (L) { return 'Lampka nr ' + (L.net + 1) + ' z 19 na siatce kortu na Starcie, licząc od lewej.'; }, hint: 'Na Starcie przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.' },
     snowman: { tab: 'start', rank: 6, gen: 'Jeden z guzików bałwana w stopce Startu.', admin: function (L) { return ['Górny', 'Środkowy', 'Dolny'][L.snowman % 3] + ' guzik bałwana w stopce Startu.'; }, hint: 'Bałwan na dole Startu ma guziki. Jeden z nich wcale nie jest guzikiem.' },
     gifts: { tab: 'start', rank: 7, gen: 'Przy jednym z trzech prezentów pod choinką w stopce Startu.', admin: function (L) { return ['Na białej kokardzie zielonego prezentu', 'W śniegu przy czerwonym prezencie, z lewej', 'W śniegu przy żółtym prezencie, z prawej'][L.gifts % 3] + ' (prezenty pod choinką w stopce Startu).'; }, hint: 'Pod choinką na dole Startu leżą prezenty. Przy jednym z nich coś się złoci.' },
-    game: { tab: 'gra', rank: 8, gen: 'Złota naklejka przy jednej z gier na liście w zakładce Gra.', admin: function (L) { return 'Złota naklejka przy grze nr ' + (L.game % 5 + 1) + ' na liście w zakładce Gra.'; }, hint: 'W zakładce Gra, na liście gier, jedna gra ma złotą naklejkę.' },
+    game: { tab: 'gra', rank: 8, gen: 'Złota naklejka przy jednej z gier na liście w zakładce Gra.', admin: function (L) { return 'Złota naklejka przy grze nr ' + (L.game % 7 + 1) + ' na liście w zakładce Gra.'; }, hint: 'W zakładce Gra, na liście gier, jedna gra ma złotą naklejkę.' },
     snow: { tab: 'start', rank: 9, gen: 'Piłka wystająca ze śniegu w tylnym rogu kortu na Starcie (lewym albo prawym).', admin: function (L) { return 'Piłka wystająca ze śniegu w ' + (L.snow % 2 ? 'prawym' : 'lewym') + ' tylnym rogu kortu na Starcie.'; }, hint: 'Na Starcie, w tylnym rogu kortu, coś wystaje ze śniegu.' },
     bounce: { tab: 'start', rank: 10, admin: 'Piłka, którą podbija bałwan w stopce Startu, jest złota.', hint: 'Bałwan na dole Startu podbija piłkę. Przyjrzyj się jej kolorowi.' },
     lamp: { tab: 'start', rank: 11, gen: 'Złota piłka na szczycie jednej z dwóch lamp przy korcie na Starcie.', admin: function (L) { return 'Na szczycie ' + (L.lamp % 2 ? 'prawej' : 'lewej') + ' lampy przy korcie na Starcie.'; }, hint: 'Na Starcie przyjrzyj się lampom, które oświetlają kort.' },
@@ -4567,7 +4580,7 @@ function createSafe(opts) {
   var stage = byId('stage'), sctx = stage.getContext('2d'), stageUI = byId('stage-ui'), SW = 0, SH = 0, G = null, bgStars = null;
   var paddle = { x: .5, tx: .5 }, allScores = {}, history = {}, resultsFor = 0, lastJoined = 0, finalShownFor = '';
   /* points for a place in one game; everyone further down who played still gets 1 */
-  var PLACE_PTS = [15, 12, 10, 8, 7, 6, 5, 4, 3, 2], GAME_ORDER = ['catch', 'quiz', 'reflex', 'snow', 'juggle', 'chimney'], REGULAR = 5;
+  var PLACE_PTS = [15, 12, 10, 8, 7, 6, 5, 4, 3, 2], GAME_ORDER = ['catch', 'quiz', 'tower', 'reflex', 'memory', 'snow', 'juggle', 'chimney'], REGULAR = 7;
   function practiceDur(k) { return k === 'quiz' ? 3 * 12000 : GAMES[k].dur; }
   function gameTag(idx) { var k = GAME_ORDER[idx]; return GAMES[k] && GAMES[k].bonus ? 'Gra bonusowa' : 'Gra ' + (idx + 1) + ' z ' + REGULAR; }
   function plural(n, f) { var d = n % 10, t = n % 100; return n === 1 ? f[0] : (d >= 2 && d <= 4 && (t < 12 || t > 14)) ? f[1] : f[2]; }
@@ -4592,6 +4605,14 @@ function createSafe(opts) {
       desc: 'Odbijaj spadającą piłkę pod linią. Każde odbicie leci inaczej, a wiatr się zmienia.',
       icon: '<svg viewBox="0 0 24 24"><circle cx="15" cy="6" r="3.2"/><ellipse cx="9" cy="15" rx="4.5" ry="5.5" transform="rotate(-30 9 15)"/><path d="M12 19.5 15 22"/></svg>',
       fmt: function (n) { return n + ' ' + plural(n, ['odbicie', 'odbicia', 'odbić']); } },
+    tower: { name: 'Wieża z prezentów', time: '45 s', dur: 45000, better: 'high', label: 'PUNKTY', hint: 'Stuknij, żeby upuścić prezent',
+      desc: 'Prezent jeździ nad stosem. Stuknij, żeby go upuścić: to, co wystaje, spada. Za każdy prezent +1, za idealne trafienie +2.',
+      icon: '<svg viewBox="0 0 24 24"><rect x="5.5" y="15.5" width="13" height="5.5" rx="1"/><rect x="7" y="10" width="10" height="5.5" rx="1"/><rect x="8.5" y="4.5" width="7" height="5.5" rx="1"/><path d="M12 4.5V21"/></svg>',
+      fmt: function (n) { return n + ' pkt'; } },
+    memory: { name: 'Świąteczne memory', time: '1 min', dur: 60000, better: 'high', label: 'PUNKTY', hint: 'Odkrywaj po dwie karty i szukaj par',
+      desc: 'Odkrywaj po dwie karty i szukaj par. Za parę +1, za całą planszę +3, a potem przychodzi nowa. Wszyscy mają te same plansze.',
+      icon: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="11" rx="1.6"/><rect x="13" y="8" width="8" height="11" rx="1.6"/><path d="M7 8.6v3.8M5.1 10.5h3.8M17 11.2l1.4 2.3-1.4 2.3-1.4-2.3z"/></svg>',
+      fmt: function (n) { return n + ' pkt'; } },
     chimney: { name: 'Serwis do komina', time: '40 s', dur: 6 * 6500, better: 'high', label: 'PUNKTY', hint: 'Traf do komina. Uważaj na wiatr!', bonus: true, mult: 2,
       desc: 'Niespodzianka na koniec. Bez treningu, a punkty za miejsce liczą się podwójnie.',
       icon: '<svg viewBox="0 0 24 24"><path d="M3 12.5 12 5.5l9 7M5.5 10.6V20h13v-9.4"/><path d="M15.2 7.6V3.8h2.6v5.8"/><circle cx="9" cy="3.6" r="1.7"/></svg>',
@@ -4708,8 +4729,8 @@ function createSafe(opts) {
   }
   /* the night sky, stars, court lines and snow are painted once per board size and then copied every frame */
   var bgCache = {};
-  function drawBg(court) {
-    var key = court ? 'c' : 'n', bc = bgCache[key];
+  function drawBg(court, bare) {
+    var key = (court ? 'c' : 'n') + (bare ? 'b' : ''), bc = bgCache[key];
     if (!bc) {
       var dpr = Math.min(2, window.devicePixelRatio || 1);
       bc = bgCache[key] = document.createElement('canvas');
@@ -4725,8 +4746,10 @@ function createSafe(opts) {
         c.strokeStyle = 'rgba(242,247,243,.07)'; c.lineWidth = 1.5;
         c.beginPath(); c.moveTo(SW * .5, SH * .35); c.lineTo(SW * .5, SH - 30); c.moveTo(SW * .12, SH - 30); c.lineTo(SW * .3, SH * .35); c.moveTo(SW * .88, SH - 30); c.lineTo(SW * .7, SH * .35); c.stroke();
       }
-      c.fillStyle = '#e6f2ec'; c.beginPath(); c.moveTo(0, SH - 22);
-      c.quadraticCurveTo(SW * .25, SH - 34, SW * .5, SH - 24); c.quadraticCurveTo(SW * .75, SH - 14, SW, SH - 28); c.lineTo(SW, SH); c.lineTo(0, SH); c.closePath(); c.fill();
+      if (!bare) {
+        c.fillStyle = '#e6f2ec'; c.beginPath(); c.moveTo(0, SH - 22);
+        c.quadraticCurveTo(SW * .25, SH - 34, SW * .5, SH - 24); c.quadraticCurveTo(SW * .75, SH - 14, SW, SH - 28); c.lineTo(SW, SH); c.lineTo(0, SH); c.closePath(); c.fill();
+      }
     }
     sctx.drawImage(bc, 0, 0, SW, SH);
   }
@@ -5157,6 +5180,144 @@ function createSafe(opts) {
     if (byy < SH + 30) drawItem(c, 'ball', bx, byy, 26, ft * 9, 0);
   };
 
+  /* ---- 7. Wieża z prezentów: a present slides over the stack, a tap drops it, whatever overhangs falls off ---- */
+  function towerGeo() { return { bh: clamp(SH * .052, 16, 26), w0: clamp(SW * .5, 120, 190), base: SH - 30 }; }
+  INIT.tower = function (G) {
+    var q = towerGeo(), i;
+    G.st = [{ x: (SW - q.w0) / 2, w: q.w0, c: 0 }]; G.mv = null; G.bits = []; G.cam = 0; G.next = 0; G.combo = 0; G.cols = [];
+    for (i = 0; i < 120; i++) G.cols.push(Math.floor(G.r() * 4));
+    G.dir0 = G.r() < .5 ? 1 : -1;
+  };
+  /* the same speed curve for everyone: it only depends on how tall the tower is */
+  function towerX(G, t) {
+    var m = G.mv, sp = SW * Math.min(1.4, .46 + G.st.length * .03), lo = -m.w * .25, span = SW - m.w * .5;
+    var d = Math.max(0, t - m.t0) / 1000 * sp % (2 * span), k = d < span ? d : 2 * span - d;
+    return m.dir > 0 ? lo + k : lo + span - k;
+  }
+  function giftBlock(c, x, y, w, h, col, bow) {
+    var gc = GIFT_COLS[col % 4];
+    c.fillStyle = gc[0]; rrect(c, x, y, w, h, Math.min(4, w / 4, h / 3)); c.fill();
+    c.fillStyle = 'rgba(0,0,0,.2)'; c.fillRect(x + 1, y + h - 3, Math.max(0, w - 2), 3);
+    c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(x + 2, y + 2, Math.max(0, w - 4), 2);
+    if (w > 9) { var rw = Math.min(8, w * .16); c.fillStyle = gc[1]; c.fillRect(x + w / 2 - rw / 2, y, rw, h); }
+    if (bow && w > 24) {
+      c.fillStyle = gc[1]; c.beginPath();
+      c.ellipse(x + w / 2 - 6, y - 2.5, 6.5, 3.6, -.5, 0, 6.284); c.ellipse(x + w / 2 + 6, y - 2.5, 6.5, 3.6, .5, 0, 6.284); c.fill();
+    }
+  }
+  POINTER.tower = function (G, type) {
+    if (type !== 'down' || !G.mv) return;
+    var t = G.opt.clock() - G.opt.startAt;
+    if (t < 0 || t >= G.opt.duration) return;
+    var q = towerGeo(), top = G.st[G.st.length - 1], m = G.mv, x = G.mvx != null ? G.mvx : towerX(G, t), lvl = G.st.length;
+    var l = Math.max(x, top.x), r = Math.min(x + m.w, top.x + top.w), ov = r - l;
+    G.mv = null; G.mvx = null; G.next = t + 230;
+    if (ov <= 1.5) {   /* missed the stack: the present tumbles down, the tower stays as it was */
+      G.bits.push({ x: x, w: m.w, lvl: lvl, c: m.c, t: G.now, vx: x < top.x ? -70 : 70 });
+      G.combo = 0; G.next = t + 450;
+      pop(G, SW / 2, SH * .3, 'Pudło', '#ff8b9a');
+      try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) {}
+      return;
+    }
+    if (Math.abs(x - top.x) <= Math.max(3, m.w * .045)) {   /* a perfect drop keeps the width and even grows it back a little */
+      G.combo++;
+      var nw = Math.min(q.w0, top.w + (G.combo > 1 ? 7 : 4));
+      G.st.push({ x: top.x - (nw - top.w) / 2, w: nw, c: m.c, t: G.now });
+      G.score += 2;
+      pop(G, SW / 2, SH * .3, G.combo > 1 ? 'Idealnie ×' + G.combo + '! +2' : 'Idealnie! +2', '#f0c35a');
+      try { if (navigator.vibrate) navigator.vibrate(14); } catch (e) {}
+    } else {
+      G.combo = 0;
+      var minW = Math.max(22, q.w0 * .22), keep = Math.max(ov, minW);
+      G.st.push({ x: l + ov / 2 - keep / 2, w: keep, c: m.c, t: G.now });
+      G.score += 1;
+      pop(G, SW / 2, SH * .3, '+1', '#dcee4e');
+      if (m.w - ov > .5) G.bits.push({ x: x < top.x ? x : r, w: m.w - ov, lvl: lvl, c: m.c, t: G.now, vx: x < top.x ? -45 : 45 });
+    }
+  };
+  FRAME.tower = function (G, t, dt) {
+    var c = sctx, q = towerGeo(), n = G.st.length, i;
+    if (t >= 0 && t < G.opt.duration && !G.mv && t >= G.next) G.mv = { w: G.st[n - 1].w, t0: t, dir: (n % 2 ? 1 : -1) * G.dir0, c: G.cols[n % G.cols.length] };
+    /* the camera follows the top of the tower */
+    var want = Math.max(0, SH * .4 - (q.base - (n + 1) * q.bh));
+    G.cam += (want - G.cam) * Math.min(1, dt * 5);
+    c.save(); c.translate(0, G.cam);
+    c.fillStyle = '#e6f2ec'; c.beginPath(); c.moveTo(-10, q.base + 4);
+    c.quadraticCurveTo(SW * .3, q.base - 6, SW * .55, q.base + 2); c.quadraticCurveTo(SW * .8, q.base + 8, SW + 10, q.base - 2); c.lineTo(SW + 10, q.base + SH); c.lineTo(-10, q.base + SH); c.closePath(); c.fill();
+    for (i = 0; i < n; i++) {
+      var b = G.st[i], y = q.base - (i + 1) * q.bh, sq = b.t ? Math.max(0, 1 - (G.now - b.t) / 160) * .18 : 0;
+      if (y + G.cam > SH + q.bh || y + G.cam < -2 * q.bh) continue;
+      if (sq) { c.save(); c.translate(b.x + b.w / 2, y + q.bh); c.scale(1 + sq * .4, 1 - sq); c.translate(-(b.x + b.w / 2), -(y + q.bh)); }
+      giftBlock(c, b.x, y, b.w, q.bh, b.c, i === n - 1);
+      if (sq) c.restore();
+    }
+    if (G.mv) { G.mvx = towerX(G, t); giftBlock(c, G.mvx, q.base - (n + 1) * q.bh, G.mv.w, q.bh, G.mv.c, true); }
+    G.bits = G.bits.filter(function (p) {
+      var age = (G.now - p.t) / 1000;
+      if (age > 1.3) return false;
+      var y = q.base - (p.lvl + 1) * q.bh + 420 * age * age, x = p.x + p.vx * age;
+      c.save(); c.globalAlpha = Math.max(0, 1 - age / 1.3); c.translate(x + p.w / 2, y + q.bh / 2); c.rotate((p.vx > 0 ? 1 : -1) * age * 2.2);
+      giftBlock(c, -p.w / 2, -q.bh / 2, p.w, q.bh, p.c, false); c.restore();
+      return true;
+    });
+    c.restore();
+    c.textAlign = 'center'; c.fillStyle = '#a8c3b7'; c.font = '600 12px "Barlow Condensed", "Arial Narrow", sans-serif';
+    c.fillText('WYSOKOŚĆ ' + (n - 1), SW / 2, 24);
+  };
+
+  /* ---- 8. Świąteczne memory: 16 cards, 8 pairs; everyone gets the same boards ---- */
+  var MEM_RACKET = '<svg viewBox="0 0 48 48" fill="none" stroke="#f0c35a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="19" cy="18" rx="11" ry="13.5" transform="rotate(-38 19 18)" fill="#f0c35a" fill-opacity=".16"/><path d="M12 10.5 26.5 23M9.5 17l11 9.6M17 6.5l11.4 9.8" stroke-width="1.3" opacity=".7"/><path d="M27.5 27.5 38.5 40"/><circle cx="38" cy="10" r="4.2" fill="#dcee4e" stroke="none"/></svg>';
+  function memFaces() {
+    return safeApi().SIGNS.map(function (sg) { return { name: sg.name, svg: sg.svg }; })
+      .concat([{ name: 'Rakieta', svg: MEM_RACKET }, { name: 'Piłka', svg: '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>' }]);
+  }
+  INIT.memory = function (G) { G.board = 0; G.mem = null; G.lock = 0; G.memOn = false; G.faces = memFaces(); };
+  function memDeal(g) {
+    var r = mulberry(((g.opt.seed >>> 0) + g.board * 7919) >>> 0), cards = [], grid = document.createElement('div');
+    g.faces.forEach(function (f, k) { cards.push(k, k); });
+    shuffle(cards, r);
+    g.mem = { cards: cards, open: [], done: 0 };
+    var top = 76, avail = SH - top - 12, gap = SW < 340 ? 6 : 8, cw = (SW - 24 - gap * 3) / 4, h = Math.min(avail, cw * 1.32 * 4 + gap * 3);
+    grid.className = 'mem';
+    grid.style.cssText = 'top:' + Math.round(top + (avail - h) / 2) + 'px;height:' + Math.round(h) + 'px;gap:' + gap + 'px';
+    grid.innerHTML = cards.map(function (k, i) { return '<button type="button" class="mem-card" data-i="' + i + '" aria-label="Karta ' + (i + 1) + ', zakryta"><span class="mc-b"></span><span class="mc-f">' + g.faces[k].svg + '</span></button>'; }).join('');
+    grid.addEventListener('click', function (e) { var b = e.target.closest('.mem-card'); if (b) memFlip(g, b); });
+    stageUI.innerHTML = ''; stageUI.appendChild(grid);
+    g.lock = g.opt.clock() + (still ? 0 : 420);
+    if (!still) Array.prototype.forEach.call(grid.children, function (b, i) { b.animate([{ opacity: 0, transform: 'translateY(12px) scale(.9)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: i * 16, easing: OUT, fill: 'backwards' }); });
+  }
+  function memFlip(g, b) {
+    var t = g.opt.clock() - g.opt.startAt, m = g.mem, i = +b.getAttribute('data-i');
+    if (g.done || !m || t < 0 || t >= g.opt.duration || g.opt.clock() < g.lock) return;
+    if (b.classList.contains('up') || b.classList.contains('done')) return;
+    g.acted = true;
+    b.classList.add('up'); b.setAttribute('aria-label', g.faces[m.cards[i]].name);
+    m.open.push(i);
+    if (m.open.length < 2) return;
+    var els = b.parentNode.children, a = m.open[0], z = m.open[1];
+    m.open = [];
+    if (m.cards[a] === m.cards[z]) {
+      g.score += 1; m.done++;
+      setTimeout(function () { els[a].classList.add('done'); els[z].classList.add('done'); }, 260);
+      pop(g, SW / 2, 70, '+1', '#5be38f');
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+      if (m.done === g.faces.length) {
+        g.score += 3; g.board++; g.lock = g.opt.clock() + 1000;
+        pop(g, SW / 2, 50, 'Cała plansza! +3', '#f0c35a');
+        setTimeout(function () { if (!g.done && g === G) memDeal(g); }, 950);
+      }
+    } else {
+      g.lock = g.opt.clock() + 720;
+      setTimeout(function () {
+        [a, z].forEach(function (k) { els[k].classList.remove('up'); els[k].setAttribute('aria-label', 'Karta ' + (k + 1) + ', zakryta'); });
+      }, 700);
+    }
+  }
+  FRAME.memory = function (G, t) {
+    if (t >= 0 && !G.memOn) { G.memOn = true; memDeal(G); }
+    if (t >= 0) { sctx.textAlign = 'center'; sctx.fillStyle = '#a8c3b7'; sctx.font = '600 12px "Barlow Condensed", "Arial Narrow", sans-serif'; sctx.fillText('PLANSZA ' + (G.board + 1), SW / 2, 24); }
+  };
+
   /* ---- the shared engine ---- */
   stageUI.addEventListener('pointerdown', function (e) {
     if (!G || G.done || !POINTER[G.key]) return;
@@ -5175,7 +5336,7 @@ function createSafe(opts) {
     if (/^(Arrow|Enter| )/.test(e.key)) G.acted = true;
     if (G.key === 'catch' && e.key === 'ArrowLeft') { paddle.tx = Math.max(.07, paddle.tx - .08); e.preventDefault(); }
     if (G.key === 'catch' && e.key === 'ArrowRight') { paddle.tx = Math.min(.93, paddle.tx + .08); e.preventDefault(); }
-    if ((G.key === 'reflex' || G.key === 'chimney') && (e.key === ' ' || e.key === 'Enter')) { POINTER[G.key](G, 'down', SW / 2, SH / 2); e.preventDefault(); }
+    if ((G.key === 'reflex' || G.key === 'chimney' || G.key === 'tower') && (e.key === ' ' || e.key === 'Enter')) { POINTER[G.key](G, 'down', SW / 2, SH / 2); e.preventDefault(); }
   });
 
   function placeStage(practice) {
@@ -5237,7 +5398,7 @@ function createSafe(opts) {
     var o = G.opt, now = o.clock(), t = now - o.startAt, dt = G.prev ? Math.min(.05, (now - G.prev) / 1000) : 0, c = sctx;
     G.prev = now; G.now = now;
     if (G.key === 'reflex' && G.score === 0) G.score = reflexScore(G);
-    drawBg(G.key === 'catch');
+    drawBg(G.key === 'catch', G.key === 'tower');
     FRAME[G.key](G, t, dt);
     G.pops = G.pops.filter(function (pp) {
       var life = (now - pp.t) / 800;
