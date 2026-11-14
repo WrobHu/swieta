@@ -707,28 +707,54 @@
   .booting .hero, .booting .hero * { animation-play-state: paused !important; }
   .splash {
     position: fixed; inset: 0; z-index: 30; overflow: hidden;
-    background: radial-gradient(ellipse at 50% 30%, #12402f, var(--night-deep) 70%);
+    background: radial-gradient(130% 75% at 50% 0%, #185340 0%, #0b2d24 48%, var(--night-deep) 100%);
     display: grid; place-items: center; text-align: center;
     padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
   }
-  .splash-inner { width: min(100%, 380px); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .splash::before, .splash::after {
+    content: ""; position: absolute; left: 0; right: 0; top: -240px; bottom: 0; z-index: 1; pointer-events: none;
+    background-image: radial-gradient(circle at 20px 30px, #fff 1.3px, transparent 1.8px), radial-gradient(circle at 110px 90px, #fff 1px, transparent 1.5px),
+      radial-gradient(circle at 160px 20px, #fff 1.6px, transparent 2.1px), radial-gradient(circle at 70px 150px, #fff 1.1px, transparent 1.6px),
+      radial-gradient(circle at 190px 170px, #fff .9px, transparent 1.4px);
+    background-size: 210px 210px; opacity: .55; animation: sp-snow 11s linear infinite;
+  }
+  .splash::after { background-size: 300px 300px; opacity: .3; transform: scale(1.6); animation: sp-snow-b 16s linear infinite; }
+  @keyframes sp-snow { from { transform: translateY(0); } to { transform: translateY(210px); } }
+  @keyframes sp-snow-b { from { transform: translate(0, 0) scale(1.6); } to { transform: translate(-40px, 300px) scale(1.6); } }
+  .sp-sky { position: absolute; left: 0; top: 0; width: 100%; height: 50vh; pointer-events: none; }
+  .sp-hills { position: absolute; left: 0; bottom: 0; width: 100%; height: 26vh; pointer-events: none; }
+  .sp-stars circle { fill: var(--snow); }
+  .sp-stars .tw { animation: star 2.6s ease-in-out infinite alternate; }
+  .sp-moon { animation: fade 2s ease-out .1s both; }
+  .splash-inner { position: relative; z-index: 2; width: min(100%, 380px); display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .splash-stage { position: relative; width: 120px; height: 150px; }
-  .splash-ball { position: absolute; left: 28px; bottom: 18px; width: 64px; height: 64px; animation: s-drop 1.5s cubic-bezier(.3, 0, .7, 1) both; filter: drop-shadow(0 0 18px rgba(220, 238, 78, .45)); }
-  .splash-ball svg { width: 100%; height: 100%; display: block; animation: s-spin 1.5s linear both; }
+  .splash-stage::before {
+    content: ""; position: absolute; left: -40px; right: -40px; bottom: -30px; height: 120px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(220, 238, 78, .22), rgba(220, 238, 78, 0)); animation: fade 1s ease-out 1.7s both;
+  }
+  .splash-ball { position: absolute; left: 28px; bottom: 18px; width: 64px; height: 64px; animation: s-drop 1.4s cubic-bezier(.3, 0, .7, 1) 1.2s both; filter: drop-shadow(0 0 18px rgba(220, 238, 78, .45)); }
+  .splash-ball svg { width: 100%; height: 100%; display: block; animation: s-spin 1.4s linear 1.2s both; }
   @keyframes s-drop {
-    0% { transform: translateY(-62vh); } 38% { transform: translateY(0) scale(1.08, .86); }
+    0% { transform: translateY(-175px) scale(.3); opacity: 0; } 8% { opacity: 1; }
+    38% { transform: translateY(0) scale(1.08, .86); }
     52% { transform: translateY(-74px) scale(.96, 1.04); } 66% { transform: translateY(0) scale(1.05, .9); }
-    78% { transform: translateY(-26px); } 88% { transform: translateY(0) scale(1.02, .96); } 100% { transform: translateY(0); }
+    78% { transform: translateY(-26px); } 88% { transform: translateY(0) scale(1.02, .96); } 100% { transform: translateY(0); opacity: 1; }
   }
   @keyframes s-spin { to { transform: rotate(540deg); } }
-  .splash-shadow { position: absolute; left: 30px; bottom: 10px; width: 60px; height: 10px; border-radius: 50%; background: rgba(0, 0, 0, .45); filter: blur(3px); animation: s-shadow 1.5s cubic-bezier(.3, 0, .7, 1) both; }
+  .splash-shadow { position: absolute; left: 30px; bottom: 10px; width: 60px; height: 10px; border-radius: 50%; background: rgba(0, 0, 0, .45); filter: blur(3px); animation: s-shadow 1.4s cubic-bezier(.3, 0, .7, 1) 1.2s both; }
   @keyframes s-shadow { 0% { transform: scale(.2); opacity: 0; } 38%, 66%, 88%, 100% { transform: scale(1); opacity: 1; } 52% { transform: scale(.5); opacity: .5; } }
+  .sp-burst { position: absolute; left: 60px; bottom: 18px; width: 0; height: 0; }
+  .sp-burst::before { content: ""; position: absolute; left: -30px; top: -14px; width: 60px; height: 22px; margin-top: 3px; border-radius: 50%; border: 1.5px solid var(--ball); opacity: 0; animation: sp-ring .8s var(--out) 1.73s both; }
+  @keyframes sp-ring { 0% { opacity: .8; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.7); } }
+  .sp-burst i { position: absolute; left: -2px; top: -6px; width: 4px; height: 12px; border-radius: 2px; background: var(--gold); opacity: 0; transform-origin: 50% 100%; animation: sp-spark .75s var(--out) 1.73s both; }
+  .sp-burst i:nth-child(even) { background: var(--ball); height: 9px; }
+  @keyframes sp-spark { 0% { opacity: 0; transform: rotate(var(--a)) translateY(-4px) scaleY(.3); } 18% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-54px) scaleY(1); } }
   .splash h1 { font: 900 clamp(44px, 14vw, 60px)/.94 var(--display); letter-spacing: -.025em; }
   .splash h1 em { font-style: italic; color: var(--ball); }
-  .splash .w:nth-child(1) > * { animation-delay: .9s; }
-  .splash .w:nth-child(2) > * { animation-delay: 1s; }
-  .splash .w:nth-child(3) > * { animation-delay: 1.15s; }
-  .splash .eyebrow { animation-delay: .7s; }
+  .splash .w:nth-child(1) > * { animation-delay: 1.78s; }
+  .splash .w:nth-child(2) > * { animation-delay: 1.9s; }
+  .splash .w:nth-child(3) > * { animation-delay: 2.05s; }
+  .splash .eyebrow { animation-delay: 1.62s; }
   .splash-form { width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 8px; }
   .splash-form label { font: 700 22px/1.1 var(--display); color: var(--snow); }
   .splash-help { font-size: 14px; color: var(--mist); }
@@ -745,26 +771,47 @@
   .vlead { color: var(--mist); max-width: 36ch; }
 
   .tabbar {
-    position: fixed; z-index: 7; left: 0; right: 0; bottom: 0;
-    padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 6px) max(10px, env(safe-area-inset-left, 0px));
-    background: rgba(4, 18, 16, .97);
-    border-top: 1px solid var(--line); display: flex; justify-content: center;
-    transition: transform .4s var(--out), opacity .3s;
+    position: fixed; z-index: 7; left: 0; right: 0; bottom: 0; pointer-events: none;
+    padding: 0 max(12px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 10px) max(12px, env(safe-area-inset-left, 0px));
+    display: flex; justify-content: center;
+    transition: transform .45s var(--out), opacity .3s;
   }
-  .tabbar-in { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; width: 100%; max-width: 460px; }
+  .tabbar::before {
+    content: ""; position: absolute; left: 0; right: 0; top: -38px; bottom: 0; pointer-events: none;
+    background: linear-gradient(rgba(4, 18, 16, 0), rgba(4, 18, 16, .82) 52%, rgba(4, 18, 16, .95));
+  }
+  .tabbar-in {
+    pointer-events: auto; position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    width: 100%; max-width: 440px; padding: 6px; border-radius: 26px;
+    background: linear-gradient(180deg, #164a3d 0%, #0c3027 55%, #08241d 100%);
+    border: 1px solid rgba(242, 247, 243, .1);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, .75), 0 6px 14px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .07);
+  }
+  .tb-snow { position: absolute; z-index: 2; top: -7px; height: 13px; pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .25)); }
+  .tb-snow.l { left: 18px; width: 128px; }
+  .tb-snow.r { right: 24px; width: 86px; }
   .tab {
-    position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    min-height: 54px; padding: 6px 2px; border-radius: 14px; color: var(--mist); text-decoration: none;
-    font: 600 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; transition: color .3s;
+    position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    min-height: 56px; padding: 7px 2px 6px; border-radius: 20px; color: rgba(168, 195, 183, .82); text-decoration: none;
+    font: 600 10.5px/1 var(--score); letter-spacing: .13em; text-transform: uppercase; transition: color .35s;
+    -webkit-tap-highlight-color: transparent;
   }
-  .tab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--spring); }
-  .tab[aria-current="page"] { color: var(--ink); }
-  .tab[aria-current="page"] svg { transform: translateY(-1px) scale(1.1); }
-  .tab:active svg { transform: scale(.85); }
-  .tab-ind { position: absolute; z-index: 0; top: 2px; bottom: 2px; left: 0; width: 0; border-radius: 14px; background: var(--ball); box-shadow: 0 4px 18px rgba(220, 238, 78, .3); transition: transform .5s var(--spring), width .5s var(--spring); }
-  .tab .dot { position: absolute; top: 4px; left: calc(50% + 6px); min-width: 17px; height: 17px; padding: 0 4px; border-radius: 99px; background: var(--gold); color: var(--ink); font: 700 11px/17px var(--score); letter-spacing: 0; }
-  .tab .live-dot { position: absolute; top: 7px; left: calc(50% + 9px); width: 9px; height: 9px; border-radius: 50%; background: var(--berry-lit); box-shadow: 0 0 10px var(--berry-lit); animation: bulb .8s ease-in-out infinite alternate; }
-  html.playing .tabbar { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  .tab svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s var(--spring); }
+  .tab[aria-current="page"] { color: var(--ball); }
+  .tab[aria-current="page"] svg { animation: tab-pop .6s var(--spring); }
+  @keyframes tab-pop { 0% { transform: scale(.72); } 55% { transform: translateY(-2px) scale(1.14); } 100% { transform: none; } }
+  .tab:active svg { transform: scale(.86); }
+  .tab-ind {
+    position: absolute; z-index: 0; top: 0; left: 0; width: 60px; height: 34px; border-radius: 17px; opacity: 0;
+    background: radial-gradient(120% 140% at 50% 0%, rgba(220, 238, 78, .3), rgba(220, 238, 78, .1));
+    box-shadow: inset 0 0 0 1px rgba(220, 238, 78, .38), 0 0 24px rgba(220, 238, 78, .2);
+    transition: transform .6s var(--spring), opacity .3s;
+  }
+  .tab-ind.on { opacity: 1; }
+  .tab .dot { position: absolute; top: 2px; left: calc(50% + 7px); min-width: 17px; height: 17px; padding: 0 4px; border-radius: 99px; background: var(--gold); color: var(--ink); font: 700 11px/17px var(--score); letter-spacing: 0; box-shadow: 0 0 0 2px #0f3a2f; }
+  .tab .live-dot { position: absolute; top: 6px; left: calc(50% + 10px); width: 9px; height: 9px; border-radius: 50%; background: var(--berry-lit); box-shadow: 0 0 0 2px #0f3a2f, 0 0 10px var(--berry-lit); animation: bulb .8s ease-in-out infinite alternate; }
+  html.playing .tabbar { transform: translateY(140%); opacity: 0; }
+  html.playing .tabbar-in { pointer-events: none; }
   html.playing .hunt-badge { opacity: 0; pointer-events: none; }
   html.playing .fall-gold { visibility: hidden; pointer-events: none; }
 
@@ -908,6 +955,44 @@
 <body>
 <svg class="defs" aria-hidden="true">
   <defs>
+    <radialGradient id="noseGlow">
+      <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lampGlow">
+      <stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sgRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ec3a48"/><stop offset=".5" stop-color="#b3172c"/><stop offset="1" stop-color="#650a18"/>
+    </linearGradient>
+    <linearGradient id="sgSuit" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0" stop-color="#f04a58"/><stop offset=".55" stop-color="#c41f34"/><stop offset="1" stop-color="#7e0e1f"/>
+    </linearGradient>
+    <linearGradient id="sgFur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfdcd8"/>
+    </linearGradient>
+    <linearGradient id="sgGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a6"/><stop offset=".5" stop-color="#f0c35a"/><stop offset="1" stop-color="#b9821f"/>
+    </linearGradient>
+    <linearGradient id="sgSack" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b98450"/><stop offset=".6" stop-color="#8a5a33"/><stop offset="1" stop-color="#5a381e"/>
+    </linearGradient>
+    <radialGradient id="sgBall" cx=".36" cy=".32" r=".8">
+      <stop offset="0" stop-color="#f8ffa8"/><stop offset=".6" stop-color="#d6ea45"/><stop offset="1" stop-color="#97ae1c"/>
+    </radialGradient>
+    <radialGradient id="sgSkin" cx=".45" cy=".4" r=".7">
+      <stop offset="0" stop-color="#ffd8bc"/><stop offset="1" stop-color="#e9a886"/>
+    </radialGradient>
+    <linearGradient id="dCoat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b07a4b"/><stop offset=".55" stop-color="#7e5030"/><stop offset="1" stop-color="#4c2e18"/>
+    </linearGradient>
+    <linearGradient id="dBelly" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1e0c2"/><stop offset="1" stop-color="#c4a179"/>
+    </linearGradient>
+    <linearGradient id="tbSnow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9ddd5"/></linearGradient>
+    <linearGradient id="spGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3f0ea"/><stop offset="1" stop-color="#8fb3a6"/></linearGradient>
+    <radialGradient id="spMoonGlow"><stop offset="0" stop-color="#fff6d8" stop-opacity=".45"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
     <radialGradient id="fb" cx=".36" cy=".3" r=".8">
       <stop offset="0" stop-color="#fbffa6"/><stop offset=".5" stop-color="#dcee4e"/><stop offset="1" stop-color="#9db528"/>
     </radialGradient>
@@ -935,8 +1020,24 @@
 <button type="button" class="hunt-badge" id="hunt-badge" aria-label="Złote piłki: postęp i kupon"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg><span id="hunt-count">0</span><span class="of">/7</span></button>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="splash" id="splash">
+  <svg class="sp-sky" viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="sp-stars" id="sp-stars"></g>
+    <g class="sp-moon"><circle cx="292" cy="58" r="46" fill="url(#spMoonGlow)"/><circle cx="292" cy="58" r="15" fill="#f6f1dc"/><circle cx="287" cy="54" r="3" fill="#d8d1b2" opacity=".6"/><circle cx="296" cy="63" r="3.8" fill="#d8d1b2" opacity=".6"/></g>
+    <g id="sp-trail"></g>
+    <g id="sp-team" transform="translate(120 120) rotate(-12) scale(.5)"></g>
+  </svg>
+  <svg class="sp-hills" viewBox="0 0 390 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path d="M-10 70C40 44 90 40 140 56S240 40 290 52 370 38 400 46V120H-10Z" fill="#0f382d"/>
+    <g fill="#082119">
+      <path d="M38 58 31 72H45ZM38 52 33 62H43Z"/><path d="M60 56 51 74H69ZM60 48 54 61H66Z"/><path d="M322 48 314 64H330ZM322 41 316 53H328Z"/>
+      <path d="M344 50 337 66H351ZM344 44 339 55H349Z"/><path d="M300 54 294 66H306Z"/>
+    </g>
+    <path d="M-10 92C50 78 120 82 195 88S330 80 400 86V120H-10Z" fill="url(#spGround)"/>
+    <path d="M-10 92C50 78 120 82 195 88S330 80 400 86" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1"/>
+    <g transform="translate(250 66)"><rect x="0" y="10" width="26" height="14" fill="#3b2a22"/><path d="M-3 11 13 0 29 11Z" fill="#e6f2ec"/><rect x="5" y="14" width="5" height="5" fill="#ffcf70"/><rect x="16" y="14" width="5" height="5" fill="#ffcf70"/><circle cx="13" cy="17" r="13" fill="#ffcf70" opacity=".12"/></g>
+  </svg>
   <div class="splash-inner">
-    <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="splash-ball"><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div>
+    <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="sp-burst"><i style="--a:-80deg"></i><i style="--a:-55deg"></i><i style="--a:-30deg"></i><i style="--a:-10deg"></i><i style="--a:10deg"></i><i style="--a:30deg"></i><i style="--a:55deg"></i><i style="--a:80deg"></i></div><div class="splash-ball"><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div>
     <p class="eyebrow">List Huberta do Mikołaja</p>
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
     <form class="splash-form" id="splash-form" hidden>
@@ -1012,41 +1113,6 @@
             <stop offset="0" stop-color="#fffdf1"/>
             <stop offset=".65" stop-color="#f1ecd4"/>
             <stop offset="1" stop-color="#d8d2b4"/>
-          </radialGradient>
-          <linearGradient id="sgRed" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ec3a48"/><stop offset=".5" stop-color="#b3172c"/><stop offset="1" stop-color="#650a18"/>
-          </linearGradient>
-          <linearGradient id="sgSuit" x1="0" y1="0" x2=".35" y2="1">
-            <stop offset="0" stop-color="#f04a58"/><stop offset=".55" stop-color="#c41f34"/><stop offset="1" stop-color="#7e0e1f"/>
-          </linearGradient>
-          <linearGradient id="sgFur" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfdcd8"/>
-          </linearGradient>
-          <linearGradient id="sgGold" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ffe9a6"/><stop offset=".5" stop-color="#f0c35a"/><stop offset="1" stop-color="#b9821f"/>
-          </linearGradient>
-          <linearGradient id="sgSack" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#b98450"/><stop offset=".6" stop-color="#8a5a33"/><stop offset="1" stop-color="#5a381e"/>
-          </linearGradient>
-          <radialGradient id="sgBall" cx=".36" cy=".32" r=".8">
-            <stop offset="0" stop-color="#f8ffa8"/><stop offset=".6" stop-color="#d6ea45"/><stop offset="1" stop-color="#97ae1c"/>
-          </radialGradient>
-          <radialGradient id="sgSkin" cx=".45" cy=".4" r=".7">
-            <stop offset="0" stop-color="#ffd8bc"/><stop offset="1" stop-color="#e9a886"/>
-          </radialGradient>
-          <linearGradient id="dCoat" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#b07a4b"/><stop offset=".55" stop-color="#7e5030"/><stop offset="1" stop-color="#4c2e18"/>
-          </linearGradient>
-          <linearGradient id="dBelly" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#f1e0c2"/><stop offset="1" stop-color="#c4a179"/>
-          </linearGradient>
-          <radialGradient id="noseGlow">
-            <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
-            <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="lampGlow">
-            <stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/>
-            <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
           </radialGradient>
           <radialGradient id="reflect">
             <stop offset="0" stop-color="#e9f3e6" stop-opacity=".16"/>
@@ -1601,6 +1667,8 @@
 </main>
 <nav class="tabbar" id="tabbar" aria-label="Zakładki">
   <div class="tabbar-in" id="tabbar-in">
+    <svg class="tb-snow l" viewBox="0 0 128 13" aria-hidden="true"><path d="M0 13C3 9 8 7.5 13 8.5 17 4 25 2.6 32 5.2 37 1.6 47 .8 54 4.4 60 2.4 69 2.8 74 6.4 80 4.6 88 5.2 92 8.4 99 7.4 106 8.6 110 10.6 116 10 122 11 128 13Z" fill="url(#tbSnow)"/><circle cx="40" cy="9" r="1" fill="#fff"/></svg>
+    <svg class="tb-snow r" viewBox="0 0 86 13" aria-hidden="true"><path d="M0 13C4 10.6 9 9.8 13 10.6 17 7 24 5.6 30 7.6 35 3.4 45 2.4 51 6 57 4.2 65 5 69 8.4 75 7.8 81 9.6 86 13Z" fill="url(#tbSnow)"/></svg>
     <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
     <a class="tab" href="#start" data-tab="start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg>Start</a>
     <a class="tab" href="#prezenty" data-tab="prezenty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg>Prezenty</a>
@@ -2841,11 +2909,37 @@
     if (visitor) {
       hello.innerHTML = 'Cześć, <b></b>!';
       hello.querySelector('b').textContent = visitor.name;
-      setTimeout(function () { appear(hello); appear(skip); }, still ? 0 : 1500);
-      var t = setTimeout(closeSplash, still ? 900 : 3200);
+      setTimeout(function () { appear(hello); appear(skip); }, still ? 0 : 2350);
+      var t = setTimeout(closeSplash, still ? 900 : 4300);
       splash.onclick = function () { clearTimeout(t); closeSplash(); };
     } else {
-      setTimeout(function () { appear(form); }, still ? 0 : 1500);
+      setTimeout(function () { appear(form); }, still ? 0 : 2350);
+    }
+  }
+  /* the splash scene: a copy of the hero's sleigh team flies across the night sky and drops the ball */
+  function splashScene() {
+    var host = byId('sp-team'), team = byId('team');
+    if (!host || !team || host.firstChild) return;
+    var cl = team.cloneNode(true);
+    cl.removeAttribute('id');
+    Array.prototype.forEach.call(cl.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
+    host.appendChild(cl);
+    var stars = byId('sp-stars'), r = mulberry(99), tw = [0, 1].map(function (k) { var g = svg('g', { 'class': 'tw' }); g.style.animationDelay = (-k * 1.3) + 's'; stars.appendChild(g); return g; });
+    for (var k = 0; k < 46; k++) tw[k % 2].appendChild(svg('circle', { cx: (r() * 390).toFixed(1), cy: (r() * 230).toFixed(1), r: (.35 + r() * .95).toFixed(2), opacity: (.35 + r() * .6).toFixed(2) }));
+    if (still || !host.animate) return;
+    var P0 = [-250, 255], P1 = [185, 70], P2 = [640, 14], N = 18, START = 150, DUR = 2300, frames = [], trail = byId('sp-trail');
+    function at(t) { var u = 1 - t; return [u * u * P0[0] + 2 * u * t * P1[0] + t * t * P2[0], u * u * P0[1] + 2 * u * t * P1[1] + t * t * P2[1]]; }
+    function slope(t) { return Math.atan2(2 * (1 - t) * (P1[1] - P0[1]) + 2 * t * (P2[1] - P1[1]), 2 * (1 - t) * (P1[0] - P0[0]) + 2 * t * (P2[0] - P1[0])) * 180 / Math.PI * .75; }
+    for (k = 0; k <= N; k++) { var q = at(k / N); frames.push({ transform: 'translate(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px) rotate(' + slope(k / N).toFixed(1) + 'deg) scale(.5)' }); }
+    host.animate(frames, { duration: DUR, delay: START, easing: 'linear', fill: 'both' });
+    for (k = 2; k < 30; k++) {
+      var t = k / 30, pt = at(t), a = slope(t) * Math.PI / 180, ox = 4, oy = 30;
+      var x = pt[0] + ox * Math.cos(a) - oy * Math.sin(a), y = pt[1] + ox * Math.sin(a) + oy * Math.cos(a);
+      var c = svg('circle', { cx: (x + (r() - .5) * 8).toFixed(1), cy: (y + (r() - .5) * 8).toFixed(1), r: (.8 + r() * 1.6).toFixed(2), fill: k % 3 ? '#f0c35a' : '#ffffff' });
+      c.style.transformBox = 'fill-box'; c.style.transformOrigin = 'center';
+      trail.appendChild(c);
+      c.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1.3)', offset: .15 }, { opacity: 0, transform: 'translate(-6px, 14px) scale(.2)' }],
+        { duration: 1300 + r() * 500, delay: START + t * DUR, easing: 'ease-out', fill: 'both' });
     }
   }
   byId('splash-form').addEventListener('submit', function (e) {
@@ -2865,9 +2959,11 @@
   function go(v) { if (location.hash !== '#' + v) location.hash = v; else showView(v); }
   function moveInd() {
     var t = document.querySelector('.tab[aria-current="page"]'), ind = byId('tab-ind');
-    if (!t) { ind.style.width = '0'; return; }
-    ind.style.width = t.offsetWidth + 'px';
-    ind.style.transform = 'translateX(' + t.offsetLeft + 'px)';
+    if (!t) { ind.classList.remove('on'); return; }
+    var box = byId('tabbar-in').getBoundingClientRect(), ic = t.querySelector('svg').getBoundingClientRect();
+    if (!ic.width) return;
+    ind.style.transform = 'translate(' + (ic.left + ic.width / 2 - box.left - 30 - 1).toFixed(1) + 'px,' + (ic.top + ic.height / 2 - box.top - 17 - 1).toFixed(1) + 'px)';
+    ind.classList.add('on');
   }
   window.addEventListener('resize', moveInd);
   window.addEventListener('load', moveInd);
@@ -3872,7 +3968,7 @@
   window.addEventListener('hashchange', route);
   route();
   if (location.hash.indexOf('#kupon-') === 0) { splash.hidden = true; html.classList.remove('booting'); }
-  else startSplash(false);
+  else { splashScene(); startSplash(false); }
   fbInit();
 })();
 </script>
