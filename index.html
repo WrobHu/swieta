@@ -22,7 +22,7 @@
   [hidden] { display: none !important; }
 </style>
 <style>
-  /* Layout: one phone-width column. A night poster on top (a turning tennis-ball moon, a galloping sleigh team,
+  /* Layout: one phone-width column. A night poster on top (a pale moon, Santa's sleigh pulled by three reindeer,
      a snowed-in court with a lit net), then the scoreboard countdown, wrapped presents that a served ball
      tears open, and a snow hill closing the page. */
   :root {
@@ -127,32 +127,37 @@
   .par-team { transform: translate(calc(var(--sy) * .55px), calc(var(--sy) * -.1px)); }
   .moon-rise { animation: moon-rise 2.8s var(--out) .15s both; }
   @keyframes moon-rise { from { transform: translateY(180px); } }
-  .moon-body, .halo, .ring { transform-box: fill-box; transform-origin: center; }
-  .halo { animation: halo 5.5s ease-in-out infinite alternate; }
-  @keyframes halo { from { opacity: .78; transform: scale(.96); } to { opacity: 1; transform: scale(1.06); } }
-  .seam { fill: none; stroke: #fbfdf0; stroke-width: 6; stroke-linejoin: round; }
-  .seam-shadow { fill: none; stroke: #6f8a12; stroke-width: 11; stroke-linejoin: round; opacity: .4; }
-  .ring { fill: none; stroke: var(--ball); stroke-width: 1.2; opacity: 0; animation: ring 4s ease-out 4.5s infinite; }
-  @keyframes ring { 0% { opacity: .5; transform: scale(1); } 55%, 100% { opacity: 0; transform: scale(1.3); } }
+  .halo { transform-box: fill-box; transform-origin: center; animation: halo 5.5s ease-in-out infinite alternate; }
+  @keyframes halo { from { opacity: .7; transform: scale(.94); } to { opacity: 1; transform: scale(1.05); } }
 
   /* sleigh team */
-  .sf { fill: var(--sil); }
-  .sl { fill: none; stroke: var(--sil); stroke-linecap: round; stroke-linejoin: round; }
   .team-in { animation: team-in 3.4s var(--out) 1s both; }
   @keyframes team-in { from { transform: translate(-520px, 130px); } }
   .team-drift { animation: drift 7s ease-in-out infinite alternate; }
   @keyframes drift { from { transform: translate(-5px, 4px) rotate(.8deg); } to { transform: translate(7px, -5px) rotate(-1.4deg); } }
-  .bob, .gal, .leg, #arm, .lantern { transform-box: fill-box; }
+  .bob, .gal, .lantern { transform-box: fill-box; }
+  .leg, #arm { transform-box: view-box; }
   .bob { transform-origin: center; animation: bob 2.4s ease-in-out infinite alternate; }
   @keyframes bob { from { transform: translateY(3px) rotate(1.6deg); } to { transform: translateY(-3px) rotate(-1.6deg); } }
   .gal { transform-origin: center; animation: gal .5s ease-in-out infinite alternate; }
   @keyframes gal { from { transform: translateY(2.5px) rotate(2.5deg); } to { transform: translateY(-3px) rotate(-3deg); } }
   .leg { animation-duration: .5s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
-  .fore { transform-origin: 8% 3%; animation-name: fore; }
-  .hind { transform-origin: 92% 6%; animation-name: hind; }
-  @keyframes fore { from { transform: rotate(-8deg); } to { transform: rotate(46deg); } }
-  @keyframes hind { from { transform: rotate(8deg); } to { transform: rotate(-48deg); } }
-  #arm { transform-origin: 2% 97%; }
+  .fore { transform-origin: 61px 43px; animation-name: fore; }
+  .hind { transform-origin: 30px 42px; animation-name: hind; }
+  .far.fore { animation-name: fore-far; }
+  .far.hind { animation-name: hind-far; }
+  @keyframes fore { from { transform: rotate(-14deg); } to { transform: rotate(38deg); } }
+  @keyframes fore-far { from { transform: rotate(4deg); } to { transform: rotate(52deg); } }
+  @keyframes hind { from { transform: rotate(14deg); } to { transform: rotate(-36deg); } }
+  @keyframes hind-far { from { transform: rotate(-2deg); } to { transform: rotate(-50deg); } }
+  #arm { transform-origin: 71px 29px; }
+  .head { transform-box: view-box; transform-origin: 72px 18px; animation: nod .5s ease-in-out infinite alternate; }
+  @keyframes nod { from { transform: rotate(-3deg); } to { transform: rotate(4deg); } }
+  .santa-head { transform-box: view-box; transform-origin: 77px 22px; animation: santa-nod 2.4s ease-in-out infinite alternate; }
+  @keyframes santa-nod { from { transform: rotate(-2.5deg); } to { transform: rotate(3deg); } }
+  .pom { transform-box: view-box; transform-origin: 70px 5px; animation: pom 1.2s ease-in-out infinite alternate; }
+  @keyframes pom { from { transform: rotate(-7deg); } to { transform: rotate(9deg); } }
+  .bell { transform-box: fill-box; transform-origin: 50% 0; animation: sway .5s ease-in-out infinite alternate; }
   .lantern { transform-origin: 50% 0; animation: sway 1.7s ease-in-out infinite alternate; }
   @keyframes sway { from { transform: rotate(-14deg); } to { transform: rotate(12deg); } }
   .nose { fill: var(--berry-lit); }
@@ -186,8 +191,9 @@
   @keyframes bulb { from { opacity: 1; } to { opacity: .35; } }
 
   .serve {
-    position: absolute; z-index: 2; left: 26.4%; top: 14%; width: 47.2%; aspect-ratio: 1;
-    border: 0; border-radius: 50%; background: transparent; cursor: pointer; padding: 0;
+    position: absolute; z-index: 2; left: 6%; top: 21%; width: 88%; height: 30%;
+    border: 0; border-radius: 40%; background: transparent; cursor: pointer; padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
   .hint {
     position: absolute; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px)); top: 14px;
@@ -892,7 +898,6 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .par-moon, .par-far, .par-team { transform: none; }
-    .ring { opacity: 0; }
   }
 </style>
 </head>
@@ -992,24 +997,45 @@
   <header class="hero">
     <div class="scene-wrap">
       <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
-      <svg class="scene" id="scene" viewBox="0 0 390 520" role="img" aria-label="Zaśnieżony kort tenisowy nocą na Biegunie Północnym. Nad lasem wschodzi księżyc w kształcie piłki tenisowej, a na jego tle lecą sanie Świętego Mikołaja z rakietą w dłoni, ciągnięte przez trzy renifery. Pierwszy z nich ma świecący czerwony nos. Siatka kortu jest ozdobiona lampkami.">
+      <svg class="scene" id="scene" viewBox="0 0 390 520" role="img" aria-label="Zaśnieżony kort tenisowy nocą na Biegunie Północnym. Nad lasem świeci księżyc, a po niebie lecą czerwone sanie Świętego Mikołaja z workiem prezentów i rakietą w dłoni, ciągnięte przez trzy renifery. Pierwszy z nich ma świecący czerwony nos. Siatka kortu jest ozdobiona lampkami.">
         <defs>
           <radialGradient id="halo">
-            <stop offset="0" stop-color="#dcee4e" stop-opacity=".5"/>
-            <stop offset=".4" stop-color="#bfe05a" stop-opacity=".2"/>
-            <stop offset=".72" stop-color="#58c08a" stop-opacity=".07"/>
-            <stop offset="1" stop-color="#58c08a" stop-opacity="0"/>
+            <stop offset="0" stop-color="#fff6d8" stop-opacity=".42"/>
+            <stop offset=".3" stop-color="#e9f1d8" stop-opacity=".14"/>
+            <stop offset="1" stop-color="#bfe3d4" stop-opacity="0"/>
           </radialGradient>
-          <radialGradient id="ballGrad" cx=".36" cy=".3" r=".82">
-            <stop offset="0" stop-color="#fbffa6"/>
-            <stop offset=".34" stop-color="#e8f65f"/>
-            <stop offset=".72" stop-color="#c3d93a"/>
-            <stop offset="1" stop-color="#8fa823"/>
+          <radialGradient id="moonFace" cx=".38" cy=".34" r=".75">
+            <stop offset="0" stop-color="#fffdf1"/>
+            <stop offset=".65" stop-color="#f1ecd4"/>
+            <stop offset="1" stop-color="#d8d2b4"/>
           </radialGradient>
-          <radialGradient id="ballShade" cx=".32" cy=".28" r=".95">
-            <stop offset=".5" stop-color="#1b3206" stop-opacity="0"/>
-            <stop offset="1" stop-color="#1b3206" stop-opacity=".55"/>
+          <linearGradient id="sgRed" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ec3a48"/><stop offset=".5" stop-color="#b3172c"/><stop offset="1" stop-color="#650a18"/>
+          </linearGradient>
+          <linearGradient id="sgSuit" x1="0" y1="0" x2=".35" y2="1">
+            <stop offset="0" stop-color="#f04a58"/><stop offset=".55" stop-color="#c41f34"/><stop offset="1" stop-color="#7e0e1f"/>
+          </linearGradient>
+          <linearGradient id="sgFur" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfdcd8"/>
+          </linearGradient>
+          <linearGradient id="sgGold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffe9a6"/><stop offset=".5" stop-color="#f0c35a"/><stop offset="1" stop-color="#b9821f"/>
+          </linearGradient>
+          <linearGradient id="sgSack" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#b98450"/><stop offset=".6" stop-color="#8a5a33"/><stop offset="1" stop-color="#5a381e"/>
+          </linearGradient>
+          <radialGradient id="sgBall" cx=".36" cy=".32" r=".8">
+            <stop offset="0" stop-color="#f8ffa8"/><stop offset=".6" stop-color="#d6ea45"/><stop offset="1" stop-color="#97ae1c"/>
           </radialGradient>
+          <radialGradient id="sgSkin" cx=".45" cy=".4" r=".7">
+            <stop offset="0" stop-color="#ffd8bc"/><stop offset="1" stop-color="#e9a886"/>
+          </radialGradient>
+          <linearGradient id="dCoat" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#b07a4b"/><stop offset=".55" stop-color="#7e5030"/><stop offset="1" stop-color="#4c2e18"/>
+          </linearGradient>
+          <linearGradient id="dBelly" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f1e0c2"/><stop offset="1" stop-color="#c4a179"/>
+          </linearGradient>
           <radialGradient id="noseGlow">
             <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
             <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
@@ -1019,8 +1045,8 @@
             <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
           </radialGradient>
           <radialGradient id="reflect">
-            <stop offset="0" stop-color="#dcee4e" stop-opacity=".22"/>
-            <stop offset="1" stop-color="#dcee4e" stop-opacity="0"/>
+            <stop offset="0" stop-color="#e9f3e6" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#e9f3e6" stop-opacity="0"/>
           </radialGradient>
           <linearGradient id="hillGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#7ba598"/>
@@ -1040,7 +1066,6 @@
             <stop offset="1" stop-color="#9dc0b4"/>
           </linearGradient>
           <pattern id="speckPat" width="48" height="48" patternUnits="userSpaceOnUse"><image id="speck-img" width="48" height="48"/></pattern>
-          <clipPath id="moon-clip"><circle cx="195" cy="165" r="92"/></clipPath>
           <linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#1f5144"/><stop offset="1" stop-color="#0f3329"/>
           </linearGradient>
@@ -1081,65 +1106,110 @@
 
         <g class="par-moon">
           <g class="moon-rise">
-            <circle class="halo" cx="195" cy="165" r="236" fill="url(#halo)"/>
-            <circle class="ring" cx="195" cy="165" r="92"/>
-            <g class="moon-body" id="moon">
-              <circle cx="195" cy="165" r="92" fill="url(#ballGrad)"/>
-              <g clip-path="url(#moon-clip)">
-                <path class="seam-shadow" id="seam-shadow" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
-                <path class="seam" id="seam" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
-              </g>
-              <image id="moon-felt" x="103" y="73" width="184" height="184" clip-path="url(#moon-clip)" opacity=".55" preserveAspectRatio="none"/>
-              <circle cx="195" cy="165" r="92" fill="url(#ballShade)"/>
-              <circle cx="195" cy="165" r="91.5" fill="none" stroke="#fdffd0" stroke-opacity=".45" stroke-width="1"/>
+            <circle class="halo" cx="292" cy="96" r="92" fill="url(#halo)"/>
+            <circle cx="292" cy="96" r="21" fill="url(#moonFace)"/>
+            <g fill="#cfc8a6" fill-opacity=".55">
+              <circle cx="285" cy="90" r="4.2"/><circle cx="298.5" cy="100" r="5.4"/><circle cx="288" cy="105" r="2.4"/>
+              <circle cx="300" cy="87" r="2"/><circle cx="280.5" cy="99" r="1.6"/>
             </g>
+            <circle cx="292" cy="96" r="20.6" fill="none" stroke="#fffbe6" stroke-opacity=".6" stroke-width=".8"/>
           </g>
         </g>
 
         <!-- sleigh team: built here, deer added by script so each one gallops on its own beat -->
-        <g transform="translate(74 206) rotate(-13) scale(.6)">
+        <g transform="translate(30 204) rotate(-11) scale(.77)">
           <g class="par-team"><g class="team-in"><g class="team-drift" id="team">
             <g class="dust" id="dust"></g>
-            <path class="sl" stroke-width="1.1" d="M112 31Q160 48 207 37M207 37Q250 50 289 37M289 37Q332 50 371 37"/>
+            <path d="M109 31Q159 47 206 38M206 38Q248 49 288 38M288 38Q330 49 370 38" fill="none" stroke="#f0c35a" stroke-width="1.1" stroke-opacity=".9"/>
             <g class="bob">
-              <path class="sl" stroke-width="2.8" d="M2 67C-1 70 0 74 5 74H92C110 74 119 62 114 53 110 47 102 48 102 54 102 58 106 59 108 56"/>
-              <path class="sl" stroke-width="2.3" d="M32 60C32 66 28 70 25 74M82 60C82 66 86 70 89 74"/>
-              <!-- gift and sack full of balls -->
-              <rect class="sf" x="7" y="24" width="15" height="14" transform="rotate(-10 14 31)"/>
-              <path class="sl" stroke-width="1.6" d="M12 23C8 18 13 16 14.5 22 17 16 22 19 17.5 23"/>
-              <path class="sf" d="M20 52C12 36 15 19 23 15L45 15C52 21 54 36 51 52Z"/>
-              <circle class="sf" cx="26.5" cy="11.5" r="5.3"/>
-              <circle class="sf" cx="36.5" cy="7.5" r="5.3"/>
-              <circle class="sf" cx="44.5" cy="13.5" r="4.8"/>
-              <rect class="sf" x="40" y="38" width="32" height="14"/>
-              <!-- Santa in profile -->
-              <ellipse class="sf" cx="66" cy="38" rx="12" ry="14.5"/>
-              <circle class="sf" cx="71.5" cy="19.5" r="6"/>
-              <circle class="sf" cx="78.4" cy="19.3" r="1.7"/>
-              <path class="sf" d="M65.8 20 78 20.6C81 25.5 79.5 32.5 74.5 36 69.5 35 66.4 30 65.8 24Z"/>
-              <path class="sf" d="M63.8 17.2 78.6 14.3C78.3 7 73 1.8 67.5 2.7 61 3.8 56.5 8 55 13.2L58.6 15C60 11.6 62.3 10.5 64.5 11.6Z"/>
-              <path class="sl" stroke-width="3.9" d="M63.6 17.3 79.2 14.3"/>
-              <circle class="sf" cx="54.7" cy="14.6" r="3.5"/>
+              <!-- runners -->
+              <path d="M31 59 28 75M86 59 90 75" stroke="#c8922e" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M1 69C-2 72-1 76 5 76H94C112 76 122 64 117 55 113 48.5 104.5 49.5 104.5 55.5 104.5 59.5 108.5 61 110.8 58" fill="none" stroke="#7d5212" stroke-width="3.8" stroke-linecap="round"/>
+              <path d="M1 69C-2 72-1 76 5 76H94C112 76 122 64 117 55 113 48.5 104.5 49.5 104.5 55.5 104.5 59.5 108.5 61 110.8 58" fill="none" stroke="url(#sgGold)" stroke-width="2.2" stroke-linecap="round"/>
+              <!-- presents and a sack full of tennis balls -->
+              <g transform="rotate(-12 14 30)">
+                <rect x="5" y="21" width="17" height="16" rx="1.6" fill="#1d7a55"/>
+                <rect x="5" y="21" width="17" height="16" rx="1.6" fill="url(#sgFur)" opacity=".12"/>
+                <rect x="12.2" y="21" width="3" height="16" fill="#f0c35a"/>
+                <rect x="5" y="27.5" width="17" height="3" fill="#f0c35a"/>
+                <path d="M13.7 21.5C9 15.5 4.5 18 8 21 10 22.3 12.5 21.9 13.7 21.5 15 21.9 17.5 22.3 19.5 21 23 18 18.5 15.5 13.7 21.5Z" fill="#ffd979"/>
+              </g>
+              <path d="M19 52C12 37 14 20 22.5 15L45.5 14C53.5 20 56.5 35 53.5 52Z" fill="url(#sgSack)"/>
+              <path d="M28 21C25 31 25 41 27 51M41 19C43 29 44 40 43 51" fill="none" stroke="#3e2714" stroke-opacity=".3" stroke-width=".9"/>
+              <path d="M22.5 15C20 22 20 30 21.5 37" fill="none" stroke="#e7c08c" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="26.5" cy="11.5" r="5.4" fill="url(#sgBall)"/>
+              <path d="M22.4 8.6C25.5 10 26.5 13.5 25.4 16.6" fill="none" stroke="#fbfdf0" stroke-width="1"/>
+              <g transform="rotate(14 46 9)">
+                <rect x="39.5" y="2" width="12" height="11" rx="1.2" fill="#d8283c"/>
+                <rect x="44.4" y="2" width="2.2" height="11" fill="#fff4d8"/>
+                <path d="M45.5 2.3C43 -1 40.5.5 42.5 2.2 43.6 2.8 44.8 2.6 45.5 2.3 46.2 2.6 47.4 2.8 48.5 2.2 50.5.5 48 -1 45.5 2.3Z" fill="#fff4d8"/>
+              </g>
+              <circle cx="36.5" cy="8" r="5.4" fill="url(#sgBall)"/>
+              <path d="M32.6 4.6C35.7 6.4 36.6 10 35.2 13.1" fill="none" stroke="#fbfdf0" stroke-width="1"/>
+              <path d="M21.5 15.5Q34 20 47 14.5" fill="none" stroke="#e9b949" stroke-width="1.8" stroke-linecap="round"/>
+              <!-- Santa: far hand on the reins -->
+              <!-- coat -->
+              <path d="M50 49C47 37 50 26 57 21.5 64 17 74 17.5 79.5 22.5 85 27.5 86 38 84 49Z" fill="url(#sgSuit)"/>
+              <path d="M50 49C47 37 50 26 57 21.5 54 30 54.5 40 57.5 49Z" fill="#5e0a18" opacity=".5"/>
+              <path d="M57 21.5C63 18 72 17.6 78 21.5" fill="none" stroke="#ff8a8f" stroke-opacity=".5" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M50.8 40.4C62 42.6 74 42.6 85 40.2V45.3C74 47.3 62 47.3 51.4 45.3Z" fill="#1c1411"/>
+              <rect x="76.4" y="40.3" width="6.4" height="5.8" rx="1.1" fill="none" stroke="url(#sgGold)" stroke-width="1.4"/>
+              <path d="M72 34.6 86 37" stroke="#a8182c" stroke-width="5.2" stroke-linecap="round"/>
+              <path d="M72 33 85 35.2" stroke="#ff7d86" stroke-opacity=".3" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M84.6 36.7 87.6 37.2" stroke="#f6faf8" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="89.8" cy="37.4" r="2.7" fill="#2b8a5e"/><circle cx="89.2" cy="36.6" r=".8" fill="#8fe0b6" opacity=".7"/>
+              <!-- raised arm with the racket (Santa swings it) -->
               <g id="arm">
-                <path class="sl" stroke-width="5.2" d="M69 31.5 83 23.5"/>
-                <circle class="sf" cx="84" cy="22.7" r="3.2"/>
-                <path class="sl" stroke-width="2.2" d="M84.2 22.3 90.5 13.3"/>
-                <g id="racket">
-                  <ellipse class="sl" stroke-width="1.9" cx="95.5" cy="5.5" rx="5.9" ry="8.3" transform="rotate(35 95.5 5.5)"/>
-                  <path class="sl" stroke-width=".55" d="M91.5 .5 100.5 8.5M90.3 5 98.3 12M95 -2 101.3 4M98.5 -.8 91.5 10M101.3 2.7 95 11.8M95 -1.5 89.8 6.5"/>
+                <path d="M71 29 88.4 19.4" stroke="#c8263a" stroke-width="5.6" stroke-linecap="round"/>
+                <path d="M71 29 88.4 19.4" stroke="#ff7d86" stroke-opacity=".35" stroke-width="1.4" stroke-linecap="round" transform="translate(0 -1.6)"/>
+                <path d="M86.8 20.3 90 18.5" stroke="#f6faf8" stroke-width="4.2" stroke-linecap="round"/>
+                <path d="M92 17.4 97 9.8" stroke="#2a1d17" stroke-width="2.3" stroke-linecap="round"/>
+                <circle cx="92" cy="17.6" r="2.9" fill="#2b8a5e"/><circle cx="91.3" cy="16.7" r=".85" fill="#8fe0b6" opacity=".7"/>
+                <g id="racket" transform="translate(2.2 -1.8)">
+                  <path d="M94.6 12.2 94.2 8.4M94.6 12.2 98 10.4" stroke="#e8eef0" stroke-width="1" stroke-linecap="round"/>
+                  <ellipse cx="100.4" cy="3.6" rx="6.3" ry="8.7" transform="rotate(37 100.4 3.6)" fill="#dcee4e" fill-opacity=".1" stroke="#f4f7f2" stroke-width="1.9"/>
+                  <path d="M96 -1.2 104.8 6.6M94.8 2.6 102.4 9.4M99.4 -4.2 105.8 1.6M102.4 -3.4 95.4 7.4M105.2 0 98.8 9.6M99 -3.8 93.8 4.2" stroke="#ffffff" stroke-opacity=".55" stroke-width=".5"/>
+                  <ellipse cx="100.4" cy="3.6" rx="5.2" ry="7.5" transform="rotate(37 100.4 3.6)" fill="none" stroke="#dcee4e" stroke-width=".6"/>
                 </g>
               </g>
-              <!-- hull with scrolls -->
-              <path class="sf" d="M10 22C4 22 2 14 8 11 14 8 20 12 21 20 24 36 30 46 44 48H84C94 48 100 42 102 32 103 26 108 24 112 26 116 28 115 34 110 34 108 44 104 60 88 60H36C18 60 10 44 10 22Z"/>
-              <path d="M13 32C15 47 23 57 37 58H88C99 58 104 49 107 39" fill="none" stroke="#dcee4e" stroke-opacity=".34" stroke-width="1.1" stroke-linecap="round"/>
+              <!-- head: face, beard, hat -->
+              <g class="santa-head">
+                <circle cx="72.4" cy="14.6" r="1.8" fill="#e9a886"/>
+                <circle cx="77.2" cy="13.8" r="6.7" fill="url(#sgSkin)"/>
+                <path d="M70.8 14.2C69.2 21 71.2 28.6 77.2 32.8 82 33.4 86 28.2 86.2 21.6 86.3 18.6 85 16.6 83.4 16.4 81.4 18.8 77.2 19.6 73.6 17.4Z" fill="url(#sgFur)"/>
+                <path d="M74 22C75 26 77 29 80 30.5M79 21.5C80 24.5 81.5 27 84 28" fill="none" stroke="#b9c8c4" stroke-width=".7" stroke-linecap="round" opacity=".8"/>
+                <circle cx="79.4" cy="16.2" r="2.1" fill="#f0837f" opacity=".55"/>
+                <path d="M78.6 18.4C80.8 16.4 84 16.4 86.2 18.2 87.3 19.2 86.7 20.6 85 20.3 83.2 20 81.4 19.6 78.6 18.4Z" fill="#ffffff"/>
+                <circle cx="84" cy="16.1" r="1.8" fill="#ee8a7a"/>
+                <circle cx="83.5" cy="15.5" r=".55" fill="#fff" opacity=".7"/>
+                <path d="M80 12.6Q81 11.8 82 12.5" fill="none" stroke="#2b1a14" stroke-width=".85" stroke-linecap="round"/>
+                <path d="M79.4 10.6Q81.1 9.5 82.9 10.4" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M70.6 10.4C70.4 4.6 74 .8 78.8.8 82.4.8 85 3.6 85.2 8.8Z" fill="url(#sgSuit)"/>
+                <g class="pom">
+                  <path d="M72.4 4.6C67.6 1.4 61.4 2 57.8 6.8L60.4 8.6C63.2 6.4 66.8 6.2 71.2 8.8Z" fill="#b51c30"/>
+                  <circle cx="57.8" cy="8.4" r="3.5" fill="url(#sgFur)"/>
+                </g>
+                <path d="M69.6 11.4C71 7.6 80.2 6.4 85.6 9 86.6 10.3 86.2 12.2 85 12.6 79.6 10.5 74 10.9 70.6 13.2Z" fill="url(#sgFur)"/>
+              </g>
+              <!-- sleigh body -->
+              <path d="M10 22C4 22 2 14 8 11 14 8 20 12 21 20 24 36 30 46 44 48H84C94 48 100 42 102 32 103 26 108 24 112 26 116 28 115 34 110 34 108 44 104 60 88 60H36C18 60 10 44 10 22Z" fill="url(#sgRed)"/>
+              <path d="M21 20C24 36 30 46 44 48H84C94 48 100 42 102 32" fill="none" stroke="url(#sgGold)" stroke-width="2" stroke-linecap="round"/>
+              <path d="M13.5 31C15.5 46.5 23.5 56.5 37 57.6H88C98.5 57.6 103.6 49.4 106.6 39.5" fill="none" stroke="#f0c35a" stroke-width="1.2" stroke-linecap="round" opacity=".9"/>
+              <path d="M9.4 15.8C10.4 12.8 14 12.4 15.6 15 16.6 17.2 15 19.2 13 18.7" fill="none" stroke="#f0c35a" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M109.6 30.8C109.6 28.4 112.6 27.8 113.4 29.8" fill="none" stroke="#f0c35a" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M44 53.5C49 50.5 54 50.6 58 53.4 62 56.2 67.5 56.2 72 53.2M58 53.4C58.5 51 60.6 50.4 61.8 51.8" fill="none" stroke="#f0c35a" stroke-width="1" stroke-linecap="round" opacity=".85"/>
+              <circle cx="58" cy="53.4" r="1.3" fill="#ffe39a"/>
+              <path d="M26 45C34 52 45 54 58 54" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M10 22C10 36 14 46 22 53" fill="none" stroke="#ff9aa0" stroke-opacity=".28" stroke-width="1.4" stroke-linecap="round"/>
               <!-- lantern -->
-              <path class="sl" stroke-width="1.5" d="M111 27C112 17 118 13 124 16.5"/>
+              <path d="M111 27C112 17 118 13 124 16.5" fill="none" stroke="#c8922e" stroke-width="1.5" stroke-linecap="round"/>
               <g class="lantern">
-                <path class="sl" stroke-width=".9" d="M124 16.5V20"/>
-                <circle cx="124" cy="25.5" r="13" fill="url(#lampGlow)"/>
-                <rect class="sf" x="120.8" y="19.8" width="6.4" height="2.2" rx=".8"/>
+                <path d="M124 16.5V20" stroke="#c8922e" stroke-width=".9"/>
+                <circle cx="124" cy="25.5" r="14" fill="url(#lampGlow)"/>
+                <rect x="120.8" y="19.8" width="6.4" height="2.2" rx=".8" fill="#9a6a1c"/>
                 <rect x="121.4" y="22" width="5.2" height="7" rx="1" fill="#ffe2a0"/>
-                <rect class="sf" x="120.8" y="29" width="6.4" height="1.9" rx=".8"/>
+                <path d="M124 22V29" stroke="#c8922e" stroke-width=".6"/>
+                <rect x="120.8" y="29" width="6.4" height="1.9" rx=".8" fill="#9a6a1c"/>
               </g>
             </g>
           </g></g></g>
@@ -1261,10 +1331,10 @@
           <path class="spark slow g-hide" data-gold="g2" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
         <g id="bulbs"></g>
       </svg>
-      <button type="button" class="serve" id="serve" aria-label="Zaserwuj piłki z księżyca"></button>
+      <button type="button" class="serve" id="serve" aria-label="Niech Mikołaj zaserwuje piłki"></button>
       <button type="button" class="gold-spot" data-g="g1" style="left:70.4%;top:73.58%" aria-label="Złota lampka na siatce"></button>
       <button type="button" class="gold-spot" data-g="g2" style="left:17.95%;top:67.1%" aria-label="Coś błyszczy w śniegu"></button>
-      <span class="hint" id="hint" aria-hidden="true">Stuknij w księżyc</span>
+      <span class="hint" id="hint" aria-hidden="true">Stuknij w sanie</span>
     </div>
 
     <div class="hero-copy layer gutter">
@@ -1601,16 +1671,57 @@
       target.appendChild(svg('path', { d: t.snow, fill: c.snow, 'fill-opacity': c.snowOp || 1 }));
     });
   }
+  /* a tapered limb with round ends, from (x1,y1) w1 wide to (x2,y2) w2 wide */
+  function limb(x1, y1, x2, y2, w1, w2, fill) {
+    var dx = x2 - x1, dy = y2 - y1, l = Math.sqrt(dx * dx + dy * dy) || 1, nx = -dy / l, ny = dx / l, a = w1 / 2, b = w2 / 2;
+    function p(x, y) { return x.toFixed(1) + ' ' + y.toFixed(1); }
+    return '<path fill="' + fill + '" d="M' + p(x1 + nx * a, y1 + ny * a) + 'L' + p(x2 + nx * b, y2 + ny * b) +
+      'A' + b + ' ' + b + ' 0 0 0 ' + p(x2 - nx * b, y2 - ny * b) + 'L' + p(x1 - nx * a, y1 - ny * a) +
+      'A' + a + ' ' + a + ' 0 0 0 ' + p(x1 + nx * a, y1 + ny * a) + 'Z"/>';
+  }
   function deerSVG(x, y, delay, lead) {
-    var dl = ' style="animation-delay:' + delay + 's"';
-    return '<g transform="translate(' + x + ' ' + y + ')"><g class="gal"' + dl + '>' +
-      '<g class="leg hind"' + dl + '><path class="sl" stroke-width="4.2" d="M27 44 16 51.5M31 46 22 56"/><path class="sl" stroke-width="2.3" d="M16 51.5 4.5 53M22 56 11 61.5"/></g>' +
-      '<g class="leg fore"' + dl + '><path class="sl" stroke-width="4.2" d="M63 45 76 49.5M59.5 46.5 69 54"/><path class="sl" stroke-width="2.3" d="M76 49.5 78.5 60M69 54 67.5 64.5"/></g>' +
-      '<path class="sf" d="M20 40C26 33 44 33 58 35 62 30 66 22 70 16 71 12 75 10 79 11L88 15C90 16 90 19 87 19.5L79 20.5C76 23 75 27 74.5 31 74 37 71 43 68 46 60 51 40 51 30 47 24 46 20 44 20 40Z"/>' +
-      '<path class="sf" d="M21 39 13.5 34 19 43Z"/><path class="sf" d="M72.5 12.5 66.5 7.5 75 10.5Z"/>' +
-      '<path class="sl" stroke-width="1.5" d="M74 11C72.5 4 67 0 60 -3M71.6 5 73.5 -3M67.2 1 66.5 -6.5M76.5 10.5C77.5 4 74.5 -1 69.5 -5M76.6 4 81 -1"/>' +
-      '<path d="M67.5 30.5 74 35" stroke="#f0c35a" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>' +
-      (lead ? '<circle class="nose-glow" cx="88.5" cy="17" r="10" fill="url(#noseGlow)"/><circle class="nose" cx="88.5" cy="17" r="2.9"/>' : '') +
+    var dl = 'animation-delay:' + delay + 's';
+    var FAR = '#4a2c17', FAR2 = '#3a2312', NEAR2 = '#6a4325', HOOF = '#1b110a', TUFT = '#efe2c8';
+    function hoof(cx, cy) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="2" ry="1.6" fill="' + HOOF + '"/>'; }
+    return '<g transform="translate(' + x + ' ' + y + ')"><g class="gal" style="' + dl + '">' +
+      /* far legs, in shadow */
+      '<g class="leg far hind" style="' + dl + '">' + limb(33, 44, 23, 53, 6.5, 3.4, FAR) + limb(23, 53, 12, 58, 2.6, 2, FAR2) + hoof(10.8, 58.4) + '</g>' +
+      '<g class="leg far fore" style="' + dl + '">' + limb(58, 44, 66, 53, 6, 3.1, FAR) + limb(66, 53, 64.5, 62, 2.5, 2, FAR2) + hoof(64.4, 62.8) + '</g>' +
+      /* tail */
+      '<path d="M25.5 34.5C21.5 31 17.6 31.2 16.4 33.6 19 36 22 37 25.6 37.4Z" fill="' + TUFT + '"/>' +
+      /* body and neck in one piece */
+      '<path fill="url(#dCoat)" d="M25 36C26 30 34 28.5 42 29 50 29.5 56 28.5 60 27 63 23 67 17 71 12.5L77 20C75 25 73.2 31 70.8 36.5 69.6 41 67.5 45 63 48 55 51.5 42 52.5 33 50.5 27 49 23.5 45 23.5 40.5 23.5 38.5 24 37 25 36Z"/>' +
+      '<path fill="url(#dBelly)" d="M31 47.5C39 51 52 51.5 61.5 47.6 65.6 45.4 68 41.6 68.8 37.4 66.4 43 60.4 46.2 52 47.6 44 48.8 37 48.6 31 47.5Z"/>' +
+      '<path fill="' + TUFT + '" d="M73.6 22C75 27 73.8 33.5 70.4 38.6 71.6 33.5 72 28 70.8 23.4Z" opacity=".9"/>' +
+      '<path d="M28 31.5C36 29 48 30 59 27.6 62.5 23.6 66 18.4 69.6 13.6" fill="none" stroke="#e6c79c" stroke-opacity=".45" stroke-width="1.1" stroke-linecap="round"/>' +
+      /* harness: girth strap, collar, bells */
+      '<path d="M41.5 29.4C42.6 36 42.6 43.5 41.4 51" fill="none" stroke="#c81d34" stroke-width="2.8"/>' +
+      '<rect x="40" y="38.4" width="3.4" height="3.2" rx=".6" fill="none" stroke="#f0c35a" stroke-width=".9"/>' +
+      '<path d="M63.2 25.8C66.8 28.4 69 33 69.2 38.4" fill="none" stroke="#c81d34" stroke-width="3.4" stroke-linecap="round"/>' +
+      '<path d="M63.2 25.8C66.8 28.4 69 33 69.2 38.4" fill="none" stroke="#ff8a8f" stroke-opacity=".45" stroke-width=".9" stroke-linecap="round" transform="translate(-.9 0)"/>' +
+      '<g class="bell" style="' + dl + '"><circle cx="66.6" cy="31.6" r="1.7" fill="url(#sgGold)"/><path d="M65.8 32.4H67.4" stroke="#7d5212" stroke-width=".5"/></g>' +
+      '<g class="bell" style="animation-delay:' + (delay - .2) + 's"><circle cx="68.6" cy="36.4" r="1.7" fill="url(#sgGold)"/><path d="M67.8 37.2H69.4" stroke="#7d5212" stroke-width=".5"/></g>' +
+      /* near legs */
+      '<g class="leg hind" style="' + dl + '">' + limb(29, 41, 16.5, 50, 9.5, 3.8, 'url(#dCoat)') + limb(16.5, 50, 5.5, 52, 2.9, 2.2, NEAR2) +
+        '<circle cx="7" cy="51.8" r="1.8" fill="' + TUFT + '"/>' + hoof(4.6, 52.3) + '</g>' +
+      '<g class="leg fore" style="' + dl + '">' + limb(61, 42, 72, 49.5, 7.5, 3.5, 'url(#dCoat)') + limb(72, 49.5, 74.6, 59, 2.8, 2.2, NEAR2) +
+        '<circle cx="74.4" cy="57.6" r="1.7" fill="' + TUFT + '"/>' + hoof(74.9, 60) + '</g>' +
+      /* head with antlers, nodding with the gallop */
+      '<g class="head" style="' + dl + '">' +
+        '<path d="M74.6 9.6C73 5 70.4 2 66.8 0M72.2 4.4C69.6 4.6 67.6 6 66.6 8M70.6 1.6C70 -1.6 68 -3.6 65.4 -4.6" fill="none" stroke="#9c8058" stroke-width="1.6" stroke-linecap="round"/>' +
+        '<path d="M73.5 11.2C70.8 7.8 67 7 64.2 8.2 66.8 11.2 70 13.2 72.8 13.6Z" fill="#6e4426"/>' +
+        '<path d="M72.4 11.6C70.4 9.6 68.2 9 66.6 9.4 68.4 11.2 70.4 12.4 72.2 12.8Z" fill="#d9b48a"/>' +
+        '<path fill="url(#dCoat)" d="M70.5 13.5C71 9.5 75 7.5 79.5 8.5 83 9.3 85.5 11.8 88.5 13.8 91.8 15.8 93.2 18 92 20 90.6 22.2 87.4 22.4 84.4 21.8 81.5 21.3 78.5 21.9 75.5 21.3 72.2 20.3 70.2 17.2 70.5 13.5Z"/>' +
+        '<path fill="#c49a6c" d="M85.4 14.6C88.4 15.6 91.6 16.9 92.6 18.9 92 21 89.5 22.3 86.5 21.8 84.6 21.5 83.6 19 85.4 14.6Z" opacity=".75"/>' +
+        '<path d="M75 10C78 8.6 82.5 9.4 86 12" fill="none" stroke="#e6c79c" stroke-opacity=".5" stroke-width=".9" stroke-linecap="round"/>' +
+        '<circle cx="80.4" cy="13.4" r="1.35" fill="#160c06"/><circle cx="80.85" cy="12.95" r=".45" fill="#fff"/>' +
+        '<path d="M79 11.4Q80.4 10.6 81.9 11.4" fill="none" stroke="#3a2312" stroke-width=".55" stroke-linecap="round"/>' +
+        '<path d="M86.6 21.2Q88.6 21.8 90.6 21" fill="none" stroke="#3a2312" stroke-width=".5" stroke-linecap="round"/>' +
+        '<path d="M77.4 9C76.9 4 79 0 83 -3.5M79.5 2.5C82 2 84 3 85.6 5M78.2 5.2C76 3.2 75 0 75.5 -3M81 -1.2C81 -4.2 83 -6.6 86 -7.6" fill="none" stroke="#ead7b2" stroke-width="1.8" stroke-linecap="round"/>' +
+        (lead
+          ? '<circle class="nose-glow" cx="92.4" cy="17.6" r="11" fill="url(#noseGlow)"/><circle class="nose" cx="92.4" cy="17.6" r="2.9"/><circle cx="91.6" cy="16.8" r=".8" fill="#fff" opacity=".8"/>'
+          : '<ellipse cx="92.2" cy="17.6" rx="1.8" ry="1.5" fill="#24150b"/>') +
+      '</g>' +
     '</g></g>';
   }
   (function () {
@@ -1725,7 +1836,7 @@
 
   })();
 
-  /* ---------- Textures for the moon felt and the snow on the court, painted once ---------- */
+  /* ---------- Texture for the snow on the court, painted once ---------- */
   (function () {
     try {
       function noise(w, h, px) {
@@ -1735,7 +1846,6 @@
         g.putImageData(im, 0, 0);
         return c.toDataURL();
       }
-      byId('moon-felt').setAttribute('href', noise(256, 256, function (d, i, v) { d[i] = 41; d[i + 1] = 61; d[i + 2] = 5; d[i + 3] = v > .5 ? (v - .5) * 330 : 0; }));
       byId('speck-img').setAttribute('href', noise(96, 96, function (d, i, v) { d[i] = d[i + 1] = d[i + 2] = 255; d[i + 3] = v > .94 ? 255 : 0; }));
     } catch (e) {}
   })();
@@ -1755,29 +1865,6 @@
     } catch (e) {}
   })();
 
-  /* ---------- The moon is a turning tennis ball: its seam is a 3D curve, rotated and projected each frame ---------- */
-  var seamEl = byId('seam'), seamSh = byId('seam-shadow');
-  var SA = .7, SB = .3, SC = 2 * Math.sqrt(SA * SB), SEG = 96, seamAt = -1;
-  var spin = .6, spinV = still ? 0 : 3.4, SPIN_BASE = .42;
-  var TZ = -.5, TX = .36, cTZ = Math.cos(TZ), sTZ = Math.sin(TZ), cTX = Math.cos(TX), sTX = Math.sin(TX);
-  function drawSeam() {
-    var d = '', pen = false, ct = Math.cos(spin), st = Math.sin(spin), k, t, x, y, z, x1, z1, y2, z2;
-    for (k = 0; k <= SEG; k++) {
-      t = k / SEG * 6.2831853;
-      x = SA * Math.cos(t) + SB * Math.cos(3 * t);
-      y = SA * Math.sin(t) - SB * Math.sin(3 * t);
-      z = SC * Math.sin(2 * t);
-      x1 = x * ct + z * st; z1 = -x * st + z * ct;       /* spin about the vertical axis */
-      y2 = y * cTX - z1 * sTX; z2 = y * sTX + z1 * cTX;   /* lean toward the viewer */
-      if (z2 > .015) {
-        d += (pen ? 'L' : 'M') + (195 + 92 * (x1 * cTZ - y2 * sTZ)).toFixed(1) + ' ' + (165 - 92 * (x1 * sTZ + y2 * cTZ)).toFixed(1);
-        pen = true;
-      } else pen = false;
-    }
-    seamEl.setAttribute('d', d);
-    seamSh.setAttribute('d', d);
-  }
-  drawSeam();
 
   /* ---------- Gifts: edit this list. Put a shop address in `url` to turn "Link wkrótce" into a button. ---------- */
   var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze' };
@@ -2270,11 +2357,6 @@
     if (gameActive) {
       if (!snowCleared) { ctx.clearRect(0, 0, W, H); snowCleared = true; }
     } else { snowCleared = false; draw(dt); }
-    if (window.scrollY < 560 && currentView === 'start' && !gameActive) {
-      spinV += (SPIN_BASE - spinV) * Math.min(1, dt * 1.1);
-      spin += spinV * dt;
-      if (Math.abs(spin - seamAt) > .008) { seamAt = spin; drawSeam(); }
-    }
     raf = requestAnimationFrame(loop);
   }
   resize();
@@ -2288,47 +2370,43 @@
   }
 
   /* ---------- Santa swings his racket and sends a ball flying every few seconds ---------- */
-  var arm = byId('arm'), racket = byId('racket');
+  var arm = byId('arm'), racket = byId('racket'), swinging = false;
+  function swing(burst) {
+    if (!arm.animate || swinging) return false;
+    swinging = true;
+    arm.animate(
+      [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-46deg)', offset: .36 }, { transform: 'rotate(42deg)', offset: .6 }, { transform: 'rotate(0deg)' }],
+      { duration: burst ? 760 : 950, easing: 'ease-in-out' }
+    ).onfinish = function () { swinging = false; };
+    setTimeout(function () {
+      var r = racket.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if (!burst) {
+        shots.push({ x: cx, y: cy, r: 3.2, vx: 150 + Math.random() * 130, vy: -210 - Math.random() * 90, rot: 0, spin: 10, g: 520 });
+        return;
+      }
+      for (var i = 0; i < 9; i++) {
+        var a = -Math.PI * (.12 + Math.random() * .5), sp = 220 + Math.random() * 300;
+        shots.push({ x: cx, y: cy, r: 3.6 + Math.random() * 3.4, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, rot: Math.random() * 6.28, spin: (Math.random() - .5) * 14, g: 620 });
+      }
+      if (shots.length > 70) shots.splice(0, shots.length - 70);
+    }, burst ? 430 : 540);
+    return true;
+  }
   function santaServe() {
     setTimeout(santaServe, 4200 + Math.random() * 3200);
-    if (still || document.hidden || window.scrollY > 300 || currentView !== 'start' || gameActive || !arm.animate) return;
-    arm.animate(
-      [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-42deg)', offset: .38 }, { transform: 'rotate(40deg)', offset: .62 }, { transform: 'rotate(0deg)' }],
-      { duration: 950, easing: 'ease-in-out' }
-    );
-    setTimeout(function () {
-      var r = racket.getBoundingClientRect();
-      shots.push({ x: r.left + r.width / 2, y: r.top + r.height / 2, r: 3.2, vx: 150 + Math.random() * 130, vy: -210 - Math.random() * 90, rot: 0, spin: 10, g: 520 });
-    }, 540);
+    if (still || document.hidden || window.scrollY > 300 || currentView !== 'start' || gameActive) return;
+    swing(false);
   }
   setTimeout(santaServe, 6000);
 
-  /* ---------- Tap the moon: it spins up and serves a burst of balls ---------- */
+  /* ---------- Tap the sleigh: Santa serves a whole bunch of balls and Rudolph's nose flashes ---------- */
   var serveBtn = byId('serve');
-  var moon = byId('moon');
   var hint = byId('hint');
   serveBtn.addEventListener('click', function () {
     hint.classList.add('gone');
-    if (still) return;
-    spinV += 9;
-    if (moon.animate) {
-      moon.animate(
-        [{ transform: 'scale(1)' }, { transform: 'scale(.9)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }],
-        { duration: 620, easing: 'cubic-bezier(.3,.7,.3,1)' }
-      );
-    }
-    var r = serveBtn.getBoundingClientRect();
-    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    for (var i = 0; i < 11; i++) {
-      var a = Math.PI * (1 + .1 + Math.random() * .8);   /* upward fan */
-      var sp = 240 + Math.random() * 320;
-      shots.push({
-        x: cx + Math.cos(a) * r.width * .3, y: cy + Math.sin(a) * r.width * .3, r: 5 + Math.random() * 4,
-        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-        rot: Math.random() * 6.28, spin: (Math.random() - .5) * 14
-      });
-    }
-    if (shots.length > 70) shots.splice(0, shots.length - 70);
+    if (still || !swing(true)) return;
+    var nose = document.querySelector('#team .nose-glow');
+    if (nose && nose.animate) nose.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(2.2)', opacity: 1 }, { transform: 'scale(1)', opacity: .8 }], { duration: 700, easing: 'ease-out' });
   });
 
   /* ---------- Golden ball hunt: finding, counter, sheet, coupon ---------- */
@@ -2818,7 +2896,15 @@
 
   /* =================================================================== Firebase: presence, progress, game */
   /* Paste the firebaseConfig object from the Firebase console here. null keeps the page offline. */
-  var FIREBASE_CONFIG = null;
+  var FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyDntrqwbd36MZah8F1QqQqKRvg4eqtJtsQ',
+    authDomain: 'swieta-hubert.firebaseapp.com',
+    databaseURL: 'https://swieta-hubert-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'swieta-hubert',
+    storageBucket: 'swieta-hubert.firebasestorage.app',
+    messagingSenderId: '29847609099',
+    appId: '1:29847609099:web:6989a736c52c103a1b8c0e'
+  };
   var FB = null, myUid = null, isHost = false, players = {}, offset = 0, gameState = null, attempts = {}, pendingRound = null;
   function noop() {}
   function serverNow() { return Date.now() + offset; }
