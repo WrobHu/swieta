@@ -4424,6 +4424,12 @@ function createSafe(opts) {
   var gate = null, myJoin = null, allJoins = {}, signTries = 0, signLock = 0, safeUI = null, nagRound = 0, safeSign = null;
   function signInfo(id) { var S = safeApi().SIGNS; for (var i = 0; i < S.length; i++) if (S[i].id === id) return S[i]; return null; }
   var joinPending = false;
+  var autoJoinFor = '';
+  function hostAutoJoin() {
+    if (!FB || !isHost || !safeSign || !gate || !gate.open || !gate.id || joinedNow() || autoJoinFor === gate.id) return;
+    autoJoinFor = gate.id;
+    FB.D.set(R('joins/' + myUid), { sign: safeSign, gate: gate.id, name: visitorName() || 'Mikołaj', at: FB.D.serverTimestamp() }).catch(function () { autoJoinFor = ''; });
+  }
   function joinedNow() { return !!(gate && gate.id && myJoin && myJoin.gate === gate.id && !joinPending); }
   function codeFail(code) {
     tries++; store('mikolaj-proby', tries);
@@ -4589,7 +4595,7 @@ function createSafe(opts) {
     }).catch(noop);
     D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
     D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); }, noop);
-    D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
+    D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('game/state'), function (s) { gsLoaded = true; onGameState(s.val()); }, noop);
     D.onValue(D.query(R('game/scores'), D.limitToLast(30)), function (s) { allScores = s.val() || {}; onScores(); }, noop);
@@ -4617,7 +4623,7 @@ function createSafe(opts) {
     moveInd();
     FB.D.onValue(R('attempts'), function (s) { attempts = s.val() || {}; renderPanel(); }, noop);
     FB.D.onValue(R('joins'), function (s) { allJoins = s.val() || {}; renderLobby(); }, noop);
-    FB.D.onValue(R('safe'), function (s) { var v = s.val(); safeSign = v && v.sign || null; renderLobby(); }, noop);
+    FB.D.onValue(R('safe'), function (s) { var v = s.val(); safeSign = v && v.sign || null; hostAutoJoin(); renderLobby(); }, noop);
     renderLobby();
     if (!silent) toast('Witaj, Mikołaju! Możesz rozpocząć rundę.');
   }
