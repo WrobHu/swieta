@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Tenisowy list do Mikołaja</title>
-<meta name="description" content="Tenisowa lista życzeń do Świętego Mikołaja. Znajdź 7 złotych piłek i zdobądź kupon na prezent.">
+<title>Gem, set, Święta!</title>
+<meta name="description" content="Świąteczna zabawa dla całej rodziny: złote piłki do znalezienia, turniej mini-gier na żywo i list Huberta do Mikołaja.">
 <meta name="theme-color" content="#041210">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pl_PL">
 <meta property="og:url" content="https://wrobhu.github.io/swieta/">
 <meta property="og:title" content="Gem, set, Święta!">
-<meta property="og:description" content="Tenisowa lista życzeń do Mikołaja. Mikołaj zgubił 7 złotych piłek: znajdź je i zdobądź kupon na prezent.">
+<meta property="og:description" content="Świąteczna zabawa dla całej rodziny: znajdź 7 złotych piłek, zagraj w turnieju i przeczytaj list Huberta do Mikołaja.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%23dcee4e'/%3E%3Cpath d='M5.5 8.5C14.5 14 14.5 26 5.5 31.5M34.5 8.5C25.5 14 25.5 26 34.5 31.5' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,600..900;1,9..144,600..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Caveat:wght@500;600&family=Mrs+Saint+Delafield&family=Fraunces:ital,opsz,wght@0,9..144,600..900;1,9..144,600..900&display=swap">
 <style>
   :root { padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
   body { margin: 0; font: 14px system-ui, sans-serif; }
@@ -63,8 +63,8 @@
     overflow-x: hidden;
   }
   *, *::before, *::after { box-sizing: border-box; }
-  h1, h2, h3, p, ul { margin: 0; padding: 0; }
-  ul { list-style: none; }
+  h1, h2, h3, p, ul, ol { margin: 0; padding: 0; }
+  ul, ol { list-style: none; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .defs { position: absolute; width: 0; height: 0; }
 
@@ -256,9 +256,58 @@
   .board-note { font-size: 14px; color: var(--mist); }
   .board-note b { color: var(--snow); font-weight: 500; }
 
+  /* ---------- the letter ---------- */
+  .letter {
+    position: relative; padding: 26px 22px 18px 34px; border-radius: 6px; color: #22314d;
+    background:
+      linear-gradient(90deg, transparent 22px, rgba(207, 46, 69, .32) 22px, rgba(207, 46, 69, .32) 23.5px, transparent 23.5px),
+      repeating-linear-gradient(180deg, transparent 0 33px, rgba(34, 49, 77, .1) 33px 34px),
+      radial-gradient(120% 90% at 30% 0%, #fffaf0, #f6ecd5 70%, #efe1c2);
+    background-position: 0 0, 0 22px, 0 0;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 18px 40px -12px rgba(0, 0, 0, .65), 0 4px 10px rgba(0, 0, 0, .25);
+    transform: rotate(-.6deg);
+  }
+  .letter::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(rgba(0, 0, 0, .05), rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, .05) 60%, rgba(0, 0, 0, 0)); }
+  .letter p { position: relative; font: 500 23px/34px Caveat, "Segoe Print", cursive; letter-spacing: .005em; }
+  .letter .lt-date { text-align: right; font-size: 19px; color: #5a6a86; margin-bottom: 0; padding-right: 54px; }
+  .letter .lt-hi { font-weight: 600; font-size: 27px; }
+  .letter .lt-bye { margin-top: 2px; }
+  .lt-seal { position: absolute; right: -12px; top: -16px; width: 70px; height: 70px; transform: rotate(14deg); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4)); }
+  .sig { margin: -4px 0 0 -6px; }
+  .sig-svg { display: block; width: min(100%, 300px); height: auto; overflow: visible; }
+  .sig-t { font: 400 98px/1 "Mrs Saint Delafield", "Segoe Script", cursive; fill: #1f3c73; fill-opacity: 0; stroke: #1f3c73; stroke-width: 1.1; stroke-dasharray: 900; stroke-dashoffset: 900; }
+  .sig-fl { fill: none; stroke: #1f3c73; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .sig-ball { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; }
+  .sig-spark path { transform-box: fill-box; transform-origin: center; opacity: 0; }
+  .letter.sign .sig-t { animation: sig-draw 2.3s cubic-bezier(.45, 0, .4, 1) forwards, sig-ink .9s ease-out 1.5s forwards; }
+  .letter.sign .sig-fl { animation: sig-fl .75s cubic-bezier(.6, 0, .3, 1) 2.05s forwards; }
+  .letter.sign .sig-ball { animation: sig-ball 1.1s cubic-bezier(.3, 0, .5, 1) 2.7s forwards; }
+  .letter.sign .sig-spark path { animation: sig-spark .9s ease-out 3.3s forwards; }
+  .letter.sign .sig-spark path + path { animation-delay: 3.45s; }
+  @keyframes sig-draw { to { stroke-dashoffset: 0; } }
+  @keyframes sig-ink { to { fill-opacity: 1; stroke-width: .3; } }
+  @keyframes sig-fl { to { stroke-dashoffset: 0; } }
+  @keyframes sig-ball {
+    0% { opacity: 0; transform: translateY(-60px) scale(.6); } 15% { opacity: 1; }
+    45% { transform: translateY(16px) scale(1.12, .84); } 62% { transform: translateY(-14px) scale(.96, 1.04); }
+    80% { transform: translateY(16px) scale(1.05, .92); } 100% { opacity: 1; transform: translateY(14px); }
+  }
+  @keyframes sig-spark { 0% { opacity: 0; transform: scale(.2) rotate(0); } 40% { opacity: 1; transform: scale(1.2) rotate(45deg); } 100% { opacity: 0; transform: scale(.4) rotate(90deg); } }
+  .letter.unfold { animation: lt-unfold .9s var(--out) both; }
+  .letter.unfold > p { animation: lt-line .7s var(--out) both; }
+  .letter.unfold > p:nth-of-type(2) { animation-delay: .2s; } .letter.unfold > p:nth-of-type(3) { animation-delay: .35s; }
+  .letter.unfold > p:nth-of-type(4) { animation-delay: .5s; } .letter.unfold > p:nth-of-type(5) { animation-delay: .65s; }
+  .letter.unfold > p:nth-of-type(6) { animation-delay: .8s; }
+  .letter.unfold .lt-seal { animation: lt-seal .6s var(--spring) 1.1s both; }
+  @keyframes lt-unfold { from { opacity: 0; transform: perspective(900px) rotateX(-14deg) translateY(26px) rotate(-.6deg); transform-origin: 50% 0; } to { opacity: 1; transform: rotate(-.6deg); } }
+  @keyframes lt-line { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes lt-seal { from { opacity: 0; transform: rotate(40deg) scale(1.8); } to { opacity: 1; transform: rotate(14deg) scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .sig-t { stroke-dashoffset: 0; fill-opacity: 1; } .sig-fl { stroke-dashoffset: 0; } .sig-ball { opacity: 1; transform: translateY(14px); } }
+
   /* ---------- wish list ---------- */
   .wishes { display: flex; flex-direction: column; gap: 14px; }
   .wishes-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .wishes h2 em { font-style: italic; color: var(--ball); }
   .wishes h2, .outro h2 { font: 800 32px/1.05 var(--display); letter-spacing: -.015em; text-wrap: balance; }
   .count { font: 600 14px/1.2 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .wishes-note { font-size: 15px; color: var(--mist); max-width: 40ch; }
@@ -450,8 +499,11 @@
     display: inline-grid; place-items: center; filter: drop-shadow(0 0 6px rgba(240, 195, 90, .75));
   }
   .gold-btn svg { width: 100%; height: 100%; display: block; }
-  .gold-sticker { width: 26px; height: 26px; margin-left: auto; animation: twinkle-gold 2.6s ease-in-out infinite; will-change: transform; }
-  .gold-sky { position: absolute; z-index: 2; left: 14%; top: 16%; width: 30px; height: 30px; }
+  .gold-sticker { width: 36px; height: 36px; margin-left: auto; animation: twinkle-gold 2.6s ease-in-out infinite; will-change: transform; }
+  .gold-sky { position: absolute; z-index: 2; left: 14%; top: 16%; width: 38px; height: 38px; }
+  .gold-star { display: grid; place-items: center; }
+  .gold-star span { display: block; width: 17px; height: 17px; filter: drop-shadow(0 0 6px rgba(240, 195, 90, .95)); animation: twinkle-gold 2.2s ease-in-out infinite; }
+  .gold-star svg { display: block; width: 100%; height: 100%; }
   @keyframes twinkle-gold { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(16deg) scale(1.12); } }
   .spark { transform-box: fill-box; transform-origin: center; opacity: 0; animation: spark 2.8s ease-in-out infinite; }
   @keyframes spark {
@@ -465,7 +517,7 @@
   .hill-wrap { position: relative; }
 
   .fall-gold {
-    position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; padding: 8px;
+    position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; padding: 8px;
     border: 0; border-radius: 50%; background: none; cursor: pointer; pointer-events: auto;
     filter: drop-shadow(0 0 10px rgba(240, 195, 90, .9));
   }
@@ -508,7 +560,7 @@
   .live.has-gold i { animation: bulb 1s ease-in-out infinite alternate, goldflash 7s ease-in-out 2s infinite; }
   @keyframes goldflash {
     0%, 80%, 100% { background: var(--berry-lit); box-shadow: 0 0 10px var(--berry-lit); transform: scale(1); }
-    84%, 93% { background: radial-gradient(circle at 35% 30%, #fff4c7, #f5cc5e 50%, #b07f22); box-shadow: 0 0 16px 3px rgba(240, 195, 90, .9); transform: scale(2.1); }
+    84%, 93% { background: radial-gradient(circle at 35% 30%, #fff4c7, #f5cc5e 50%, #b07f22); box-shadow: 0 0 18px 4px rgba(240, 195, 90, .95); transform: scale(2.7); }
   }
   .live.has-gold::after {
     content: ""; position: absolute; left: -2px; top: -1px; width: 11px; height: 11px; pointer-events: none;
@@ -529,7 +581,7 @@
   .g-letter .o-plain { display: none; }
   .g-letter.taken .o-plain { display: inline; }
   .gold-letter {
-    position: relative; display: inline-block; width: .6em; height: .6em; margin: 0 .02em; vertical-align: -.02em;
+    position: relative; display: inline-block; width: .78em; height: .78em; margin: 0 .03em; vertical-align: -.1em;
     border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%;
   }
   .gold-letter svg { display: block; width: 100%; height: 100%; }
@@ -569,6 +621,29 @@
   .slot-b.on { border: 0; filter: drop-shadow(0 0 8px rgba(240, 195, 90, .6)); }
   .slot-b svg { width: 100%; height: 100%; }
   .slot-b.mark { border-color: var(--gold); }
+  .hunt-meter { margin-top: -4px; }
+  .hunt-bar { position: relative; height: 8px; border-radius: 99px; background: rgba(2, 10, 8, .5); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .4); }
+  .hunt-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; background: linear-gradient(90deg, #c9d4d8, var(--gold)); box-shadow: 0 0 12px rgba(240, 195, 90, .5); transition: width .8s var(--out); }
+  .hunt-bar .mk { position: absolute; top: -3px; width: 2px; height: 14px; margin-left: -1px; border-radius: 2px; }
+  .hunt-bar .mk.s { background: #c9d4d8; } .hunt-bar .mk.z { background: var(--gold); margin-left: -2px; }
+  .hunt-where { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .hunt-where:empty { display: none; }
+  .hw-label { width: 100%; font-size: 13px; color: var(--mist); }
+  .hw-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border-radius: 99px; background: rgba(240, 195, 90, .12); border: 1px solid rgba(240, 195, 90, .35); color: var(--snow); font: 600 14px/1 var(--body); text-decoration: none; }
+  .hw-chip b { color: var(--gold); font-family: var(--score); font-size: 15px; }
+  .hw-chip.sky { background: rgba(155, 231, 255, .1); border-color: rgba(155, 231, 255, .3); }
+  .spot-list { display: flex; flex-direction: column; gap: 6px; }
+  .spot-list li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px; border-radius: 12px; background: rgba(2, 10, 8, .35); font-size: 14px; line-height: 1.4; color: var(--mist); }
+  .spot-list b { display: block; font: 700 12px/1.2 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+  .sp-n { font: 700 15px/1.3 var(--score); color: var(--snow); }
+  .sp-lvl { font: 600 11px/1.3 var(--score); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); padding: 3px 7px; border-radius: 99px; border: 1px solid var(--line); }
+  .pl-row { cursor: pointer; }
+  .pl-row .nm small { font: 600 11px/1 var(--score); color: var(--ball); letter-spacing: .08em; }
+  .pl-spots { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 5px; padding-top: 8px; border-top: 1px solid rgba(242, 247, 243, .08); }
+  .pl-spots p { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 6px; font-size: 13px; line-height: 1.4; color: var(--mist); }
+  .pl-spots p b { color: var(--mist); }
+  .pl-spots p.ok { color: var(--snow); }
+  .pl-spots p.ok b { color: #5be38f; }
   .sheet-status { font-size: 15px; color: var(--mist); }
   .sheet-status b { color: var(--snow); font-weight: 600; }
   .hint-row { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -706,13 +781,15 @@
   /* ---------- app shell: boot splash, views, tab bar ---------- */
   .booting .hero, .booting .hero * { animation-play-state: paused !important; }
   .splash {
-    position: fixed; inset: 0; z-index: 30; overflow: hidden;
+    position: fixed; left: 0; top: var(--vvt, 0px); width: 100%; height: var(--vvh, 100%); z-index: 30; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
     background: radial-gradient(130% 75% at 50% 0%, #185340 0%, #0b2d24 48%, var(--night-deep) 100%);
     display: grid; place-items: center; text-align: center;
     padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
   }
+  .splash { scrollbar-width: none; }
+  .splash::-webkit-scrollbar { display: none; }
   .splash::before, .splash::after {
-    content: ""; position: absolute; left: 0; right: 0; top: -240px; bottom: 0; z-index: 1; pointer-events: none;
+    content: ""; position: fixed; left: 0; right: 0; top: -240px; bottom: 0; z-index: 1; pointer-events: none;
     background-image: radial-gradient(circle at 20px 30px, #fff 1.3px, transparent 1.8px), radial-gradient(circle at 110px 90px, #fff 1px, transparent 1.5px),
       radial-gradient(circle at 160px 20px, #fff 1.6px, transparent 2.1px), radial-gradient(circle at 70px 150px, #fff 1.1px, transparent 1.6px),
       radial-gradient(circle at 190px 170px, #fff .9px, transparent 1.4px);
@@ -756,6 +833,14 @@
   .splash .w:nth-child(3) > * { animation-delay: 2.05s; }
   .splash .eyebrow { animation-delay: 1.62s; }
   .splash-form { width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 8px; }
+  .field::placeholder { color: rgba(168, 195, 183, .55); }
+  .field.err { border-color: #ff8b9a; box-shadow: 0 0 0 3px rgba(255, 139, 154, .18); }
+  .splash-err { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #ff9fac; }
+  .splash-err::before { content: "!"; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #ff8b9a; color: var(--ink); font: 700 12px/1 var(--score); flex: none; }
+  .splash.typing { align-items: start; }
+  .splash.typing .splash-inner { padding-top: max(18px, env(safe-area-inset-top, 0px)); }
+  .splash.typing .splash-stage, .splash.typing .eyebrow { display: none; }
+  .splash.typing h1 { font-size: 34px; }
   .splash-form label { font: 700 22px/1.1 var(--display); color: var(--snow); }
   .splash-help { font-size: 14px; color: var(--mist); }
   .splash-hello { font: 700 24px/1.2 var(--display); color: var(--snow); }
@@ -888,18 +973,38 @@
   .rank .pts { margin-left: auto; font: 700 19px/1 var(--score); color: var(--ball); font-variant-numeric: tabular-nums; }
 
   .game-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .gl { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 10px 10px 8px; border-radius: 14px; background: rgba(2, 10, 8, .38); }
+  .gl {
+    position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; grid-template-areas: "ico head act" "desc desc desc";
+    gap: 10px 12px; align-items: center; padding: 12px; border-radius: 16px;
+    background: linear-gradient(180deg, rgba(2, 10, 8, .28), rgba(2, 10, 8, .46)); border: 1px solid rgba(242, 247, 243, .07);
+  }
+  .gl-ico { grid-area: ico; position: relative; }
+  .gl-ico i { position: absolute; right: -5px; top: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 99px; background: var(--ink); border: 1px solid rgba(220, 238, 78, .45); color: var(--ball); font: 700 11px/16px var(--score); font-style: normal; text-align: center; }
+  .gl-head { grid-area: head; min-width: 0; }
+  .gl .gl-act { grid-area: act; }
+  .gl .gl-train { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 0 11px; font-size: 12px; }
+  .gl-train svg { width: 12px; height: 12px; fill: currentColor; }
+  .gl-state { grid-area: act; font: 700 11px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; padding: 6px 9px; border-radius: 99px; }
+  .gl.now .gl-state { background: var(--ball); color: var(--ink); }
+  .gl.done .gl-state { background: rgba(91, 227, 143, .14); color: #5be38f; }
   .gl.now { box-shadow: inset 0 0 0 1.5px var(--ball); }
   .gl.done { opacity: .62; }
   .gl-ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(220, 238, 78, .12); color: var(--ball); }
   .gl-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-  .gl b { display: block; font: 700 17px/1.2 var(--display); }
-  .gl .d { display: block; font-size: 13px; line-height: 1.35; color: var(--mist); margin-top: 2px; }
+  .gl b { display: block; font: 700 18px/1.15 var(--display); margin-top: 3px; }
+  .gl .d { grid-area: desc; display: block; font-size: 14px; line-height: 1.45; color: var(--mist); padding-top: 10px; border-top: 1px solid rgba(242, 247, 243, .07); }
   .gl small { font: 700 11px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
   .gl .tool { min-height: 34px; padding: 0 12px; font-size: 13px; }
   .gl.bonus { background: linear-gradient(120deg, rgba(240, 195, 90, .14), rgba(2, 10, 8, .38) 60%); box-shadow: inset 0 0 0 1px rgba(240, 195, 90, .32); }
   .gl.bonus .gl-ico { background: rgba(240, 195, 90, .16); color: var(--gold); }
-  .gl-lock { font: 700 11px/1.25 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); text-align: right; max-width: 76px; }
+  .tr-chips { display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
+  .tr-chips::-webkit-scrollbar { display: none; }
+  .tr-chips button { flex: none; min-height: 34px; padding: 0 13px; border-radius: 99px; border: 1px solid var(--line); background: rgba(2, 10, 8, .35); color: var(--mist); font: 600 14px/1 var(--body); cursor: pointer; transition: background .25s, color .25s, border-color .25s; }
+  .tr-chips button[aria-selected="true"] { background: var(--ball); border-color: var(--ball); color: var(--ink); }
+  .tr-nm { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .tr-nm small { font-size: 12px; color: var(--mist); }
+  .tr-empty { color: var(--mist); font-size: 14px; }
+  .gl-lock { grid-area: act; font: 700 11px/1.25 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); text-align: right; max-width: 76px; }
   .stage-ui { position: absolute; inset: 0; touch-action: none; }
   .quiz { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 78px 14px 20px; }
   .quiz-n { font: 700 13px/1 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); text-align: center; }
@@ -907,9 +1012,22 @@
   .quiz-a { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
   .quiz-a button { min-height: 48px; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(242, 247, 243, .08); color: var(--snow); font: 600 16px/1.25 var(--body); text-align: left; cursor: pointer; transition: transform .15s, background-color .25s, border-color .25s; }
   .quiz-a button:active { transform: scale(.97); }
-  .quiz-a button.picked { background: rgba(240, 195, 90, .25); border-color: var(--gold); }
-  .quiz-a button.ok { background: #1c8a52; border-color: #5be38f; }
-  .quiz-a button.bad { background: #8f1a2d; border-color: #ff8b9a; }
+  .quiz-a button { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px; transition: opacity .3s, background .25s, border-color .25s; }
+  .quiz-a button i { flex: none; width: 24px; height: 24px; border-radius: 50%; display: none; place-items: center; font: 800 14px/1 var(--body); font-style: normal; }
+  .quiz-a button:disabled { cursor: default; }
+  .quiz-a button.ok { background: linear-gradient(180deg, #23a464, #17804c); border-color: #7af0aa; color: #fff; box-shadow: 0 0 0 3px rgba(91, 227, 143, .22), 0 6px 18px rgba(23, 128, 76, .45); }
+  .quiz-a button.ok i { display: grid; background: #fff; color: #17804c; }
+  .quiz-a button.ok i::before { content: "✓"; }
+  .quiz-a button.bad { background: linear-gradient(180deg, #b0263c, #8a1a2c); border-color: #ff9fac; color: #fff; }
+  .quiz-a button.bad i { display: grid; background: #fff; color: #a8213a; }
+  .quiz-a button.bad i::before { content: "✕"; }
+  .quiz-a button.dim { opacity: .38; }
+  .quiz-pot { min-height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-align: center; font-size: 14px; color: var(--mist); }
+  .quiz-pot b { font: 800 18px/1 var(--score); letter-spacing: .04em; color: var(--snow); }
+  .quiz-pot.live b { color: var(--ball); }
+  .quiz-pot.good { color: #8ff0b6; } .quiz-pot.good b { color: #5be38f; font-size: 22px; }
+  .quiz-pot.miss { color: #ffb3bd; } .quiz-pot.miss b { color: #ff8b9a; }
+  .quiz-pot small { font-size: 12px; color: var(--mist); }
   .champion { text-align: center; font: 900 30px/1.1 var(--display); color: var(--ball); }
 
   /* ---------- Mikołaj's panel ---------- */
@@ -955,6 +1073,7 @@
 <body>
 <svg class="defs" aria-hidden="true">
   <defs>
+    <radialGradient id="sealGrad" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#e2384b"/><stop offset=".65" stop-color="#a5162a"/><stop offset="1" stop-color="#6e0a18"/></radialGradient>
     <radialGradient id="noseGlow">
       <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
       <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
@@ -1038,12 +1157,13 @@
   </svg>
   <div class="splash-inner">
     <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="sp-burst"><i style="--a:-80deg"></i><i style="--a:-55deg"></i><i style="--a:-30deg"></i><i style="--a:-10deg"></i><i style="--a:10deg"></i><i style="--a:30deg"></i><i style="--a:55deg"></i><i style="--a:80deg"></i></div><div class="splash-ball"><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div>
-    <p class="eyebrow">List Huberta do Mikołaja</p>
+    <p class="eyebrow">Świąteczna zabawa dla całej rodziny</p>
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
-    <form class="splash-form" id="splash-form" hidden>
+    <form class="splash-form" id="splash-form" novalidate hidden>
       <label for="visitor-name">Jak masz na imię?</label>
-      <p class="splash-help">Wpisz imię albo pseudonim. Dzięki temu Mikołaj będzie wiedział, kto zbiera złote piłki i kto wygrywa w grze.</p>
-      <div class="field-row"><input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" required><button class="cta" type="submit">Wchodzę</button></div>
+      <p class="splash-help">Dzięki temu Mikołaj będzie wiedział, kto zbiera złote piłki i kto wygrywa w grze.</p>
+      <div class="field-row"><input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" enterkeyhint="go" placeholder="Tu wpisz imię/pseudonim" aria-describedby="splash-err"><button class="cta" type="submit">Wchodzę</button></div>
+      <p class="splash-err" id="splash-err" role="alert" hidden>Wpisz imię albo pseudonim, żeby wejść.</p>
     </form>
     <p class="splash-hello" id="splash-hello" hidden></p>
     <p class="splash-skip" id="splash-skip" hidden>Stuknij, żeby wejść</p>
@@ -1370,8 +1490,8 @@
         <ellipse cx="18" cy="359" rx="54" ry="7" fill="#dcebe4"/>
         <ellipse cx="372" cy="359" rx="54" ry="7" fill="#dcebe4"/>
         <!-- golden ball 2: half buried at the back corner of the court -->
-        <g class="g-hide" data-gold="g2">
-          <circle cx="70" cy="349.6" r="4.2" fill="url(#goldGrad)"/>
+        <g class="g-hide" data-gold="snow">
+          <circle cx="70" cy="348.8" r="5.4" fill="url(#goldGrad)"/>
           <path d="M66.2 347.6C67.6 348.8 67.9 350.4 67.4 351.8M73.8 347.6C72.4 348.8 72.1 350.4 72.6 351.8" fill="none" stroke="#fffbe8" stroke-width=".9" stroke-linecap="round"/>
           <ellipse cx="70" cy="352.4" rx="10" ry="3.8" fill="#eef6f2"/>
         </g>
@@ -1398,19 +1518,19 @@
         </g>
         <circle cx="62" cy="274" r="11" fill="url(#lampGlow)"/>
         <circle cx="328" cy="274" r="11" fill="url(#lampGlow)"/>
-          <path class="spark slow g-hide" data-gold="g2" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
+          <path class="spark slow g-hide" data-gold="snow" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
         <g id="bulbs"></g>
       </svg>
       <button type="button" class="serve" id="serve" aria-label="Niech Mikołaj zaserwuje piłki"></button>
-      <button type="button" class="gold-spot" data-g="g1" style="left:70.4%;top:73.58%" aria-label="Złota lampka na siatce"></button>
-      <button type="button" class="gold-spot" data-g="g2" style="left:17.95%;top:67.1%" aria-label="Coś błyszczy w śniegu"></button>
+      <button type="button" class="gold-spot" data-g="net" style="left:70.4%;top:73.58%" aria-label="Złota lampka na siatce"></button>
+      <button type="button" class="gold-spot" data-g="snow" style="left:17.95%;top:67.1%" aria-label="Coś błyszczy w śniegu"></button>
       <span class="hint" id="hint" aria-hidden="true">Stuknij w sanie</span>
     </div>
 
     <div class="hero-copy layer gutter">
       <p class="eyebrow">Kort centralny · Biegun Północny</p>
       <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
-      <p class="lead">List do Świętego Mikołaja od Huberta, który w tym roku był bardzo grzeczny. Przynajmniej takie krążą plotki.</p>
+      <p class="lead">Świąteczna zabawa u Huberta: szukaj złotych piłek, zagraj w turnieju i przeczytaj jego list do Mikołaja.</p>
     </div>
   </header>
 
@@ -1440,8 +1560,8 @@
   </div>
 
   <nav class="navcards layer gutter" aria-label="Co dalej">
-    <a class="navcard" href="#prezenty" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg></span>
-      <span><strong>Lista życzeń Huberta</strong><span class="sub" id="card-gifts-sub">12 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+    <a class="navcard" href="#list" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>
+      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">12 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
       <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Znajdź 3, a dostaniesz kupon na prezent.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard" href="#gra" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
@@ -1539,13 +1659,14 @@
       <path d="M326 89 331 77" stroke="#c9a26b" stroke-width="3" stroke-linecap="round"/>
       <ellipse cx="335" cy="64" rx="7.5" ry="11" transform="rotate(22 335 64)" fill="#0a231e" fill-opacity=".25" stroke="#f2f7f3" stroke-width="2"/>
       <path d="M330 57 341 69M328.5 62 338.5 72.5M332.5 53 342.5 64M339 55 330 73M342 60 334 75M335.5 54 328 68" stroke="#f2f7f3" stroke-opacity=".55" stroke-width=".5"/>
-      <g class="bounce">
-        <circle cx="340" cy="38" r="4.6" fill="url(#ornLime)"/>
+      <g class="bounce g-swap" data-gold="bounce" id="ft-bounce">
+        <circle class="gfill" cx="340" cy="38" r="4.6" fill="url(#ornLime)"/>
         <path d="M336.8 35.2C339.4 36.6 340 39.2 339.2 41.4" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width=".8" stroke-linecap="round"/>
       </g>
       <g fill="#ffffff" id="ft-glints"></g>
     </svg>
-      <button type="button" class="gold-spot" data-g="g6" style="left:29.19%;top:47.5%" aria-label="Złota bombka na choince"></button>
+      <button type="button" class="gold-spot" data-g="tree" style="left:29.19%;top:47.5%" aria-label="Złota bombka na choince"></button>
+      <button type="button" class="gold-spot" data-g="bounce" style="left:89.19%;top:11.5%;width:52px;height:60px;margin:-30px 0 0 -26px;border-radius:26px" aria-label="Złota piłka bałwana"></button>
     </div>
     <p class="drift gutter">Do zobaczenia przy wigilijnym stole!</p>
   </footer>
@@ -1553,13 +1674,49 @@
 
   <section class="view" id="view-prezenty" data-view="prezenty" hidden>
     <header class="vhead gutter">
-      <p class="eyebrow">Prezenty</p>
-      <h1>Lista życzeń <em>Huberta</em></h1>
-      <p class="vlead">Każdy prezent jest zapakowany. Stuknij w paczkę, a piłka tenisowa ją rozpakuje.</p>
+      <p class="eyebrow">List</p>
+      <h1>List do <em>Mikołaja</em></h1>
+      <p class="vlead">Kilka słów od Huberta, a pod spodem prezenty do rozpakowania.</p>
     </header>
+    <div class="layer gutter">
+      <article class="letter" id="letter" aria-label="List Huberta do Mikołaja">
+        <svg class="lt-seal" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 3C38 5 42 2 47 6S54 12 58 17 60 26 61 32 58 41 56 46 50 54 45 58 37 60 32 61 24 60 18 57 10 51 7 46 3 38 3 32 5 24 8 18 14 9 19 6 26 2 32 3Z" fill="url(#sealGrad)"/>
+          <circle cx="32" cy="32" r="20" fill="none" stroke="#7c0f1f" stroke-width="2" opacity=".55"/>
+          <circle cx="32" cy="32" r="17.5" fill="none" stroke="#ff8a8f" stroke-width=".8" opacity=".45"/>
+          <path d="M20 23C25 28 25 36 20 41M44 23C39 28 39 36 44 41" fill="none" stroke="#5e0a18" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <text x="32" y="38.5" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-style="italic" font-weight="900" font-size="18" fill="#f6cf6a" opacity=".9">H</text>
+          <ellipse cx="24" cy="15" rx="9" ry="3.5" fill="#fff" opacity=".18" transform="rotate(-24 24 15)"/>
+        </svg>
+        <p class="lt-date">Biegun Północny, Święta 2026</p>
+        <p class="lt-hi">Drogi Mikołaju,</p>
+        <p>w tym roku byłem bardzo grzeczny. Przynajmniej takie krążą plotki, a ja ich nie prostuję.</p>
+        <p>Trenowałem serwis, nie kłóciłem się z sędzią (prawie) i zawsze oddawałem piłki rywalom.</p>
+        <p>Poniżej zostawiam kilka podpowiedzi. Nie musisz spełnić wszystkich… ale rozmiar rakiety już znasz.</p>
+        <p class="lt-bye">Z pozdrowieniami z kortu,</p>
+        <div class="sig" aria-label="Podpis: Hubert" role="img">
+          <svg class="sig-svg" viewBox="0 0 330 140" aria-hidden="true">
+            <defs>
+              <linearGradient id="sigFade" x1="0" y1="0" x2="1" y2="0"><stop offset=".86" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
+              <mask id="sigMask" maskUnits="userSpaceOnUse" x="0" y="0" width="330" height="140">
+                <rect id="sig-wipe" x="-380" y="0" width="380" height="140" fill="url(#sigFade)">
+                  <animate id="sig-anim" attributeName="x" from="-380" to="0" dur="2.3s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".45 0 .4 1"/>
+                </rect>
+              </mask>
+            </defs>
+            <g mask="url(#sigMask)">
+              <text class="sig-t" x="18" y="92">Hubert</text>
+            </g>
+            <path class="sig-fl" pathLength="1" d="M30 112C92 124 178 121 244 104S318 72 300 60C288 52 272 66 292 82"/>
+            <g class="sig-ball"><circle cx="300" cy="32" r="9" fill="url(#sgBall)"/><path d="M293.2 27.6C297 30.2 297.8 34.6 296 38.4" fill="none" stroke="#fffbe8" stroke-width="1.2" stroke-linecap="round"/></g>
+            <g class="sig-spark" fill="#f0c35a"><path d="M318 22l1.4 3.8 3.8 1.4-3.8 1.4-1.4 3.8-1.4-3.8-3.8-1.4 3.8-1.4z"/><path d="M284 16l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
+          </svg>
+        </div>
+      </article>
+    </div>
   <section class="wishes layer gutter" aria-labelledby="wishes-title">
     <div class="wishes-head" data-rv>
-      <h2 id="wishes-title" class="sr">Prezenty</h2>
+      <h2 id="wishes-title">Lista <em>prezentów</em></h2>
       <p class="count" id="count" aria-live="polite"></p>
     </div>
     <div class="seg" id="seg" data-rv role="group" aria-label="Filtruj prezenty"></div>
@@ -1576,7 +1733,7 @@
     <header class="vhead gutter">
       <p class="eyebrow">Szukanie</p>
       <h1>Złote piłki <em>Mikołaja</em></h1>
-      <p class="vlead">Mikołaj zgubił 7 złotych piłek. Są ukryte na Starcie, w Prezentach i w Grze, a jedna co jakiś czas spada z nieba.</p>
+      <p class="vlead">Mikołaj zgubił 7 złotych piłek. Każdy ma je schowane w innych miejscach, więc nie da się ich podejrzeć ani podpowiedzieć innym.</p>
     </header>
     <div class="layer gutter">
       <div class="hunt-card">
@@ -1584,7 +1741,9 @@
           <p class="hunt-rule"><b>3 piłki</b>srebrny kupon na prezent</p>
           <p class="hunt-rule"><b>7 piłek</b>złoty kupon na prezent</p>
         </div>
+        <div class="hunt-meter" aria-hidden="true"><div class="hunt-bar"><i id="hunt-fill"></i><b class="mk s" style="left:42.86%"></b><b class="mk z" style="left:100%"></b></div></div>
         <div class="slots" id="slots" aria-hidden="true"></div>
+        <div class="hunt-where" id="hunt-where"></div>
         <p class="sheet-status" id="sheet-status"></p>
         <div class="hint-row" id="hint-row">
           <button type="button" class="tool" id="hint-btn">Podpowiedź</button>
@@ -1603,7 +1762,7 @@
     <header class="vhead gutter">
       <p class="eyebrow">Turniej na żywo</p>
       <h1>Turniej <em>świąteczny</em></h1>
-      <p class="vlead">Pięć krótkich gier i niespodzianka na koniec, razem około 12 minut. Wszyscy grają w tej samej chwili. Kt<span class="g-letter" data-gold="g7"><button type="button" class="gold-letter" data-g="g7" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span></span> zbierze najwięcej punktów, zostaje Mistrzem Świąt.</p>
+      <p class="vlead">Pięć krótkich gier i niespodzianka na koniec, razem około 12 minut. Wszyscy grają w tej samej chwili. Kto zbierze najwięcej punktów, zostaje Mistrzem Świąt.</p>
     </header>
     <div class="layer gutter" id="game-lobby">
       <div style="display:flex;flex-direction:column;gap:16px">
@@ -1626,6 +1785,12 @@
           <p class="card-label">Gry w turnieju</p>
           <ol class="game-list" id="game-list"></ol>
           <p class="hint-note">Stuknij „Trening”, żeby poćwiczyć grę samodzielnie. Trening nie liczy się do turnieju.</p>
+        </div>
+        <div class="card" id="train-card">
+          <p class="card-label">Tablica treningów</p>
+          <div class="tr-chips" id="train-chips" role="tablist" aria-label="Wybierz grę"></div>
+          <ol class="rank" id="train-rank"></ol>
+          <p class="hint-note">Najlepszy wynik każdej osoby z treningów. Treningi nie liczą się do turnieju.</p>
         </div>
       </div>
     </div>
@@ -1658,7 +1823,8 @@
     </header>
     <div class="layer gutter"><div class="card"><p class="card-label">Teraz na stronie</p><div class="people" id="panel-online"></div></div></div>
     <div class="layer gutter"><div class="card"><p class="card-label">Próby złamania kodu</p><ul class="plist" id="panel-attempts"></ul></div></div>
-    <div class="layer gutter"><div class="card"><p class="card-label">Goście i złote piłki</p><ul class="plist" id="panel-players"></ul></div></div>
+    <div class="layer gutter"><div class="card"><p class="card-label">Goście i złote piłki</p><p class="hint-note">Każdy gość ma własne 7 kryjówek z 11 możliwych. Stuknij osobę, żeby zobaczyć, gdzie ma swoje piłki.</p><ul class="plist" id="panel-players"></ul></div></div>
+    <div class="layer gutter"><div class="card"><p class="card-label">Wszystkie możliwe kryjówki</p><ol class="spot-list" id="panel-spots"></ol></div></div>
   </section>
 
 
@@ -1671,7 +1837,7 @@
     <svg class="tb-snow r" viewBox="0 0 86 13" aria-hidden="true"><path d="M0 13C4 10.6 9 9.8 13 10.6 17 7 24 5.6 30 7.6 35 3.4 45 2.4 51 6 57 4.2 65 5 69 8.4 75 7.8 81 9.6 86 13Z" fill="url(#tbSnow)"/></svg>
     <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
     <a class="tab" href="#start" data-tab="start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg>Start</a>
-    <a class="tab" href="#prezenty" data-tab="prezenty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg>Prezenty</a>
+    <a class="tab" href="#list" data-tab="prezenty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg>List</a>
     <a class="tab" href="#szukanie" data-tab="szukanie"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M5 6.5c4 3 4 8 0 11M19 6.5c-4 3-4 8 0 11"/></svg>Szukanie<b class="dot" id="tab-hunt" hidden></b></a>
     <a class="tab" href="#gra" data-tab="gra"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg>Gra<i class="live-dot" id="tab-live" hidden></i></a>
     <a class="tab" href="#panel" data-tab="panel" id="tab-panel" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg>Panel</a>
@@ -1688,6 +1854,24 @@
   function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
   function byId(id) { return document.getElementById(id); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  /* ---------- Golden balls: every visitor gets their own random set of 7 hiding places out of 11,
+     plus a random present, bauble, star and letter, so nobody can copy or tell anyone else ---------- */
+  var SPOT_IDS = ['net', 'snow', 'sky', 'live', 'gift', 'tree', 'bounce', 'star', 'prez-o', 'start-o', 'gra-o'];
+  var STAR_POS = [[52, 66], [150, 40], [230, 26], [70, 150], [118, 112], [250, 72]];
+  var STAR_DESC = ['lewa góra nieba', 'środek nieba, wysoko', 'góra nieba, na prawo od środka', 'lewa strona, nad saniami', 'nad saniami, bliżej środka', 'na lewo od księżyca'];
+  function huntLayout(seed) {
+    var r = mulberry((seed >>> 0) || 1), ids = SPOT_IDS.slice(), i, j, x;
+    for (i = ids.length - 1; i > 0; i--) { j = Math.floor(r() * (i + 1)); x = ids[i]; ids[i] = ids[j]; ids[j] = x; }
+    return { seed: seed, ids: ids.slice(0, 7), gift: Math.floor(r() * 12), tree: Math.floor(r() * 11), star: Math.floor(r() * STAR_POS.length),
+      o: { 'prez-o': Math.floor(r() * 97), 'start-o': Math.floor(r() * 97), 'gra-o': Math.floor(r() * 97) } };
+  }
+  var HUNT = (function () {
+    var h = restore('mikolaj-uklad', null);
+    if (!h || typeof h.seed !== 'number' || h.seed < 1) { h = { seed: Math.floor(Math.random() * 2147483000) + 1 }; store('mikolaj-uklad', h); }
+    return huntLayout(h.seed);
+  })();
+  function hunts(id) { return HUNT.ids.indexOf(id) !== -1; }
   function svg(tag, attrs) {
     var n = document.createElementNS(NS, tag);
     for (var k in attrs) n.setAttribute(k, attrs[k]);
@@ -1839,8 +2023,9 @@
     /* tennis-ball ornaments; one of them is golden ball 6 */
     var orn = byId('ft-orn');
     [[90, 55], [110, 57], [80, 75], [116, 73], [96, 92], [118, 95], [77, 114], [108, 112], [66, 134], [92, 132], [124, 130]].forEach(function (q, k) {
-      var gold = k === 5, r = k > 7 ? 4.6 : 4;
-      var g = svg('g', gold ? { 'class': 'g-swap', 'data-gold': 'g6' } : {});
+      var gold = hunts('tree') && k === HUNT.tree % 11, r = (k > 7 ? 4.6 : 4) * (gold ? 1.4 : 1);
+      if (gold) { var tbtn = document.querySelector('[data-g="tree"]'); if (tbtn) { tbtn.style.left = ((q[0] - 10) / 370 * 100).toFixed(2) + '%'; tbtn.style.top = (q[1] / 200 * 100).toFixed(2) + '%'; } }
+      var g = svg('g', gold ? { 'class': 'g-swap', 'data-gold': 'tree' } : {});
       g.appendChild(svg('path', { d: 'M' + q[0] + ' ' + (q[1] - r - 3) + 'V' + (q[1] - r), stroke: '#c9b27a', 'stroke-width': .6 }));
       g.appendChild(svg('circle', { 'class': gold ? 'gfill' : '', cx: q[0], cy: q[1], r: r, fill: gold ? 'url(#goldGrad)' : 'url(#ornLime)' }));
       g.appendChild(svg('path', { d: 'M' + f1(q[0] - r * .62) + ' ' + f1(q[1] - r * .7) + 'q' + f1(r * .75) + ' ' + f1(r * .7) + ' 0 ' + f1(r * 1.4), fill: 'none', stroke: '#fffbe8', 'stroke-width': .8, 'stroke-linecap': 'round' }));
@@ -1889,11 +2074,11 @@
     });
     for (i = 0; i < 19; i++) {
       var bx = 16 + i * (358 / 18), u = (bx - 195) / 191, by = 372 + 5 * (1 - u * u) + 6.5;
-      if (i === 13) {   /* golden ball 1: one "light" on the net is a golden ball */
-        var gg = svg('g', { 'class': 'g-swap bulb', 'data-gold': 'g1' });
+      if (i === 13 && hunts('net')) {   /* one "light" on the net is a golden ball */
+        var gg = svg('g', { 'class': 'g-swap bulb', 'data-gold': 'net' });
         gg.style.animationDelay = '2.25s';
-        gg.appendChild(svg('circle', { 'class': 'g-glow', cx: bx.toFixed(1), cy: by.toFixed(1), r: 8, fill: '#f0c35a', 'fill-opacity': .22 }));
-        gg.appendChild(svg('circle', { 'class': 'gfill', cx: bx.toFixed(1), cy: by.toFixed(1), r: 3, fill: 'url(#goldGrad)' }));
+        gg.appendChild(svg('circle', { 'class': 'g-glow', cx: bx.toFixed(1), cy: by.toFixed(1), r: 10, fill: '#f0c35a', 'fill-opacity': .26 }));
+        gg.appendChild(svg('circle', { 'class': 'gfill', cx: bx.toFixed(1), cy: by.toFixed(1), r: 4.2, fill: 'url(#goldGrad)' }));
         gg.appendChild(svg('path', { d: 'M' + (bx - 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q1.2 1.7 0 3.4M' + (bx + 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q-1.2 1.7 0 3.4', fill: 'none', stroke: '#fffbe8', 'stroke-width': .5, 'stroke-linecap': 'round' }));
         gg.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (bx + 5) + ' ' + (by - 8) + 'l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z', fill: '#fff' }));
         btw[i % 3].appendChild(gg);
@@ -2031,15 +2216,76 @@
     ]
   };
   /* hints exist for five balls only; the last two (the "Na żywo" dot and the letter in the closing line) have none */
-  var HINTS = {
-    g1: 'Na Starcie przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.',
-    g2: 'Na końcu kortu, przy lewym rogu, coś wystaje ze śniegu.',
-    g3: 'Co jakiś czas z nieba spada złota piłka. Złap ją palcem.',
-    g5: 'W Prezentach jedna paczka ma w środku niespodziankę. Rozpakuj paczkę numer 07.',
-    g6: 'Na choince na dole zakładki Start jedna bombka ma inny kolor niż reszta.'
+  var SPOT_INFO = {
+    sky: { tab: 'any', rank: 1, admin: 'Złota piłka, która co 15–25 s spada z nieba na dowolnej zakładce. Trzeba ją złapać palcem.', hint: 'Co jakiś czas z nieba spada złota piłka. Złap ją palcem.' },
+    gift: { tab: 'prezenty', rank: 2, gen: 'Naklejka w jednym z 12 prezentów pod listem w zakładce List (numer losowany dla każdego).', admin: function (L) { return 'Naklejka w rozpakowanym prezencie nr ' + pad(L.gift % 12 + 1) + ' (zakładka List, pod listem).'; }, hint: function (L) { return 'W zakładce List, pod listem, rozpakuj paczkę numer ' + pad(L.gift % 12 + 1) + '.'; } },
+    tree: { tab: 'start', rank: 3, gen: 'Złota bombka na choince w stopce Startu (jedna z 11 bombek).', admin: function (L) { return 'Złota bombka na choince w stopce Startu (bombka ' + (L.tree % 11 + 1) + ' z 11, licząc od góry).'; }, hint: 'Na samym dole Startu stoi choinka. Jedna bombka ma inny kolor niż reszta.' },
+    net: { tab: 'start', rank: 4, admin: 'Jedna z lampek na siatce kortu na Starcie (po prawej stronie siatki).', hint: 'Na Starcie przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.' },
+    snow: { tab: 'start', rank: 5, admin: 'Piłka wystająca ze śniegu w lewym tylnym rogu kortu na Starcie.', hint: 'Na Starcie, w lewym rogu kortu, coś wystaje ze śniegu.' },
+    bounce: { tab: 'start', rank: 6, admin: 'Piłka, którą podbija bałwan w stopce Startu, jest złota.', hint: 'Bałwan na dole Startu podbija piłkę. Przyjrzyj się jej kolorowi.' },
+    star: { tab: 'start', rank: 7, gen: 'Złota gwiazdka na niebie na Starcie (jedno z 6 miejsc).', admin: function (L) { return 'Złota gwiazdka na niebie na Starcie: ' + STAR_DESC[L.star % STAR_POS.length] + '.'; }, hint: 'Na niebie na Starcie jedna gwiazda jest złotą piłką.' },
+    'prez-o': { tab: 'prezenty', rank: 8, gen: 'Jedna litera „o” w opisie na górze zakładki List.', admin: function (L) { return 'Litera „o” w słowie „' + letterWord('#view-prezenty .vlead', L.o['prez-o']) + '” w opisie na górze zakładki List.'; }, hint: 'W tekście na górze zakładki List jedna litera „o” jest złotą piłką.' },
+    'start-o': { tab: 'start', rank: 9, gen: 'Jedna litera „o” w zdaniu pod „Gem, set, Święta!”.', admin: function (L) { return 'Litera „o” w słowie „' + letterWord('.hero-copy .lead', L.o['start-o']) + '” w zdaniu pod „Gem, set, Święta!”.'; }, hint: 'Pod napisem „Gem, set, Święta!” jedna litera „o” jest złotą piłką.' },
+    'gra-o': { tab: 'gra', rank: 10, gen: 'Jedna litera „o” w opisie na górze zakładki Gra.', admin: function (L) { return 'Litera „o” w słowie „' + letterWord('#view-gra .vlead', L.o['gra-o']) + '” w opisie na górze zakładki Gra.'; }, hint: 'W tekście na górze zakładki Gra jedna litera „o” jest złotą piłką.' },
+    live: { tab: 'start', rank: 11, admin: 'Czerwona kropka „Na żywo” przy odliczaniu na Starcie. Co 7 s błyska na złoto, wtedy widać, że to piłka.', hint: 'Przy odliczaniu na Starcie coś czasem błyska na złoto.' }
   };
-  var HINT_ORDER = ['g1', 'g2', 'g3', 'g5', 'g6'];
-  var ORDER = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7'];
+  var TAB_NAMES = { start: 'Start', prezenty: 'List', gra: 'Gra', any: 'z nieba' };
+  function spotText(id, key, L) { var v = SPOT_INFO[id][key]; return typeof v === 'function' ? v(L || HUNT) : v; }
+  /* hints for the five easiest of this visitor's seven; the two hardest have none */
+  var HINT_ORDER = HUNT.ids.slice().sort(function (a, b) { return SPOT_INFO[a].rank - SPOT_INFO[b].rank; }).slice(0, 5);
+  var ORDER = HUNT.ids;
+  /* the n-th letter "o" inside an element (counting from 0, wrapping around) */
+  function nthO(el, n) {
+    var tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [], t, total = 0;
+    while ((t = tw.nextNode())) { if (t.parentNode && t.parentNode.closest && t.parentNode.closest('.g-letter')) continue; var m = t.nodeValue.match(/o/g); if (m) { nodes.push(t); total += m.length; } }
+    if (!total) return null;
+    var k = n % total;
+    for (var a = 0; a < nodes.length; a++) {
+      var v = nodes[a].nodeValue;
+      for (var b = 0; b < v.length; b++) if (v.charAt(b) === 'o') { if (k === 0) return { node: nodes[a], at: b }; k--; }
+    }
+    return null;
+  }
+  function letterWord(sel, n) {
+    var el = document.querySelector(sel);
+    if (!el) return '?';
+    var txt = el.textContent, k = n, count = (txt.match(/o/g) || []).length, i;
+    if (!count) return '?';
+    k = n % count;
+    for (i = 0; i < txt.length; i++) if (txt.charAt(i) === 'o') { if (k === 0) break; k--; }
+    var a = i, b = i;
+    while (a > 0 && /[^\s.,!?„”:]/.test(txt.charAt(a - 1))) a--;
+    while (b < txt.length && /[^\s.,!?„”:]/.test(txt.charAt(b))) b++;
+    return txt.slice(a, b);
+  }
+  function placeGoldLetter(sel, id) {
+    var el = document.querySelector(sel), at = el && nthO(el, HUNT.o[id]);
+    if (!at) return;
+    var rest = at.node.splitText(at.at);
+    rest.nodeValue = rest.nodeValue.slice(1);
+    var span = document.createElement('span');
+    span.className = 'g-letter'; span.setAttribute('data-gold', id);
+    span.innerHTML = '<button type="button" class="gold-letter" data-g="' + id + '" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span>';
+    rest.parentNode.insertBefore(span, rest);
+  }
+  if (hunts('prez-o')) placeGoldLetter('#view-prezenty .vlead', 'prez-o');
+  if (hunts('start-o')) placeGoldLetter('.hero-copy .lead', 'start-o');
+  if (hunts('gra-o')) placeGoldLetter('#view-gra .vlead', 'gra-o');
+  if (hunts('star')) (function () {
+    var sp = STAR_POS[HUNT.star % STAR_POS.length], b = document.createElement('button');
+    b.type = 'button'; b.className = 'gold-spot gold-star'; b.setAttribute('data-g', 'star');
+    b.setAttribute('aria-label', 'Złota gwiazda na niebie');
+    b.style.left = (sp[0] / 390 * 100).toFixed(2) + '%'; b.style.top = (sp[1] / 520 * 100).toFixed(2) + '%';
+    b.innerHTML = '<span><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>';
+    document.querySelector('.scene-wrap').appendChild(b);
+  })();
+  if (hunts('bounce')) { var fb0 = document.querySelector('#ft-bounce .gfill'); if (fb0) fb0.setAttribute('fill', 'url(#goldGrad)'); var fbg = byId('ft-bounce'); if (fbg) fbg.style.filter = 'drop-shadow(0 0 4px rgba(240,195,90,.9))'; }
+  /* places this visitor does not have stay ordinary */
+  SPOT_IDS.forEach(function (id) {
+    if (hunts(id)) return;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-g="' + id + '"]'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-gold="' + id + '"]'), function (n) { n.classList.add('taken'); });
+  });
   var GBALL = '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg>';
   function fnv(str) {
     var h = 0x811c9dc5;
@@ -2085,7 +2331,7 @@
       '<div class="tag-main">' +
         '<p class="tag-meta"><span class="tag-cat">' + CATS[g.cat] + '</span>' +
           (g.ace ? '<span class="ace">Wymarzony</span>' : '') +
-          (g.gold ? '<button type="button" class="gold-btn gold-sticker" data-g="g5" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('g5') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
+          (hunts('gift') && i === HUNT.gift % GIFTS.length ? '<button type="button" class="gold-btn gold-sticker" data-g="gift" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('gift') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
         '<h3>' + esc(g.name) + '</h3>' +
         '<p class="tag-desc">' + esc(g.desc) + '</p>' +
       '</div>' +
@@ -2489,14 +2735,16 @@
   function markTaken(id) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-gold="' + id + '"]'), function (n) { n.classList.add('taken'); });
     Array.prototype.forEach.call(document.querySelectorAll('[data-g="' + id + '"]'), function (n) { n.hidden = true; });
-    if (id === 'g4') live.classList.remove('has-gold');
+    if (id === 'live') live.classList.remove('has-gold');
   }
   function unmarkAll() {
-    Array.prototype.forEach.call(document.querySelectorAll('[data-gold]'), function (n) { n.classList.remove('taken'); });
-    Array.prototype.forEach.call(document.querySelectorAll('[data-g]'), function (n) { n.hidden = false; });
-    live.classList.add('has-gold');
+    HUNT.ids.forEach(function (id) {
+      Array.prototype.forEach.call(document.querySelectorAll('[data-gold="' + id + '"]'), function (n) { n.classList.remove('taken'); });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-g="' + id + '"]'), function (n) { n.hidden = false; });
+    });
+    if (hunts('live')) live.classList.add('has-gold');
   }
-  live.classList.add('has-gold');
+  if (hunts('live')) live.classList.add('has-gold');
   found.forEach(markTaken);
 
   function updateBadge(bump) {
@@ -2505,7 +2753,7 @@
     badge.classList.toggle('has-coupon', n >= SILVER_AT);
     badge.setAttribute('aria-label', 'Złote piłki: ' + n + ' z ' + HUNT_TOTAL + '. Pokaż postęp i kupon.');
     var sub = byId('card-hunt-sub');
-    if (n === 0) sub.textContent = 'Są ukryte na wszystkich zakładkach. Znajdź 3, a dostaniesz kupon na prezent.';
+    if (n === 0) sub.textContent = 'Każdy ma je schowane gdzie indziej. Znajdź 3, a dostaniesz kupon na prezent.';
     else if (n < SILVER_AT) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + '. Do srebrnego kuponu brakuje ' + (SILVER_AT - n) + '.';
     else if (n < HUNT_TOTAL) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + ' i srebrny kupon. Znajdź resztę, a zmieni się na złoty.';
     else sub.textContent = 'Wszystkie znalezione! Zobacz swój złoty kupon.';
@@ -2568,28 +2816,29 @@
     var b = e.target.closest('[data-g]');
     if (!b) return;
     var c = centerOf(b), id = b.getAttribute('data-g');
+    if (!hunts(id)) return;
     if (b._anim) { b._anim.cancel(); b.remove(); }
     collect(id, c.x, c.y);
   });
   live.addEventListener('click', function () {
-    if (found.indexOf('g4') !== -1) return;
+    if (!hunts('live') || found.indexOf('live') !== -1) return;
     var dot = live.querySelector('i'), c = centerOf(dot);
-    if (still) { collect('g4', c.x, c.y); return; }
+    if (still) { collect('live', c.x, c.y); return; }
     var pop = fxEl('fxgold', GBALL);
     pop.animate([
       { transform: 'translate(' + c.x + 'px,' + c.y + 'px) scale(.2)' },
       { transform: 'translate(' + c.x + 'px,' + (c.y - 46) + 'px) scale(1.5)', offset: .7 },
       { transform: 'translate(' + c.x + 'px,' + (c.y - 40) + 'px) scale(1.3)' }
-    ], { duration: 420, easing: OUT, fill: 'forwards' }).onfinish = function () { pop.remove(); collect('g4', c.x, c.y - 40); };
+    ], { duration: 420, easing: OUT, fill: 'forwards' }).onfinish = function () { pop.remove(); collect('live', c.x, c.y - 40); };
   });
 
   /* golden ball 3 falls from the sky now and then; with reduced motion it rests in the sky instead */
-  function scheduleDrop(ms) { if (found.indexOf('g3') === -1) setTimeout(dropGold, ms); }
+  function scheduleDrop(ms) { if (hunts('sky') && found.indexOf('sky') === -1) setTimeout(dropGold, ms); }
   function dropGold() {
-    if (found.indexOf('g3') !== -1 || fx.querySelector('.fall-gold')) return;
+    if (!hunts('sky') || found.indexOf('sky') !== -1 || fx.querySelector('.fall-gold')) return;
     if (document.hidden || gameActive || !byId('unlock').hidden || !byId('splash').hidden) { scheduleDrop(5000); return; }
     var b = document.createElement('button');
-    b.type = 'button'; b.className = 'fall-gold'; b.setAttribute('data-g', 'g3');
+    b.type = 'button'; b.className = 'fall-gold'; b.setAttribute('data-g', 'sky');
     b.setAttribute('aria-label', 'Złota piłka spada z nieba. Złap ją!');
     b.innerHTML = GBALL;
     fx.appendChild(b);
@@ -2601,11 +2850,11 @@
     b._anim = b.animate(frames, { duration: 8500, easing: 'linear', fill: 'forwards' });
     b._anim.onfinish = function () { b.remove(); scheduleDrop(14000 + Math.random() * 10000); };
   }
-  if (still) {
+  if (still && hunts('sky')) {
     var sky = document.createElement('button');
-    sky.type = 'button'; sky.className = 'gold-btn gold-sky'; sky.setAttribute('data-g', 'g3');
+    sky.type = 'button'; sky.className = 'gold-btn gold-sky'; sky.setAttribute('data-g', 'sky');
     sky.setAttribute('aria-label', 'Złota piłka na niebie'); sky.innerHTML = GBALL;
-    if (found.indexOf('g3') !== -1) sky.hidden = true;
+    if (found.indexOf('sky') !== -1) sky.hidden = true;
     document.querySelector('.scene-wrap').appendChild(sky);
   } else {
     scheduleDrop(9000);
@@ -2712,6 +2961,13 @@
       html += i < n ? '<span class="slot-b on">' + GBALL + '</span>' : '<span class="slot-b' + (i + 1 === SILVER_AT ? ' mark' : '') + '">' + (i + 1) + '</span>';
     }
     slots.innerHTML = html;
+    byId('hunt-fill').style.width = (n / HUNT_TOTAL * 100).toFixed(1) + '%';
+    var left = {};
+    HUNT.ids.forEach(function (id) { if (found.indexOf(id) === -1) { var t = SPOT_INFO[id].tab; left[t] = (left[t] || 0) + 1; } });
+    var keys = ['start', 'prezenty', 'gra', 'any'].filter(function (k) { return left[k]; });
+    byId('hunt-where').innerHTML = keys.length ? '<span class="hw-label">Twoje piłki, których jeszcze szukasz:</span>' + keys.map(function (k) {
+      return k === 'any' ? '<span class="hw-chip sky">1 spada z nieba</span>' : '<a class="hw-chip" href="#' + (k === 'prezenty' ? 'list' : k) + '">' + TAB_NAMES[k] + ' <b>×' + left[k] + '</b></a>';
+    }).join('') : '';
     var st = byId('sheet-status');
     if (n < SILVER_AT) st.innerHTML = 'Znalezione: <b>' + n + ' z ' + HUNT_TOTAL + '</b>. Do srebrnego kuponu brakuje ' + (SILVER_AT - n) + '.';
     else if (n < HUNT_TOTAL) st.innerHTML = 'Znalezione: <b>' + n + ' z ' + HUNT_TOTAL + '</b>. Masz srebrny kupon! Znajdź wszystkie, a zmieni się na złoty.';
@@ -2720,7 +2976,7 @@
     byId('hint-text').hidden = true;
     var hintsLeft = HINT_ORDER.filter(function (id) { return found.indexOf(id) === -1; }).length;
     byId('hint-note').textContent = hintsLeft
-      ? 'Podpowiedzi są tylko do 5 piłek. Zostało ich ' + hintsLeft + '. Dwie ostatnie trzeba znaleźć samodzielnie.'
+      ? 'Podpowiedzi są tylko do 5 Twoich piłek. Zostało ich ' + hintsLeft + '. Dwie najtrudniejsze trzeba znaleźć samodzielnie.'
       : 'Podpowiedzi się skończyły. Dwie ostatnie piłki trzeba znaleźć samodzielnie.';
 
     var area = byId('coupon-area');
@@ -2755,7 +3011,7 @@
   byId('hint-btn').addEventListener('click', function () {
     var next = HINT_ORDER.filter(function (id) { return found.indexOf(id) === -1; })[0];
     var ht = byId('hint-text');
-    ht.textContent = next ? HINTS[next] : 'Podpowiedzi się skończyły. Ostatnie piłki są dobrze schowane. Rozglądaj się uważnie, czasem coś błyśnie złotem.';
+    ht.textContent = next ? spotText(next, 'hint') : 'Podpowiedzi się skończyły. Ostatnie piłki są dobrze schowane. Rozglądaj się uważnie, czasem coś błyśnie złotem.';
     ht.hidden = false;
     if (!still) ht.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: OUT });
   });
@@ -2942,10 +3198,26 @@
         { duration: 1300 + r() * 500, delay: START + t * DUR, easing: 'ease-out', fill: 'both' });
     }
   }
+  /* the splash follows the visible part of the screen, so the keyboard never cuts the form off */
+  (function () {
+    var vv = window.visualViewport;
+    if (!vv) return;
+    function fit() { html.style.setProperty('--vvh', vv.height + 'px'); html.style.setProperty('--vvt', vv.offsetTop + 'px'); }
+    vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
+  })();
+  var nameIn = byId('visitor-name'), nameErr = byId('splash-err');
+  nameIn.addEventListener('focus', function () { splash.classList.add('typing'); splash.scrollTop = 0; splash.scrollLeft = 0; });
+  nameIn.addEventListener('blur', function () { setTimeout(function () { if (document.activeElement !== nameIn) splash.classList.remove('typing'); }, 150); });
+  nameIn.addEventListener('input', function () { if (nameIn.value.trim()) { nameErr.hidden = true; nameIn.classList.remove('err'); } });
   byId('splash-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var v = byId('visitor-name').value.replace(/\s+/g, ' ').trim().slice(0, 20);
-    if (!v) return;
+    var v = nameIn.value.replace(/\s+/g, ' ').trim().slice(0, 20);
+    if (!v) {
+      nameErr.hidden = false; nameIn.classList.add('err'); nameIn.focus();
+      if (!still) nameIn.parentNode.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(7px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 360, easing: 'ease-out' });
+      return;
+    }
+    nameIn.blur(); splash.classList.remove('typing');
     visitor = { name: v, since: (visitor && visitor.since) || new Date().toISOString() };
     store('mikolaj-gosc', visitor);
     renderHello(); syncPlayer(); renderLobby();
@@ -2967,7 +3239,29 @@
   }
   window.addEventListener('resize', moveInd);
   window.addEventListener('load', moveInd);
+  /* the letter unfolds, and Hubert signs it when the signature comes into view */
+  var letterEl = byId('letter'), sigIO = null;
+  function signLetter() {
+    if (letterEl.classList.contains('sign')) return;
+    letterEl.classList.add('sign');
+    var a = byId('sig-anim');
+    if (a && a.beginElement && !still) { try { a.beginElement(); } catch (e) {} }
+    else byId('sig-wipe').setAttribute('x', '0');
+  }
+  function playLetter() {
+    letterEl.classList.remove('unfold', 'sign');
+    byId('sig-wipe').setAttribute('x', still ? '0' : '-380');
+    if (still) { letterEl.classList.add('sign'); return; }
+    void letterEl.offsetWidth;
+    letterEl.classList.add('unfold');
+    if (sigIO) sigIO.disconnect();
+    if ('IntersectionObserver' in window) {
+      sigIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { setTimeout(signLetter, 500); sigIO.disconnect(); } }); }, { threshold: .7 });
+      sigIO.observe(letterEl.querySelector('.sig'));
+    } else setTimeout(signLetter, 1200);
+  }
   function showView(v) {
+    if (v === 'list') v = 'prezenty';
     if (VIEWS.indexOf(v) === -1) v = 'start';
     if (v === 'panel' && !isHost) v = 'start';
     var changed = v !== currentView;
@@ -2984,6 +3278,7 @@
     }
     if (v === 'szukanie') renderSheet();
     if (v === 'gra') { drawIcons(); renderLobby(); }
+    if (v === 'prezenty' && changed) playLetter();
     if (v === 'panel') renderPanel();
   }
   function route() {
@@ -3038,8 +3333,10 @@
       D.set(R(me + '/online'), true).catch(noop);
       syncPlayer();
     });
-    D.get(R(me + '/found')).then(function (s) {
-      var rf = s.val() || {}, added = false;
+    D.get(R(me)).then(function (s) {
+      var pv = s.val() || {}, rf = pv.found || {}, added = false;
+      /* same browser account but the local copy was cleared: bring the old layout back */
+      if (pv.seed && pv.seed !== HUNT.seed && !found.length && pv.found) { store('mikolaj-uklad', { seed: pv.seed }); location.reload(); return; }
       Object.keys(rf).forEach(function (id) {
         if (ORDER.indexOf(id) !== -1 && found.indexOf(id) === -1) { found.push(id); markTaken(id); added = true; }
       });
@@ -3055,7 +3352,7 @@
   function couponTier() { return found.length >= HUNT_TOTAL ? 'złoty' : found.length >= SILVER_AT ? 'srebrny' : ''; }
   function syncPlayer() {
     if (!FB || !myUid || !visitor) return;
-    FB.D.update(R('players/' + myUid), { name: visitor.name, lastSeen: FB.D.serverTimestamp(), foundCount: found.length, coupon: couponTier() }).catch(noop);
+    FB.D.update(R('players/' + myUid), { name: visitor.name, lastSeen: FB.D.serverTimestamp(), foundCount: found.length, coupon: couponTier(), seed: HUNT.seed }).catch(noop);
   }
   function syncFound() {
     if (!FB || !myUid) return;
@@ -3127,6 +3424,7 @@
   var stage = byId('stage'), sctx = stage.getContext('2d'), stageUI = byId('stage-ui'), SW = 0, SH = 0, G = null, bgStars = null;
   var paddle = { x: .5, tx: .5 }, allScores = {}, history = {}, resultsFor = 0, lastJoined = 0, finalShownFor = '';
   var PLACE_PTS = [10, 7, 5, 4, 3], GAME_ORDER = ['catch', 'quiz', 'reflex', 'snow', 'juggle', 'chimney'], REGULAR = 5;
+  function practiceDur(k) { return k === 'quiz' ? 3 * 12000 : GAMES[k].dur; }
   function gameTag(idx) { var k = GAME_ORDER[idx]; return GAMES[k] && GAMES[k].bonus ? 'Gra bonusowa' : 'Gra ' + (idx + 1) + ' z ' + REGULAR; }
   function plural(n, f) { var d = n % 10, t = n % 100; return n === 1 ? f[0] : (d >= 2 && d <= 4 && (t < 12 || t > 14)) ? f[1] : f[2]; }
   var GAMES = {
@@ -3135,7 +3433,7 @@
       icon: '<svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     quiz: { name: 'Świąteczny quiz', time: '1,5 min', dur: 7 * 12000, better: 'high', label: 'PUNKTY', hint: 'Stukaj w dobrą odpowiedź',
-      desc: '7 pytań o Święta i tenis. Im szybciej dobra odpowiedź, tym więcej punktów.',
+      desc: '7 pytań o Święta i tenis (w treningu 3 inne). Za dobrą odpowiedź do 100 punktów, a z każdą sekundą mniej.',
       icon: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 9a2 2 0 1 1 2.5 1.9c-.4.1-.5.4-.5.8V12M12 14.2v.1"/></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     reflex: { name: 'Refleks Mikołaja', time: '30 s', dur: 6 * 5000, better: 'low', label: 'ŚREDNIO', hint: 'Stuknij, gdy zrobi się zielono',
@@ -3333,45 +3631,65 @@
 
   /* ---- 2. Świąteczny quiz ---- */
   INIT.quiz = function (G) {
-    var pool = G.opt.practice ? QUIZ : QUIZ_LIVE, idx = shuffle(pool.map(function (q, i) { return i; }), G.r).slice(0, 7);
+    G.nq = G.opt.practice ? 3 : 7;
+    var pool = G.opt.practice ? QUIZ : QUIZ_LIVE, idx = shuffle(pool.map(function (q, i) { return i; }), G.r).slice(0, G.nq);
     G.qs = idx.map(function (i) {
       var q = pool[i], order = shuffle([0, 1, 2, 3], G.r);
       return { q: q[0], a: order.map(function (k) { return q[k + 1]; }), c: order.indexOf(0) };
     });
     G.qi = -1; G.picked = {}; G.shown = {};
   };
+  var Q_ANSWER = 10000, Q_STEP = 12000;
+  function quizPot(local) { return Math.max(10, Math.round(100 * (1 - local / Q_ANSWER))); }
   function quizQuestion(G, qi) {
     var q = G.qs[qi];
-    stageUI.innerHTML = '<div class="quiz"><p class="quiz-n">Pytanie ' + (qi + 1) + ' z 7</p><p class="quiz-q"></p><div class="quiz-a">' +
-      q.a.map(function (a, i) { return '<button type="button" data-i="' + i + '"></button>'; }).join('') + '</div></div>';
+    stageUI.innerHTML = '<div class="quiz"><p class="quiz-n">Pytanie ' + (qi + 1) + ' z ' + G.nq + '</p><p class="quiz-q"></p><div class="quiz-a">' +
+      q.a.map(function (a, i) { return '<button type="button" data-i="' + i + '"><span></span><i aria-hidden="true"></i></button>'; }).join('') + '</div>' +
+      '<p class="quiz-pot" aria-live="polite"></p></div>';
     stageUI.querySelector('.quiz-q').textContent = q.q;
-    Array.prototype.forEach.call(stageUI.querySelectorAll('.quiz-a button'), function (b, i) {
-      b.textContent = q.a[i];
+    var bs = stageUI.querySelectorAll('.quiz-a button');
+    Array.prototype.forEach.call(bs, function (b, i) {
+      b.querySelector('span').textContent = q.a[i];
       b.addEventListener('click', function () {
-        var local = G.opt.clock() - G.opt.startAt - qi * 12000;
-        if (G.picked[qi] != null || local >= 10000 || G.qi !== qi) return;
+        var local = G.opt.clock() - G.opt.startAt - qi * Q_STEP;
+        if (G.picked[qi] != null || local >= Q_ANSWER || G.qi !== qi) return;
         G.picked[qi] = i;
-        b.classList.add('picked');
-        if (i === q.c) {
-          var pts = 50 + Math.round(50 * Math.max(0, 1 - local / 10000));
-          G.score += pts; G.lastPts = pts;
-        } else G.lastPts = 0;
+        var ok = i === q.c, pts = ok ? quizPot(local) : 0;
+        G.score += pts; G.lastPts = pts;
+        Array.prototype.forEach.call(bs, function (o, k) { o.disabled = true; if (k === q.c) o.classList.add('ok'); else if (k === i) o.classList.add('bad'); else o.classList.add('dim'); });
+        var pot = stageUI.querySelector('.quiz-pot');
+        pot.className = 'quiz-pot ' + (ok ? 'good' : 'miss');
+        pot.innerHTML = ok ? 'Dobrze! <b>+' + pts + ' pkt</b>' : 'Niestety, to nie to. <b>0 pkt</b>';
+        if (!still) {
+          if (ok) b.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.04)' }, { transform: 'scale(1)' }], { duration: 360, easing: SPRING });
+          else b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-7px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(-3px)' }, { transform: 'translateX(0)' }], { duration: 380 });
+        }
+        if (ok) pop(G, SW / 2, SH * .2, '+' + pts, '#5be38f');
+        try { if (navigator.vibrate) navigator.vibrate(ok ? 18 : [40, 30, 40]); } catch (e) {}
       });
     });
     if (!still) stageUI.firstChild.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: OUT });
   }
   FRAME.quiz = function (G, t) {
     if (t < 0) return;
-    var qi = Math.min(6, Math.floor(t / 12000)), local = t - qi * 12000, c = sctx;
+    var qi = Math.min(G.nq - 1, Math.floor(t / Q_STEP)), local = t - qi * Q_STEP, c = sctx;
     if (qi !== G.qi) { G.qi = qi; quizQuestion(G, qi); }
-    var left = clamp(1 - local / 10000, 0, 1);
+    var left = clamp(1 - local / Q_ANSWER, 0, 1), pot = stageUI.querySelector('.quiz-pot');
     c.fillStyle = 'rgba(242,247,243,.1)'; c.fillRect(14, SH - 12, SW - 28, 5);
     c.fillStyle = left < .3 ? '#ff8b9a' : '#f0c35a'; c.fillRect(14, SH - 12, (SW - 28) * left, 5);
-    if (local >= 10000 && !G.shown[qi]) {
+    if (G.picked[qi] == null && local < Q_ANSWER && pot) {
+      var v = quizPot(local);
+      if (pot._v !== v) { pot._v = v; pot.className = 'quiz-pot live'; pot.innerHTML = 'Za dobrą odpowiedź teraz: <b>' + v + ' pkt</b>'; }
+    }
+    if (local >= Q_ANSWER && !G.shown[qi]) {
       G.shown[qi] = true;
       var bs = stageUI.querySelectorAll('.quiz-a button'), q = G.qs[qi];
-      Array.prototype.forEach.call(bs, function (b, i) { b.disabled = true; if (i === q.c) b.classList.add('ok'); else if (G.picked[qi] === i) b.classList.add('bad'); });
-      if (G.picked[qi] === q.c) pop(G, SW / 2, SH * .22, '+' + G.lastPts, '#5be38f');
+      Array.prototype.forEach.call(bs, function (b, i) { b.disabled = true; if (i === q.c) b.classList.add('ok'); else if (G.picked[qi] !== i) b.classList.add('dim'); });
+      if (G.picked[qi] == null && pot) { pot.className = 'quiz-pot miss'; pot.innerHTML = 'Czas minął. <b>0 pkt</b>'; }
+    }
+    if (pot && G.picked[qi] != null && qi < G.nq - 1) {
+      var nx = Math.ceil((Q_STEP - local) / 1000);
+      if (pot._n !== nx) { pot._n = nx; var sm = pot.querySelector('small') || pot.appendChild(document.createElement('small')); sm.textContent = 'Następne pytanie za ' + nx + ' s'; }
     }
   };
 
@@ -3851,8 +4169,10 @@
   }
   function showPractice(game, score) {
     var key = 'mikolaj-trening-' + game, def = GAMES[game], prev = restore(key, null), better = prev == null || (def.better === 'low' ? score < prev : score > prev);
-    var best = better ? score : prev;
-    store(key, best);
+    var best = better ? score : prev, plays = (+restore(key + '-n', 0) || 0) + 1;
+    store(key, best); store(key + '-n', plays);
+    if (FB && myUid && visitor) FB.D.update(R('players/' + myUid + '/training/' + game), { best: best, last: score, plays: plays, at: FB.D.serverTimestamp() }).catch(noop);
+    trainGame = game;
     resultsFor = 0;
     byId('game-lobby').hidden = true; byId('game-results').hidden = false;
     byId('res-label').textContent = 'Trening · ' + def.name;
@@ -3888,8 +4208,10 @@
     var list = byId('game-list'), st = gameState, cur = st && st.session && !st.final ? st.idx : -1;
     list.innerHTML = GAME_ORDER.map(function (k, i) {
       var g = GAMES[k], cls = (i === cur ? ' now' : i < cur ? ' done' : '') + (g.bonus ? ' bonus' : '');
-      return '<li class="gl' + cls + '"><span class="gl-ico" aria-hidden="true">' + g.icon + '</span><span><small>' + (g.bonus ? 'Bonus · ' + g.time + ' · punkty ×' + g.mult : 'Gra ' + (i + 1) + ' · ' + g.time) + '</small><b>' + g.name + '</b><span class="d">' + g.desc + '</span></span>' +
-        (g.bonus ? '<span class="gl-lock">Tylko w turnieju</span></li>' : '<button type="button" class="tool" data-practice="' + k + '">Trening</button></li>');
+      var act = i === cur ? '<span class="gl-state">Trwa</span>' : i < cur ? '<span class="gl-state">Rozegrana</span>'
+        : g.bonus ? '<span class="gl-lock">Tylko w turnieju</span>' : '<button type="button" class="tool gl-act gl-train" data-practice="' + k + '"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg>Trening</button>';
+      return '<li class="gl' + cls + '"><span class="gl-ico" aria-hidden="true">' + g.icon + '<i>' + (g.bonus ? '★' : i + 1) + '</i></span><span class="gl-head"><small>' + (g.bonus ? 'Bonus · ' + g.time + ' · punkty ×' + g.mult : 'Gra ' + (i + 1) + ' · ' + g.time) + '</small><b>' + g.name + '</b></span>' + act +
+        '<span class="d">' + g.desc + '</span></li>';
     }).join('');
   }
   byId('game-list').addEventListener('click', function (e) {
@@ -3897,10 +4219,33 @@
     if (!b || gameActive) return;
     var k = b.getAttribute('data-practice');
     if (!GAMES[k] || GAMES[k].bonus) return;
-    startGame({ game: k, seed: Math.floor(Math.random() * 1e9), duration: GAMES[k].dur, startAt: Date.now() + 3600, clock: Date.now, practice: true });
+    startGame({ game: k, seed: Math.floor(Math.random() * 1e9), duration: practiceDur(k), startAt: Date.now() + 3600, clock: Date.now, practice: true });
+  });
+  var trainGame = 'catch';
+  function renderTraining() {
+    var chips = byId('train-chips'), list = GAME_ORDER.filter(function (k) { return !GAMES[k].bonus; });
+    chips.innerHTML = list.map(function (k) { return '<button type="button" role="tab" data-tg="' + k + '" aria-selected="' + (k === trainGame) + '">' + GAMES[k].name + '</button>'; }).join('');
+    var sel = chips.querySelector('[aria-selected="true"]');
+    if (sel) chips.scrollLeft = Math.max(0, sel.offsetLeft - chips.offsetLeft - 24);
+    var def = GAMES[trainGame], low = def.better === 'low', rows = [];
+    Object.keys(players || {}).forEach(function (u) {
+      var pl = players[u], t = pl && pl.training && pl.training[trainGame];
+      if (t && typeof t.best === 'number' && pl.name) rows.push({ uid: u, name: pl.name, score: t.best, plays: t.plays || 1 });
+    });
+    if (!FB) { var mine = restore('mikolaj-trening-' + trainGame, null); if (mine != null) rows.push({ uid: myUid, name: visitorName() || 'Ty', score: mine, plays: +restore('mikolaj-trening-' + trainGame + '-n', 1) || 1 }); }
+    rows.sort(function (a, b) { return low ? a.score - b.score : b.score - a.score; });
+    var fmt = trainGame === 'reflex' ? function (n) { return n + ' ms'; } : def.fmt;
+    byId('train-rank').innerHTML = rows.slice(0, 10).map(function (e, i) {
+      return '<li class="' + (e.uid === myUid ? 'me' : '') + '"><span class="pos">' + (i + 1) + '.</span>' + avatarHTML(e.name) + '<span class="tr-nm">' + esc(e.name) + '<small>' + e.plays + ' ' + plural(e.plays, ['trening', 'treningi', 'treningów']) + '</small></span><span class="pts">' + esc(fmt(e.score)) + '</span></li>';
+    }).join('') || '<li class="tr-empty"><span>Nikt jeszcze nie trenował tej gry. Bądź pierwszy!</span></li>';
+  }
+  byId('train-chips').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tg]'); if (!b) return;
+    trainGame = b.getAttribute('data-tg'); renderTraining();
   });
   function renderLobby() {
     drawIcons();
+    renderTraining();
     var ppl = byId('game-people'), status = byId('game-status'), label = byId('people-label');
     var go = byId('host-go'), fin = byId('host-final'), sc = byId('standings-card');
     if (!FB) {
@@ -3940,8 +4285,18 @@
     if (d < 86400) return Math.floor(d / 3600) + ' godz. temu';
     return new Date(ts).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
   }
+  var panelOpen = {};
+  byId('panel-players').addEventListener('click', function (e) {
+    var li = e.target.closest('.pl-row'); if (!li) return;
+    var u = li.getAttribute('data-uid'); panelOpen[u] = !panelOpen[u];
+    var d = li.querySelector('.pl-spots'); if (d) d.hidden = !panelOpen[u];
+  });
   function renderPanel() {
     if (!isHost) return;
+    byId('panel-spots').innerHTML = SPOT_IDS.slice().sort(function (a, b) { return SPOT_INFO[a].rank - SPOT_INFO[b].rank; }).map(function (id, k) {
+      var txt = SPOT_INFO[id].gen || SPOT_INFO[id].admin;
+      return '<li><span class="sp-n">' + (k + 1) + '</span><span><b>' + TAB_NAMES[SPOT_INFO[id].tab] + '</b>' + esc(txt) + '</span><span class="sp-lvl">' + (k < 4 ? 'łatwa' : k < 8 ? 'średnia' : 'trudna') + '</span></li>';
+    }).join('');
     var on = onlineList();
     byId('panel-online').innerHTML = on.map(function (pp) { return '<span class="person">' + avatarHTML(pp.name) + esc(pp.name) + '</span>'; }).join('') || '<span class="hello-sub">Nikogo nie ma na stronie.</span>';
     var g = {};
@@ -3958,7 +4313,11 @@
     var all = Object.keys(players).filter(function (u) { return players[u] && players[u].name; }).map(function (u) { var o = players[u]; o.uid = u; return o; })
       .sort(function (a, b) { return (b.online ? 1 : 0) - (a.online ? 1 : 0) || (b.foundCount || 0) - (a.foundCount || 0); });
     byId('panel-players').innerHTML = all.map(function (pp) {
-      return '<li>' + avatarHTML(pp.name) + '<span><span class="nm">' + (pp.online ? '<i class="online"></i>' : '') + esc(pp.name) + '</span><span class="meta">' + (pp.online ? 'na stronie teraz' : 'ostatnio ' + rel(pp.lastSeen)) + (pp.coupon ? ' · kupon ' + esc(pp.coupon) : '') + '</span></span><span class="val">' + (pp.foundCount || 0) + '/7</span></li>';
+      var L = pp.seed ? huntLayout(pp.seed) : null, f = pp.found || {}, open = panelOpen[pp.uid];
+      var det = L ? '<div class="pl-spots"' + (open ? '' : ' hidden') + '>' + L.ids.slice().sort(function (a, b) { return SPOT_INFO[a].rank - SPOT_INFO[b].rank; }).map(function (id) {
+        return '<p class="' + (f[id] ? 'ok' : '') + '"><b>' + (f[id] ? '✓' : '○') + '</b>' + esc(spotText(id, 'admin', L)) + '</p>';
+      }).join('') + '</div>' : '<div class="pl-spots"' + (open ? '' : ' hidden') + '><p>Ten gość ma jeszcze starą wersję strony. Układ pojawi się, gdy wejdzie ponownie.</p></div>';
+      return '<li class="pl-row" data-uid="' + esc(pp.uid) + '">' + avatarHTML(pp.name) + '<span><span class="nm">' + (pp.online ? '<i class="online"></i>' : '') + esc(pp.name) + (pp.uid === myUid ? ' <small>Ty</small>' : '') + '</span><span class="meta">' + (pp.online ? 'na stronie teraz' : 'ostatnio ' + rel(pp.lastSeen)) + (pp.coupon ? ' · kupon ' + esc(pp.coupon) : '') + '</span></span><span class="val">' + (pp.foundCount || 0) + '/7</span>' + det + '</li>';
     }).join('') || '<li><span></span><span class="nm">Nikt jeszcze nie odwiedził strony.</span><span></span></li>';
   }
   window.addEventListener('resize', function () { if (G && !G.done) sizeStage(); });
