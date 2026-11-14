@@ -377,6 +377,7 @@
   .reveal { overflow: hidden; }
   .tags > li { --wh: 92px; }
   .tags > li.tier-top { --wh: 112px; }
+  .tags > li.tier-toptop { --wh: 120px; }
   .tags > li.tier-mocny { --wh: 100px; }
   li.wrapped .reveal { height: var(--wh); }
   li.wrapped .tag { visibility: hidden; }
@@ -398,6 +399,12 @@
         --pat: repeating-linear-gradient(-45deg, rgba(207, 46, 69, .22) 0 3px, transparent 3px 13px); }
   .wtop { --p1: #f6d27a; --p2: #c9952c; --rb: #c62a41; --rb2: #8f1a2c; color: #3d2a00;
           --pat: radial-gradient(circle at 9px 9px, rgba(255, 255, 255, .55) 0 1.4px, transparent 2px) 0 0 / 18px 18px; }
+  .wsup { --p1: #c62a41; --p2: #6e0f1e; --rb: #f6d27a; --rb2: #b07f22; color: #fff4c7;
+          --pat: radial-gradient(circle at 9px 9px, rgba(246, 210, 122, .65) 0 1.6px, transparent 2.2px) 0 0 / 18px 18px; }
+  .wsup.alt { --pat: radial-gradient(circle at 9px 9px, rgba(246, 210, 122, .65) 0 1.6px, transparent 2.2px) 0 0 / 18px 18px; }
+  .wsup .wtier { background: linear-gradient(135deg, #fff1b8, #f0c35a 55%, #c4912c); color: #5a1020; box-shadow: 0 2px 8px rgba(240, 195, 90, .6); }
+  li.tier-toptop .wrap { box-shadow: 0 0 0 2px #f6d27a, 0 0 0 5px rgba(198, 42, 65, .55), 0 0 28px rgba(240, 195, 90, .7); }
+  .gtier.toptop { color: #fff4c7; background: linear-gradient(135deg, #e0465c, #8f1a2c); box-shadow: 0 0 0 1.5px #f0c35a, 0 2px 8px rgba(143, 26, 44, .45); }
   .wrap.alt { --pat: repeating-linear-gradient(90deg, rgba(255, 255, 255, .13) 0 2px, transparent 2px 14px); }
   .wtop.alt { --pat: radial-gradient(circle at 9px 9px, rgba(255, 255, 255, .55) 0 1.4px, transparent 2px) 0 0 / 18px 18px; }
   .w2.alt { --pat: repeating-linear-gradient(90deg, rgba(207, 46, 69, .18) 0 3px, transparent 3px 15px); }
@@ -1955,7 +1962,7 @@
 
   <nav class="navcards layer gutter" aria-label="Co dalej">
     <a class="navcard" href="#list" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>
-      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">14 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">15 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
       <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard" href="#turniej" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
@@ -2548,11 +2555,14 @@
 
 
   /* ---------- Gifts: edit this list. Put a shop address in `url` to turn "Link wkrótce" into a button. ---------- */
-  var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze', gra: 'Gaming' };
+  var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze', gra: 'Gaming', any: 'Niespodzianka' };
   /* gift tiers: the label shown on the wrapping and the tag; 'top' is the most wanted */
-  var GIFT_TIERS = { top: 'TOP prezent', mocny: 'Mocny prezent', fajny: 'Fajny prezent', drob: 'Drobiazg do skarpety' };
-  var TIER_ORDER = ['top', 'mocny', 'fajny', 'drob'];
+  var GIFT_TIERS = { toptop: 'TOP TOP prezent', top: 'TOP prezent', mocny: 'Mocny prezent', fajny: 'Fajny prezent', drob: 'Drobiazg do skarpety' };
+  var TIER_ORDER = ['toptop', 'top', 'mocny', 'fajny', 'drob'];
   var GIFTS = [
+    { cat: 'any', icon: 'gift', tier: 'toptop', tease: 'Cokolwiek, i tak się ucieszę', nolink: true, name: 'Niespodzianka od Mikołajów',
+      desc: 'Cokolwiek to będzie, będę się cieszył. Zdaję się na wszystkich Mikołajów: wybierzcie sami, a ja obiecuję szczery uśmiech przy rozpakowywaniu.',
+      price: 'dowolna', url: '' },
     { cat: 'gra', icon: 'mouse', tier: 'top', tease: 'Coś dla gracza LoL-a', name: 'Myszka Logitech G PRO X2 SUPERSTRIKE',
       desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. PS Nie mówcie Domi: nowa myszka to trochę mniej czasu dla niej. PS 2 To drogi prezent, więc warto podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
       price: 'ok. 769 zł', url: 'https://www.logitechg.com/pl-pl/shop/p/pro-x2-superstrike-mouse.910-007776' },
@@ -2603,6 +2613,7 @@
     sock: '<path d="M8.5 2.5h7v10l3.2 3.2a2.8 2.8 0 0 1 0 4 2.8 2.8 0 0 1-4 0L8.5 13.5z"/><path d="M8.5 6h7"/>',
     perfume: '<rect x="6" y="9" width="12" height="12" rx="3"/><path d="M10 9V6.5h4V9M9.5 6.5h5M12 4V2.5"/><path d="M9 14.5h6" opacity=".6"/>',
     shirt: '<path d="M8.5 3.5 4 6l1.8 4.2 2.2-1V20.5h8V9.2l2.2 1L20 6l-4.5-2.5c-.6 1.5-1.9 2.4-3.5 2.4S9.1 5 8.5 3.5z"/>',
+    gift: '<rect x="4" y="9.5" width="16" height="11" rx="1.5"/><path d="M3 6.5h18v3H3zM12 6.5v14"/><path d="M12 6.5C10 2.8 6.5 3.6 7.6 6.2M12 6.5c2-3.7 5.5-2.9 4.4-.3"/>',
     gel: '<path d="M8 3.5h8l-1 3v12a3 3 0 0 1-3 3 3 3 0 0 1-3-3v-12z"/><path d="M9.5 11.5h5M10 3.5V2M14 3.5V2"/>',
     damp: '<path d="M8 4.5c2.5 1.6 5.5 1.6 8 0M8 19.5c2.5-1.6 5.5-1.6 8 0"/><rect x="7" y="8" width="10" height="8" rx="4"/><path d="M10 12h4"/>',
     mouse: '<rect x="6.5" y="2.5" width="11" height="19" rx="5.5"/><path d="M12 2.5v6.5M6.5 9.5h11"/><path d="M12 5.2v1.6" stroke-width="2.4"/>',
@@ -2831,10 +2842,10 @@
   var openedBefore = loadOpened();
 
   function wrapHTML(i, g) {
-    var paper = { top: 'wtop', mocny: 'w0', fajny: 'w1', drob: 'w2' }[g.tier] || 'w' + (i % 3);
+    var paper = { toptop: 'wsup', top: 'wtop', mocny: 'w0', fajny: 'w1', drob: 'w2' }[g.tier] || 'w' + (i % 3);
     return '<button type="button" class="wrap ' + paper + (i % 2 ? ' alt' : '') + '" aria-label="Odpakuj prezent ' + (i + 1) + (g.tier ? ', ' + GIFT_TIERS[g.tier] : '') + '">' +
       '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span>' + BOW +
-      '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.tier ? '<b class="wtier">' + (g.tier === 'top' ? '★ TOP' : GIFT_TIERS[g.tier]) + '</b>' : '') + '</span>' +
+      '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.tier ? '<b class="wtier">' + (g.tier === 'toptop' ? '★★ TOP TOP' : g.tier === 'top' ? '★ TOP' : GIFT_TIERS[g.tier]) + '</b>' : '') + '</span>' +
       '<span class="wrap-cat">' + esc(g.tease || CATS[g.cat]) + '</span></span>' +
       '<span class="wrap-ball">' + BALL + '</span></button>';
   }
@@ -2842,13 +2853,13 @@
   list.innerHTML = GIFTS.map(function (g, i) {
     var link = g.url
       ? '<a class="shop" href="' + esc(g.url) + '" target="_blank" rel="noopener">Zobacz w sklepie ' + ARROW + '</a>'
-      : '<span class="soon">Link wkrótce</span>';
+      : g.nolink ? '' : '<span class="soon">Link wkrótce</span>';
     var isOpen = openedBefore.indexOf(g.name) !== -1;
-    return '<li data-rv data-i="' + i + '" data-cat="' + g.cat + '" data-name="' + esc(g.name) + '" class="' + (isOpen ? 'open' : 'wrapped') + (g.tier ? ' tier-' + g.tier : '') +
+    return '<li data-rv data-i="' + i + '" data-cat="' + g.cat + '" data-name="' + esc(g.name) + '" class="' + (isOpen ? 'open' : 'wrapped') + (g.tier ? ' tier-' + g.tier + (g.tier === 'toptop' ? ' tier-top' : '') : '') +
       '" style="view-transition-name:gift-' + i + '"><div class="reveal"><article class="tag" tabindex="-1">' +
       '<div class="tag-main">' +
         '<p class="tag-meta"><span class="tag-cat">' + CATS[g.cat] + '</span>' +
-          (g.tier ? '<span class="gtier ' + g.tier + '">' + (g.tier === 'top' ? '★ ' : '') + GIFT_TIERS[g.tier] + '</span>' : '') +
+          (g.tier ? '<span class="gtier ' + g.tier + '">' + (g.tier === 'toptop' ? '★★ ' : g.tier === 'top' ? '★ ' : '') + GIFT_TIERS[g.tier] + '</span>' : '') +
           (g.ace ? '<span class="ace">Wymarzony</span>' : '') +
           (hunts('gift') && i === HUNT.gift % GIFTS.length ? '<button type="button" class="gold-btn gold-sticker" data-g="gift" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('gift') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
         '<h3>' + esc(g.name) + '</h3>' +
@@ -2943,7 +2954,7 @@
       var gold = ['#f0c35a', '#fff4c7', '#cf2e45', '#ffffff'];
       setTimeout(function () { shards(x - 70, y - 10, gold); shards(x + 70, y - 10, gold); }, 140);
       setTimeout(function () { shards(x, y - 40, gold); }, 300);
-      toast('TOP prezent! Mikołaju, ten jest z tych najważniejszych.');
+      toast(li.classList.contains('tier-toptop') ? 'TOP TOP! Mikołaje, wybór należy do Was.' : 'TOP prezent! Dobry wybór, Mikołaju.');
     }
     try { if (navigator.vibrate) navigator.vibrate(li.classList.contains('tier-top') ? [20, 40, 60] : 14); } catch (e) {}
     li.classList.remove('wrapped'); li.classList.add('open');
@@ -2999,14 +3010,14 @@
 
   /* ---------- Filter: sliding thumb + cards that morph between states ---------- */
   var seg = byId('seg');
-  var filters = [['all', 'Wszystko']].concat(Object.keys(CATS).filter(function (k) { return GIFTS.some(function (g) { return g.cat === k; }); }).map(function (k) { return [k, CATS[k]]; }));
+  var filters = [['all', 'Wszystko']].concat(Object.keys(CATS).filter(function (k) { return k !== 'any' && GIFTS.some(function (g) { return g.cat === k; }); }).map(function (k) { return [k, CATS[k]]; }));
   seg.style.setProperty('--n', filters.length);
   seg.innerHTML = '<span class="thumb" aria-hidden="true"></span>' + filters.map(function (f, i) {
     return '<button type="button" id="seg-' + f[0] + '" data-filter="' + f[0] + '" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + f[1] + '</button>';
   }).join('');
   function applyFilter(f) {
     Array.prototype.forEach.call(list.children, function (li) {
-      var hide = f !== 'all' && li.getAttribute('data-cat') !== f;
+      var hide = f !== 'all' && li.getAttribute('data-cat') !== f && li.getAttribute('data-cat') !== 'any';
       li.hidden = hide;
       if (!hide) { li.classList.add('in'); li.style.transitionDelay = ''; }
     });
