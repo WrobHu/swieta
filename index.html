@@ -356,7 +356,10 @@
   .gtier.drob { color: var(--ink); background: linear-gradient(135deg, #f2f7c8, #dcee4e); box-shadow: 0 2px 6px rgba(147, 168, 35, .3); }
   li.tier-mocny .tag::before { border-color: #b3233a; }
   li.tier-fajny .tag::before { border-color: #1f7a52; }
-  @media (prefers-reduced-motion: reduce) { li.tier-top .wrap::after { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .wsheen::after { animation: none; } }
+  /* the moment the ball hits, the golden frame and the shine go with the paper */
+  .wrap.tearing, li.tier-top .wrap.tearing, li.tier-toptop .wrap.tearing { box-shadow: none; }
+  .wrap.tearing .wsheen { opacity: 0; }
   .seg button:active { transform: scale(.94); }
   :focus-visible { outline: 2px solid var(--ball); outline-offset: 3px; }
 
@@ -388,7 +391,7 @@
     border: 0; padding: 0; background: none; cursor: pointer;
     font: inherit; text-align: left; color: var(--snow);
     border-radius: 14px;
-    transition: transform .2s var(--out);
+    transition: transform .2s var(--out), box-shadow .18s ease-out;
   }
   .wrap:active { transform: scale(.985); }
   .w0 { --p1: #c62a41; --p2: #a51c32; --rb: #f0c35a; --rb2: #c4912c;
@@ -431,8 +434,8 @@
   .w2 .wtier { background: rgba(207, 46, 69, .12); box-shadow: inset 0 0 0 1px rgba(207, 46, 69, .35); }
   .wtop .wtier { background: #c62a41; color: #fff4c7; box-shadow: 0 2px 6px rgba(143, 26, 44, .4); }
   li.tier-top .wrap-cat { font-size: 22px; }
-  li.tier-top .wrap { overflow: hidden; }
-  li.tier-top .wrap::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent); transform: translateX(-120%) skewX(-18deg); animation: top-sheen 3.8s ease-in-out infinite; }
+  .wsheen { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; pointer-events: none; transition: opacity .15s; }
+  .wsheen::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent); transform: translateX(-120%) skewX(-18deg); animation: top-sheen 3.8s ease-in-out infinite; }
   @keyframes top-sheen { 0%, 55% { transform: translateX(-120%) skewX(-18deg); } 100% { transform: translateX(300%) skewX(-18deg); } }
   .wrap-ball { position: absolute; right: 16px; top: 50%; width: 38px; height: 38px; margin-top: -19px; border-radius: 50%; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); }
   .wrap-ball svg { display: block; width: 100%; height: 100%; }
@@ -2564,7 +2567,7 @@
       desc: 'Cokolwiek to będzie, będę się cieszył. Zdaję się na wszystkich Mikołajów: wybierzcie sami, a ja obiecuję szczery uśmiech przy rozpakowywaniu.',
       price: 'dowolna', url: '' },
     { cat: 'gra', icon: 'mouse', tier: 'top', tease: 'Coś dla gracza LoL-a', name: 'Myszka Logitech G PRO X2 SUPERSTRIKE',
-      desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. PS Nie mówcie Domi: nowa myszka to trochę mniej czasu dla niej. PS 2 To drogi prezent, więc warto podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
+      desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. PS Nie mówcie Domi: nowa myszka to trochę mniej czasu dla niej. PPS To drogi prezent, więc warto podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
       price: 'ok. 769 zł', url: 'https://www.logitechg.com/pl-pl/shop/p/pro-x2-superstrike-mouse.910-007776' },
     { cat: 'kort', icon: 'balls', tier: 'drob', tease: 'Coś okrągłego na mączkę', name: 'Piłki Wilson Roland Garros Clay, 4 sztuki',
       desc: 'Piłki na mączkę, takie jak na Roland Garros. Po moim serwisie część i tak ląduje u sąsiadów, więc zapas zawsze się przyda.',
@@ -2844,7 +2847,7 @@
   function wrapHTML(i, g) {
     var paper = { toptop: 'wsup', top: 'wtop', mocny: 'w0', fajny: 'w1', drob: 'w2' }[g.tier] || 'w' + (i % 3);
     return '<button type="button" class="wrap ' + paper + (i % 2 ? ' alt' : '') + '" aria-label="Odpakuj prezent ' + (i + 1) + (g.tier ? ', ' + GIFT_TIERS[g.tier] : '') + '">' +
-      '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span>' + BOW +
+      '<span class="half l"></span><span class="half r"></span>' + (g.tier === 'top' || g.tier === 'toptop' ? '<span class="wsheen"></span>' : '') + '<span class="ribbon"></span>' + BOW +
       '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.tier ? '<b class="wtier">' + (g.tier === 'toptop' ? '★★ TOP TOP' : g.tier === 'top' ? '★ TOP' : GIFT_TIERS[g.tier]) + '</b>' : '') + '</span>' +
       '<span class="wrap-cat">' + esc(g.tease || CATS[g.cat]) + '</span></span>' +
       '<span class="wrap-ball">' + BALL + '</span></button>';
@@ -2959,6 +2962,7 @@
     try { if (navigator.vibrate) navigator.vibrate(li.classList.contains('tier-top') ? [20, 40, 60] : 14); } catch (e) {}
     li.classList.remove('wrapped'); li.classList.add('open');
     w.style.pointerEvents = 'none';
+    w.classList.add('tearing');
     reveal.animate([{ height: h0 + 'px' }, { height: h1 + 'px' }], { duration: 640, easing: OUT });
     tag.animate([{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 620, easing: SPRING });
     li.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(4px) scale(.975)' }, { transform: 'translateY(-2px) scale(1.012)' }, { transform: 'translateY(0) scale(1)' }], { duration: 380, easing: 'ease-out' });
