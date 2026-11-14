@@ -1109,6 +1109,33 @@
   .rk-toggle { align-self: center; margin-top: -4px; }
   .res-next { width: 100%; }
   .res-next:disabled { opacity: .55; cursor: default; }
+  .res-hl { display: flex; flex-wrap: wrap; gap: 6px; }
+  .hl-chip { font-size: 13px; line-height: 1.2; padding: 6px 10px; border-radius: 99px; background: rgba(242, 247, 243, .07); border: 1px solid var(--line); color: var(--mist); }
+  .hl-chip b { color: var(--snow); font-weight: 700; }
+  .hl-chip.lead { border-color: rgba(240, 195, 90, .5); }
+  .hl-chip.lead b { color: var(--gold); }
+  .hl-chip.up b { color: #8ff0b6; }
+  .hl-chip.me { border-color: rgba(220, 238, 78, .5); }
+  .gain { flex: none; font: 700 13px/1 var(--score); color: var(--gold); margin-left: auto; padding-right: 4px; }
+  .gain + .pts { margin-left: 0; }
+  .res-next-game, .next-card .nc-row { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .res-next-game { padding: 12px; border-radius: 14px; background: rgba(2, 10, 8, .35); border: 1px dashed rgba(220, 238, 78, .35); }
+  .ng-ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(220, 238, 78, .12); color: var(--ball); font-size: 22px; }
+  .ng-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .ng-txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ng-txt small { font: 700 11px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .ng-txt b { font: 800 19px/1.15 var(--display); }
+  .ng-txt span { font-size: 14px; line-height: 1.45; color: var(--mist); }
+  .ng-txt em { font-style: normal; font-size: 13px; color: var(--ball); margin-top: 2px; }
+  .next-card { border-color: rgba(220, 238, 78, .3); }
+  .nc-wait { font-size: 14px; color: var(--ball); }
+  .pod .bar { transform-origin: 50% 100%; }
+  .rank .pts { white-space: nowrap; }
+  .res-ranking .rank li { gap: 8px; padding: 7px 9px; }
+  .res-ranking .rank .pts { font-size: 17px; }
+  .res-ranking .rank .nm { flex: 1 1 auto; }
+  .res-ranking .gain { margin-left: 0; }
+  .mv.same { display: none; }
   .res-ranking { display: flex; flex-direction: column; gap: 8px; padding: 12px; margin: 2px -4px 0; border-radius: 14px; background: rgba(240, 195, 90, .07); border: 1px solid rgba(240, 195, 90, .28); }
   .res-ranking .card-label { font-size: 14px; }
   .mv { flex: none; min-width: 30px; text-align: center; font: 700 12px/1 var(--score); letter-spacing: .04em; padding: 3px 5px; border-radius: 99px; }
@@ -2219,6 +2246,7 @@
     <div class="layer gutter" id="game-lobby">
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="card boss-card" id="boss-card" hidden></div>
+        <div class="card next-card" id="next-card" hidden></div>
         <div class="card">
           <p class="notice" id="game-status">Czekamy, aż Mikołaj rozpocznie turniej.</p>
           <p class="host-sign" id="host-sign" hidden></p>
@@ -2260,8 +2288,10 @@
         <h2 id="res-title"></h2>
         <button type="button" class="cta wide res-next" id="res-next" hidden>Następna gra</button>
         <div class="boss-launch" id="boss-launch-res" hidden></div>
+        <div class="res-hl" id="res-hl" hidden></div>
         <div class="podium" id="podium"></div>
         <div id="res-standings-wrap" class="res-ranking" hidden><p class="card-label" id="res-standings-label">Ranking turnieju</p><ol class="rank" id="res-standings"></ol></div>
+        <div class="res-next-game" id="res-nextgame" hidden></div>
         <p class="card-label" id="rank-label" hidden>Wyniki tej gry</p>
         <ol class="rank" id="rank"></ol>
         <div class="actions">
@@ -4868,6 +4898,24 @@ function createSafe(opts) {
     c.restore();
   }
   function pop(G, x, y, txt, col) { G.pops.push({ x: x, y: y, t: G.now, txt: txt, col: col || '#dcee4e' }); }
+  /* a small burst of sparks where a point was scored */
+  function spark(G, x, y, col, n) {
+    if (still) return;
+    G.sparks = G.sparks || [];
+    for (var i = 0; i < (n || 10); i++) { var a = Math.random() * 6.283, v = 60 + Math.random() * 140; G.sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60, t: G.now, col: col || '#f0c35a', r: 1.5 + Math.random() * 2.2 }); }
+    if (G.sparks.length > 120) G.sparks.splice(0, G.sparks.length - 120);
+  }
+  function drawSparks(G, c) {
+    if (!G.sparks || !G.sparks.length) return;
+    G.sparks = G.sparks.filter(function (p) {
+      var age = (G.now - p.t) / 1000;
+      if (age > .6) return false;
+      c.globalAlpha = 1 - age / .6; c.fillStyle = p.col;
+      c.beginPath(); c.arc(p.x + p.vx * age, p.y + p.vy * age + 260 * age * age, p.r * (1 - age), 0, 6.284); c.fill();
+      return true;
+    });
+    c.globalAlpha = 1;
+  }
 
   /* ---- 1. Złap prezenty ---- */
   var INIT = {}, FRAME = {}, POINTER = {}, FINISH = {}, PTS = { gift: 1, ball: 2, gold: 5, coal: -3 };
@@ -4899,6 +4947,7 @@ function createSafe(opts) {
           it.done = true;
           var pts = PTS[it.type];
           G.score = Math.max(0, G.score + pts);
+          if (pts > 0) spark(G, x, ry - 8, it.type === 'gold' ? '#f0c35a' : it.type === 'ball' ? '#dcee4e' : '#ff8b9a', it.type === 'gold' ? 18 : 10);
           pop(G, x, ry - 24, (pts > 0 ? '+' : '−') + Math.abs(pts), it.type === 'coal' ? '#ff8b9a' : it.type === 'gold' ? '#f0c35a' : '#dcee4e');
           if (it.type === 'coal') {
             if (!still) stage.parentNode.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 260 });
@@ -5056,6 +5105,7 @@ function createSafe(opts) {
     G.score = Math.max(0, G.score + pts);
     if (pts > 0) G.bump = G.now;
     else try { if (navigator.vibrate) navigator.vibrate(50); } catch (e) {}
+    if (pts > 0) spark(G, best.x * SW, best.y * SH, best.type === 'star' ? '#f0c35a' : '#ffffff', best.type === 'star' ? 16 : 9);
     pop(G, best.x * SW, best.y * SH - R, (pts > 0 ? '+' : '−') + Math.abs(pts), pts < 0 ? '#ff8b9a' : best.type === 'star' ? '#f0c35a' : '#f2f7f3');
   };
   function snowStar(c, x, y, r) {
@@ -5134,6 +5184,7 @@ function createSafe(opts) {
     b.vx = clamp(-dx * 6, -SW * .6, SW * .6) + (G.r() - .5) * SW * .9;
     G.lastHit = G.now; G.score++; G.ring = { x: b.x, y: b.y, t: G.now };
     pop(G, b.x, b.y - b.r - 10, '+1', '#dcee4e');
+    spark(G, b.x, b.y, '#dcee4e', 8);
   };
   FRAME.juggle = function (G, t, dt) {
     var c = sctx, b = G.ball, floor = SH - 30;
@@ -5538,6 +5589,7 @@ function createSafe(opts) {
     if (G.key === 'reflex' && G.score === 0) G.score = reflexScore(G);
     drawBg(G.key === 'catch', G.key === 'tower');
     FRAME[G.key](G, t, dt);
+    drawSparks(G, c);
     G.pops = G.pops.filter(function (pp) {
       var life = (now - pp.t) / 800;
       if (life >= 1) return false;
@@ -5658,16 +5710,17 @@ function createSafe(opts) {
   function namesOf(list) { var n = list.map(function (e) { return e.name; }); return n.length < 2 ? n.join('') : n.slice(0, -1).join(', ') + ' i ' + n[n.length - 1]; }
   /* a ranking list; with many players it folds to the top 5 plus your own row, with a button to see everyone */
   var rankOpen = {};
-  function fillRank(el, list, fmt, key, moves) {
+  function fillRank(el, list, fmt, key, moves, gains) {
     var prev = null, place = 0, more = 0, open = !!rankOpen[key], fold = list.length > 7, gapNext = false;
-    el.innerHTML = list.map(function (e, i) {
+    var rowsHTML = list.map(function (e, i) {
       if (prev === null || e.score !== prev) place = i;
       prev = e.score;
       var extra = fold && i >= 5 && e.uid !== myUid, gap = fold && !extra && i > 5 && gapNext;
       if (extra) more++;
       gapNext = extra;
-      return '<li class="' + (e.uid === myUid ? 'me' : '') + (extra ? ' rk-more' : '') + (fold && i > 5 && !extra ? ' rk-gap' : '') + '"><span class="pos">' + (place + 1) + '.</span>' + avatarHTML(e.name) + '<span class="nm">' + esc(e.name) + '</span>' + (moves ? moveHTML(moves[e.uid]) : '') + '<span class="pts">' + esc(fmt(e.score)) + '</span></li>';
+      return '<li class="' + (e.uid === myUid ? 'me' : '') + (extra ? ' rk-more' : '') + (fold && i > 5 && !extra ? ' rk-gap' : '') + '"><span class="pos">' + (place + 1) + '.</span>' + avatarHTML(e.name) + '<span class="nm">' + esc(e.name) + '</span>' + (moves ? moveHTML(moves[e.uid]) : '') + (gains && gains[e.uid] ? '<span class="gain">+' + gains[e.uid] + '</span>' : '') + '<span class="pts">' + esc(fmt(e.score)) + '</span></li>';
     }).join('');
+    if (el._h !== rowsHTML) { el._h = rowsHTML; el.innerHTML = rowsHTML; }
     el.classList.toggle('rk-fold', more > 0 && !open);
     var btn = el.nextElementSibling && el.nextElementSibling.classList.contains('rk-toggle') ? el.nextElementSibling : null;
     if (more > 0) {
@@ -5683,6 +5736,7 @@ function createSafe(opts) {
     return '<span class="mv ' + (d > 0 ? 'up">▲' : 'down">▼') + Math.abs(d) + '</span>';
   }
   function placesOf(list) { var out = {}, prev = null, place = 0; list.forEach(function (e, i) { if (prev === null || e.score !== prev) place = i; prev = e.score; out[e.uid] = place; }); return out; }
+  function setHTML(el, h) { if (el._h !== h) { el._h = h; el.innerHTML = h; } }
   function unfoldRank(el) { el.classList.remove('rk-fold'); var b = el.nextElementSibling; if (b && b.classList.contains('rk-toggle')) b.hidden = true; }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('.rk-toggle'); if (!b) return;
@@ -5714,7 +5768,22 @@ function createSafe(opts) {
     if (el._h !== h) { el._h = h; el.innerHTML = h; }
   }
   function ptsFmt(n) { return n + ' pkt'; }
-  var resNextT = 0;
+  var resNextT = 0, resAnimFor = 0;
+  /* the first time results appear: the podium rises, rows slide in, the gained points count up */
+  function animateResults(gains) {
+    if (still) return;
+    Array.prototype.forEach.call(byId('podium').querySelectorAll('.pod'), function (pd, i) {
+      var order = [1, 0, 2][i] || 0, bar = pd.querySelector('.bar');
+      if (bar) bar.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 650, delay: 150 + order * 180, easing: 'cubic-bezier(.2,.9,.3,1.15)', fill: 'backwards' });
+      pd.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 450, delay: 150 + order * 180, easing: OUT, fill: 'backwards' });
+    });
+    Array.prototype.forEach.call(byId('res-standings').children, function (li, i) {
+      li.animate([{ opacity: 0, transform: 'translateX(-14px)' }, { opacity: 1, transform: 'none' }], { duration: 380, delay: 450 + Math.min(i, 8) * 60, easing: OUT, fill: 'backwards' });
+    });
+    Array.prototype.forEach.call(byId('res-standings').querySelectorAll('.gain'), function (g, i) {
+      g.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1.25)', offset: .6 }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 900 + Math.min(i, 8) * 60, easing: OUT, fill: 'backwards' });
+    });
+  }
   function renderResults(rd) {
     var h = history[rd] || (gameState && gameState.round == rd ? gameState : null);
     if (!h) return;
@@ -5725,8 +5794,9 @@ function createSafe(opts) {
       var beat = list.filter(function (e) { return e.uid !== h.bossUid && yeti && (low ? e.score < yeti.score : e.score > yeti.score); });
       byId('res-label').textContent = 'Finał z Bossem · ' + def.name;
       byId('res-title').textContent = !list.length ? 'Nikt nie zagrał' : !yeti ? 'Yeti nie stanął do walki!' : beat.length ? (beat.length > 1 ? 'Pogromcy Yetiego: ' + namesOf(beat) + '!' : beat[0].name + ' pokonuje Yetiego!') : 'Yeti obronił Biegun!';
-      byId('podium').innerHTML = podiumHTML(list, def.fmt);
+      setHTML(byId('podium'), podiumHTML(list, def.fmt));
       byId('res-standings-wrap').hidden = true;
+      byId('res-hl').hidden = true; byId('res-nextgame').hidden = true;
       byId('rank-label').hidden = false; byId('rank-label').textContent = 'Wyniki finału';
       fillRank(byId('rank'), list, def.fmt, 'res');
       byId('res-next').hidden = true;
@@ -5735,15 +5805,31 @@ function createSafe(opts) {
     byId('res-label').textContent = gameTag(idx) + ' · ' + def.name;
     var win = winnersOf(list);
     byId('res-title').textContent = !list.length ? 'Nikt nie zdobył punktów' : win.length > 1 ? 'Remis! Wygrywają ' + namesOf(win) + '!' : 'Wygrywa ' + list[0].name + '!';
-    byId('podium').innerHTML = podiumHTML(list, def.fmt);
+    setHTML(byId('podium'), podiumHTML(list, def.fmt));
     byId('rank-label').hidden = false; byId('rank-label').textContent = 'Wyniki tej gry';
     fillRank(byId('rank'), list, def.fmt, 'res');
     /* the tournament ranking after this game, with how far everyone moved */
     var st = standings(h.session), before = placesOf(standings(h.session, rd)), now = placesOf(st), moves = {}, played = Object.keys(history).filter(function (k) { return history[k] && history[k].session === h.session && !history[k].boss && +k <= +rd; }).length;
     st.forEach(function (e) { moves[e.uid] = before[e.uid] == null ? (played > 1 ? null : 0) : before[e.uid] - now[e.uid]; });
+    var prevPts = {}, gains = {};
+    standings(h.session, rd).forEach(function (e) { prevPts[e.uid] = e.score; });
+    st.forEach(function (e) { gains[e.uid] = e.score - (prevPts[e.uid] || 0); });
     byId('res-standings-wrap').hidden = !st.length;
     byId('res-standings-label').textContent = 'Ranking turnieju po ' + played + ' z ' + GAME_ORDER.length + ' ' + plural(GAME_ORDER.length, ['grze', 'grach', 'grach']);
-    fillRank(byId('res-standings'), st, ptsFmt, 'res-st', played > 1 ? moves : null);
+    fillRank(byId('res-standings'), st, ptsFmt, 'res-st', played > 1 ? moves : null, gains);
+    /* talking points for the break: who leads, who climbed the most, where you are */
+    var hl = [], up = null;
+    if (st.length) hl.push('<span class="hl-chip lead">Prowadzi: <b>' + esc(st[0].name) + '</b></span>');
+    if (played > 1) st.forEach(function (e) { var d = moves[e.uid]; if (d > 0 && (!up || d > moves[up.uid])) up = e; });
+    if (up) hl.push('<span class="hl-chip up">Awans rundy: <b>' + esc(up.name) + ' ▲' + moves[up.uid] + '</b></span>');
+    if (myUid && now[myUid] != null) hl.push('<span class="hl-chip me">Twoje miejsce: <b>' + (now[myUid] + 1) + '.</b>' + (gains[myUid] ? ' (+' + gains[myUid] + ' pkt)' : '') + '</span>');
+    byId('res-hl').hidden = !hl.length; byId('res-hl').innerHTML = hl.join('');
+    /* what comes next, for everyone, while Mikołaj decides when to start it */
+    var ng = GAME_ORDER[idx + 1], nge = byId('res-nextgame');
+    nge.hidden = false;
+    nge.innerHTML = ng ? '<span class="ng-ico" aria-hidden="true">' + GAMES[ng].icon + '</span><span class="ng-txt"><small>Następnie · ' + gameTag(idx + 1) + ' · ' + GAMES[ng].time + '</small><b>' + GAMES[ng].name + '</b><span>' + GAMES[ng].desc + '</span>' + (isHost ? '' : '<em>Mikołaj uruchomi ją, gdy wszyscy będą gotowi.</em>') + '</span>'
+      : '<span class="ng-ico" aria-hidden="true">🏆</span><span class="ng-txt"><small>Następnie</small><b>Ogłoszenie Mistrza Świąt</b><span>A potem Finał z Bossem: TOP 3 kontra Yeti Śnieżnik.</span></span>';
+    if (resAnimFor !== rd) { resAnimFor = rd; animateResults(gains); }
     var nxt = byId('res-next'), last = idx >= GAME_ORDER.length - 1, wait = isHost && gameState && String(gameState.round) === String(rd) && collecting(gameState);
     nxt.hidden = !isHost;
     nxt.disabled = !!wait;
@@ -5777,8 +5863,9 @@ function createSafe(opts) {
     byId('res-label').textContent = 'Koniec turnieju';
     var champs = winnersOf(st);
     byId('res-title').textContent = !st.length ? 'Turniej bez wyników' : champs.length > 1 ? 'Mistrzowie Świąt: ' + namesOf(champs) + '!' : 'Mistrz Świąt: ' + st[0].name + '!';
-    byId('podium').innerHTML = podiumHTML(st, fmt);
+    setHTML(byId('podium'), podiumHTML(st, fmt));
     byId('rank-label').hidden = false; byId('rank-label').textContent = 'Ranking końcowy';
+    byId('res-hl').hidden = true; byId('res-nextgame').hidden = true;
     fillRank(byId('rank'), st, fmt, 'final');
     byId('res-standings-wrap').hidden = true;
     byId('res-next').hidden = true;
@@ -5805,10 +5892,11 @@ function createSafe(opts) {
     placeStage(true); byId('game-results').hidden = false;
     byId('res-label').textContent = 'Trening · ' + def.name;
     byId('res-title').textContent = 'Twój wynik: ' + def.fmt(score);
-    byId('podium').innerHTML = '';
-    byId('rank').innerHTML = '<li class="me"><span class="pos">★</span><span>Twój najlepszy trening</span><span class="pts">' + esc(def.fmt(best)) + '</span></li>';
+    setHTML(byId('podium'), '');
+    byId('rank')._h = null; byId('rank').innerHTML = '<li class="me"><span class="pos">★</span><span>Twój najlepszy trening</span><span class="pts">' + esc(def.fmt(best)) + '</span></li>';
     unfoldRank(byId('rank'));
     byId('res-standings-wrap').hidden = true;
+    byId('res-hl').hidden = true; byId('res-nextgame').hidden = true;
     byId('rank-label').hidden = true;
     byId('boss-launch-res').hidden = true;
     byId('res-next').hidden = true;
@@ -5912,6 +6000,11 @@ function createSafe(opts) {
       return '<span class="person' + (pp.uid === myUid ? ' me' : '') + (j ? ' in' : '') + '">' + avatarHTML(pp.name) + esc(pp.name) + (pp.uid === myUid ? ' <small>Ty</small>' : '') + (isHost && j ? ' <b class="in-ok" title="Dołączył do turnieju">✓</b>' : '') + '</span>';
     }).join('') || '<span class="hello-sub">Nikogo jeszcze nie ma.</span>';
     var st = gameState, active = st && st.session && !st.final, nextIdx = active ? st.idx + 1 : 0;
+    /* the next game, with how to play it, so everyone is ready before Mikołaj starts it */
+    var nc = byId('next-card'), nk = !(st && st.boss) && !roundLive(st) && gate && gate.open ? (active ? GAME_ORDER[nextIdx] : (!st || st.final ? GAME_ORDER[0] : null)) : null;
+    nc.hidden = !nk;
+    if (nk) nc.innerHTML = '<p class="card-label">' + (active ? 'Następna gra' : 'Na start turnieju') + '</p><div class="nc-row"><span class="ng-ico" aria-hidden="true">' + GAMES[nk].icon + '</span><span class="ng-txt"><small>' + gameTag(GAME_ORDER.indexOf(nk)) + ' · ' + GAMES[nk].time + '</small><b>' + GAMES[nk].name + '</b><span>' + GAMES[nk].desc + '</span></span></div>' +
+      '<p class="nc-wait">' + (isHost ? 'Gdy wszyscy będą gotowi, stuknij „' + (active ? 'Następna gra' : 'Rozpocznij turniej') + '”.' : joinedNow() ? 'Jesteś gotowy. Gra wystartuje sama, gdy Mikołaj ją uruchomi.' : 'Dołącz przez złoty puchar, żeby zagrać.') + '</p>';
     var bc = byId('boss-card');
     bc.hidden = !(st && st.boss);
     if (st && st.boss) {
