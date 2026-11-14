@@ -1,0 +1,2194 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tenisowy list do Mikołaja</title>
+<meta name="description" content="Tenisowa lista życzeń do Świętego Mikołaja. Znajdź 7 złotych piłek i zdobądź kupon na prezent.">
+<meta name="theme-color" content="#041210">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:url" content="https://wrobhu.github.io/swieta/">
+<meta property="og:title" content="Gem, set, Święta!">
+<meta property="og:description" content="Tenisowa lista życzeń do Mikołaja. Mikołaj zgubił 7 złotych piłek: znajdź je i zdobądź kupon na prezent.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%23dcee4e'/%3E%3Cpath d='M5.5 8.5C14.5 14 14.5 26 5.5 31.5M34.5 8.5C25.5 14 25.5 26 34.5 31.5' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,600..900;1,9..144,600..900&display=swap">
+<style>
+  :root { padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; font: 14px system-ui, sans-serif; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<style>
+  /* Layout: one phone-width column. A night poster on top (a turning tennis-ball moon, a galloping sleigh team,
+     a snowed-in court with a lit net), then the scoreboard countdown, wrapped presents that a served ball
+     tears open, and a snow hill closing the page. */
+  :root {
+    color-scheme: dark;
+    --night-deep: #041210;
+    --night: #0a231e;
+    --board: #0d3a2c;
+    --cell: #061a15;
+    --snow: #f2f7f3;
+    --mist: #a8c3b7;
+    --line: rgba(242, 247, 243, .16);
+    --berry: #cf2e45;
+    --berry-deep: #9a1b30;
+    --berry-lit: #ff5a6e;
+    --ball: #dcee4e;
+    --gold: #f0c35a;
+    --ink: #0d2a22;
+    --ink-soft: #4a655b;
+    --tint: #dcebe2;
+    --sil: #020b09;
+    --pine-far: #0d2f27;
+    --pine-near: #05150f;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --score: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+    --out: cubic-bezier(.16, 1, .3, 1);
+    --spring: cubic-bezier(.34, 1.4, .5, 1);
+    view-transition-name: none;
+  }
+
+  html { background: var(--night-deep); }
+  body {
+    background: var(--night) linear-gradient(180deg, var(--night-deep) 0, #071c18 420px, var(--night) 900px, #0e3027 100%);
+    color: var(--snow);
+    font: 400 16px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  h1, h2, h3, p, ul { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .defs { position: absolute; width: 0; height: 0; }
+
+  /* layers: scene (0) < snow (1) < content (2) < grain (3) < flying balls (6) */
+  #snow { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+  .grain { position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: .05; background-size: 128px 128px; }
+  #fx { position: fixed; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+  .page { max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+  .layer { position: relative; z-index: 2; }
+  .gutter {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* ---------- hero scene ---------- */
+  .hero { display: flex; flex-direction: column; }
+  .scene-wrap {
+    position: relative; z-index: 0;
+    -webkit-mask-image: linear-gradient(#000 80%, transparent);
+    mask-image: linear-gradient(#000 80%, transparent);
+  }
+  @media (min-width: 520px) {
+    .scene-wrap {
+      -webkit-mask-image: linear-gradient(#000 80%, transparent), linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(#000 80%, transparent), linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      mask-composite: intersect;
+    }
+  }
+  .scene { position: relative; z-index: 1; display: block; width: 100%; height: auto; --sy: 0; }
+
+  .aurora { position: absolute; z-index: 0; inset: 0 0 50% 0; overflow: hidden; pointer-events: none; animation: fade 3s ease-out .4s both; }
+  .aurora i {
+    position: absolute; left: -30%; width: 160%; height: 17%; border-radius: 50%;
+    filter: blur(15px); opacity: .7;
+    background: linear-gradient(90deg, transparent 8%, rgba(40, 214, 150, .7) 30%, rgba(160, 250, 205, .5) 55%, rgba(40, 200, 170, .35) 75%, transparent 94%);
+    animation: aurora 17s ease-in-out infinite alternate;
+  }
+  .aurora i:nth-child(1) { top: 5%; }
+  .aurora i:nth-child(2) { top: 26%; height: 12%; opacity: .45; animation-duration: 23s; animation-delay: -8s; }
+  .aurora i:nth-child(3) { top: 44%; height: 10%; opacity: .28; animation-duration: 29s; animation-delay: -15s; }
+  @keyframes aurora {
+    from { transform: translateX(-8%) rotate(-11deg) scaleY(.75); }
+    to { transform: translateX(8%) rotate(-5deg) scaleY(1.3); }
+  }
+  @keyframes fade { from { opacity: 0; } }
+
+  .stars circle { fill: var(--snow); animation: star 3.2s ease-in-out infinite alternate; }
+  .stars circle.g { fill: var(--gold); }
+  .stars { animation: fade 2.4s ease-out .2s both; }
+  @keyframes star { from { opacity: .15; } to { opacity: .95; } }
+
+  .par-moon { transform: translateY(calc(var(--sy) * .26px)); }
+  .par-far { transform: translateY(calc(var(--sy) * .12px)); }
+  .par-team { transform: translate(calc(var(--sy) * .55px), calc(var(--sy) * -.1px)); }
+  .moon-rise { animation: moon-rise 2.8s var(--out) .15s both; }
+  @keyframes moon-rise { from { transform: translateY(180px); } }
+  .moon-body, .halo, .ring { transform-box: fill-box; transform-origin: center; }
+  .halo { animation: halo 5.5s ease-in-out infinite alternate; }
+  @keyframes halo { from { opacity: .78; transform: scale(.96); } to { opacity: 1; transform: scale(1.06); } }
+  .seam { fill: none; stroke: #fbfdf0; stroke-width: 6; stroke-linejoin: round; }
+  .seam-shadow { fill: none; stroke: #6f8a12; stroke-width: 11; stroke-linejoin: round; opacity: .4; }
+  .ring { fill: none; stroke: var(--ball); stroke-width: 1.2; opacity: 0; animation: ring 4s ease-out 4.5s infinite; }
+  @keyframes ring { 0% { opacity: .5; transform: scale(1); } 55%, 100% { opacity: 0; transform: scale(1.3); } }
+
+  /* sleigh team */
+  .sf { fill: var(--sil); }
+  .sl { fill: none; stroke: var(--sil); stroke-linecap: round; stroke-linejoin: round; }
+  .team-in { animation: team-in 3.4s var(--out) 1s both; }
+  @keyframes team-in { from { transform: translate(-520px, 130px); } }
+  .team-drift { animation: drift 7s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate(-5px, 4px) rotate(.8deg); } to { transform: translate(7px, -5px) rotate(-1.4deg); } }
+  .bob, .gal, .leg, #arm, .lantern { transform-box: fill-box; }
+  .bob { transform-origin: center; animation: bob 2.4s ease-in-out infinite alternate; }
+  @keyframes bob { from { transform: translateY(3px) rotate(1.6deg); } to { transform: translateY(-3px) rotate(-1.6deg); } }
+  .gal { transform-origin: center; animation: gal .5s ease-in-out infinite alternate; }
+  @keyframes gal { from { transform: translateY(2.5px) rotate(2.5deg); } to { transform: translateY(-3px) rotate(-3deg); } }
+  .leg { animation-duration: .5s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+  .fore { transform-origin: 8% 3%; animation-name: fore; }
+  .hind { transform-origin: 92% 6%; animation-name: hind; }
+  @keyframes fore { from { transform: rotate(-8deg); } to { transform: rotate(46deg); } }
+  @keyframes hind { from { transform: rotate(8deg); } to { transform: rotate(-48deg); } }
+  #arm { transform-origin: 2% 97%; }
+  .lantern { transform-origin: 50% 0; animation: sway 1.7s ease-in-out infinite alternate; }
+  @keyframes sway { from { transform: rotate(-14deg); } to { transform: rotate(12deg); } }
+  .nose { fill: var(--berry-lit); }
+  .nose-glow { transform-box: fill-box; transform-origin: center; animation: nose 1.4s ease-in-out infinite alternate; }
+  @keyframes nose { from { opacity: .55; transform: scale(.8); } to { opacity: 1; transform: scale(1.25); } }
+  .dust circle { opacity: 0; transform-box: fill-box; transform-origin: center; animation: dust 2.2s ease-out infinite; }
+  @keyframes dust {
+    0% { opacity: 0; transform: translate(0, 0) scale(1); }
+    12% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-96px, 30px) scale(.15); }
+  }
+
+  .pines-far { fill: var(--pine-far); }
+  .pines-near { fill: var(--pine-near); }
+  .pine-snow { fill: none; stroke: #e6f2ec; stroke-linecap: round; stroke-opacity: .4; }
+  .court-line { fill: none; stroke: var(--snow); stroke-linecap: round; opacity: .92; }
+  .net-tape { fill: none; stroke: var(--snow); stroke-width: 3.2; stroke-linecap: round; }
+  .bulb { animation: bulb-on .5s ease-out both, bulb 1.9s ease-in-out infinite alternate; }
+  @keyframes bulb-on { from { opacity: 0; } }
+  @keyframes bulb { from { opacity: 1; } to { opacity: .35; } }
+
+  .serve {
+    position: absolute; z-index: 2; left: 26.4%; top: 14%; width: 47.2%; aspect-ratio: 1;
+    border: 0; border-radius: 50%; background: transparent; cursor: pointer; padding: 0;
+  }
+  .hint {
+    position: absolute; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px)); top: 14px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font: 600 12px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+    animation: fade 1s ease-out 4.5s both; transition: opacity .4s;
+  }
+  .hint::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ball); box-shadow: 0 0 10px var(--ball); }
+  .hint.gone { opacity: 0; }
+
+  .hero-copy { margin-top: -86px; display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font: 600 14px/1.2 var(--score); letter-spacing: .18em; text-transform: uppercase; color: var(--gold);
+    animation: fade-up .9s var(--out) 1.1s both;
+  }
+  h1 { font: 900 clamp(46px, 14.4vw, 64px)/.94 var(--display); letter-spacing: -.025em; text-shadow: 0 4px 30px rgba(4, 18, 16, .8); }
+  h1 em { font-style: italic; color: var(--ball); }
+  .w {
+    display: inline-block; overflow: hidden; vertical-align: bottom;
+    padding: .34em .08em .12em .02em; margin: -.34em -.08em -.12em -.02em;
+  }
+  .w > * { display: inline-block; animation: rise 1.1s var(--out) both; }
+  .w:nth-child(1) > * { animation-delay: 1.2s; }
+  .w:nth-child(2) > * { animation-delay: 1.3s; }
+  .w:nth-child(3) > * { animation-delay: 1.45s; }
+  @keyframes rise { from { transform: translateY(118%) rotate(4deg); } }
+  .lead { color: var(--mist); max-width: 34ch; text-shadow: 0 2px 14px rgba(4, 18, 16, .8); animation: fade-up 1s var(--out) 1.7s both; }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(14px); } }
+
+  /* ---------- scoreboard ---------- */
+  .board {
+    background: linear-gradient(180deg, #114636, var(--board));
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 14px 16px;
+    display: flex; flex-direction: column; gap: 12px;
+    box-shadow: 0 18px 40px rgba(2, 10, 8, .45), inset 0 1px 0 rgba(255, 255, 255, .08);
+  }
+  .board-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+  .board h2 { font: 700 20px/1.1 var(--score); letter-spacing: .08em; text-transform: uppercase; }
+  .live { display: inline-flex; align-items: center; gap: 7px; font: 600 13px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
+  .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--berry-lit); box-shadow: 0 0 10px var(--berry-lit); animation: bulb 1s ease-in-out infinite alternate; }
+  .cells { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .cell {
+    position: relative;
+    background: var(--cell); border-radius: 5px;
+    padding: 12px 4px 8px; text-align: center;
+    display: flex; flex-direction: column; gap: 3px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, .55), 0 1px 0 rgba(255, 255, 255, .06);
+  }
+  .num {
+    font: 700 clamp(42px, 13.6vw, 58px)/1 var(--score);
+    font-variant-numeric: tabular-nums; color: var(--ball);
+    filter: drop-shadow(0 0 9px rgba(220, 238, 78, .32));
+    display: flex; justify-content: center;
+  }
+  .slot { display: inline-grid; overflow: hidden; height: 1em; line-height: 1; }
+  .slot > span { grid-area: 1 / 1; }
+  .unit { font: 600 12px/1.2 var(--score); letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
+  .board-note { font-size: 14px; color: var(--mist); }
+  .board-note b { color: var(--snow); font-weight: 500; }
+
+  /* ---------- wish list ---------- */
+  .wishes { display: flex; flex-direction: column; gap: 14px; }
+  .wishes-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .wishes h2, .outro h2 { font: 800 32px/1.05 var(--display); letter-spacing: -.015em; text-wrap: balance; }
+  .count { font: 600 14px/1.2 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .wishes-note { font-size: 15px; color: var(--mist); max-width: 40ch; }
+  .wishes-foot { font-size: 13px; color: var(--mist); max-width: 44ch; }
+
+  .seg {
+    --i: 0;
+    position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 4px; border: 1px solid var(--line); border-radius: 999px;
+    background: rgba(6, 26, 21, .72);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .thumb {
+    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 4);
+    border-radius: 999px; background: var(--ball);
+    box-shadow: 0 4px 18px rgba(220, 238, 78, .28);
+    transform: translateX(calc(var(--i) * 100%));
+    transition: transform .55s var(--spring);
+  }
+  .seg button {
+    position: relative; z-index: 1;
+    font: 600 15px/1 var(--score); letter-spacing: .05em; text-transform: uppercase;
+    color: var(--snow); background: none; border: 0; border-radius: 999px;
+    min-height: 40px; padding: 0 2px; cursor: pointer;
+    transition: color .3s, transform .2s var(--out);
+  }
+  .seg button[aria-pressed="true"] { color: var(--ink); }
+  .seg button:active { transform: scale(.94); }
+  :focus-visible { outline: 2px solid var(--ball); outline-offset: 3px; }
+
+  .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .tool {
+    font: 600 15px/1 var(--score); letter-spacing: .08em; text-transform: uppercase;
+    min-height: 40px; padding: 0 16px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--snow); background: rgba(242, 247, 243, .08); border: 1px solid var(--line);
+    transition: transform .2s var(--out), background-color .2s;
+  }
+  .tool:active { transform: scale(.95); background: rgba(242, 247, 243, .16); }
+  .tool svg { width: 18px; height: 18px; }
+  .tool.quiet { background: none; border-color: transparent; color: var(--mist); padding: 0 6px; text-decoration: underline; text-underline-offset: 4px; }
+
+  .tags { display: flex; flex-direction: column; gap: 14px; }
+  .tags > li { position: relative; filter: drop-shadow(0 12px 16px rgba(2, 10, 8, .38)); }
+  .reveal { overflow: hidden; }
+  li.wrapped .reveal { height: 92px; }
+  li.wrapped .tag { visibility: hidden; }
+
+  /* wrapped present */
+  .wrap {
+    position: absolute; left: 0; right: 0; top: 0; height: 92px;
+    border: 0; padding: 0; background: none; cursor: pointer;
+    font: inherit; text-align: left; color: var(--snow);
+    border-radius: 14px;
+    transition: transform .2s var(--out);
+  }
+  .wrap:active { transform: scale(.985); }
+  .w0 { --p1: #c62a41; --p2: #a51c32; --rb: #f0c35a; --rb2: #c4912c;
+        --pat: radial-gradient(circle at 7px 7px, rgba(255, 255, 255, .24) 0 1.5px, transparent 2px) 0 0 / 14px 14px; }
+  .w1 { --p1: #1b6a4e; --p2: #0f4835; --rb: #f2f7f3; --rb2: #bfd2c8;
+        --pat: repeating-linear-gradient(45deg, rgba(240, 195, 90, .26) 0 2px, transparent 2px 12px); }
+  .w2 { --p1: #f6eedb; --p2: #e3d6b8; --rb: #cf2e45; --rb2: #9a1b30; color: var(--ink);
+        --pat: repeating-linear-gradient(-45deg, rgba(207, 46, 69, .22) 0 3px, transparent 3px 13px); }
+  .half {
+    position: absolute; inset: 0; border-radius: 14px;
+    background: var(--pat), linear-gradient(180deg, var(--p1), var(--p2));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), inset 0 -10px 18px rgba(0, 0, 0, .12);
+  }
+  .half.l { clip-path: polygon(0 0, 53.4% 0, 48.9% 22%, 53.9% 41%, 47.9% 62%, 52.4% 82%, 49.4% 100%, 0 100%); }
+  .half.r { clip-path: polygon(53% 0, 100% 0, 100% 100%, 49% 100%, 52% 82%, 47.5% 62%, 53.5% 41%, 48.5% 22%); }
+  .ribbon {
+    position: absolute; top: 0; bottom: 0; left: 38px; width: 18px;
+    background: linear-gradient(90deg, var(--rb2), var(--rb) 28%, var(--rb) 72%, var(--rb2));
+    box-shadow: 0 0 6px rgba(0, 0, 0, .18);
+  }
+  .bow { position: absolute; left: 13px; top: 50%; width: 68px; height: 46px; margin-top: -25px; filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .25)); }
+  .bow .b1 { fill: var(--rb); } .bow .b2 { fill: var(--rb2); }
+  .wrap-label { position: absolute; left: 92px; right: 66px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 3px; }
+  .wrap-no { font: 600 13px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+  .wrap-no b { font-weight: 700; }
+  .wrap-cat { font: 800 22px/1.1 var(--display); letter-spacing: -.01em; }
+  .wrap-ball { position: absolute; right: 16px; top: 50%; width: 38px; height: 38px; margin-top: -19px; border-radius: 50%; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); }
+  .wrap-ball svg { display: block; width: 100%; height: 100%; }
+  li.next .wrap-ball::after {
+    content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid var(--ball);
+    animation: pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
+  li.next .wrap-ball { animation: nudge 1.8s var(--spring) infinite; }
+  @keyframes nudge { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+  /* flying ball and paper shards */
+  .fxball { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; will-change: transform; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .35)); }
+  .fxball svg { display: block; width: 100%; height: 100%; }
+  .shard { position: absolute; left: 0; top: 0; will-change: transform; border-radius: 1.5px; }
+  .fxring { position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; }
+
+  /* opened gift tag */
+  .tag {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff, var(--snow) 60%, #e6efe9);
+    color: var(--ink);
+    padding: 14px 14px 14px 42px;
+    border-radius: 0 12px 12px 0;
+    clip-path: polygon(20px 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
+    -webkit-mask: radial-gradient(circle at 19px 50%, transparent 0 5px, #000 5.6px);
+    mask: radial-gradient(circle at 19px 50%, transparent 0 5px, #000 5.6px);
+    display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px 12px;
+  }
+  .tag::before { /* eyelet ring around the punched hole */
+    content: ""; position: absolute; left: 10px; top: 50%;
+    width: 18px; height: 18px; margin-top: -9px;
+    border: 3px solid var(--berry); border-radius: 50%;
+  }
+  .tag-main { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .tag-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+  .tag-cat { font: 700 13px/1.2 var(--score); letter-spacing: .14em; text-transform: uppercase; color: var(--berry); }
+  .ace {
+    font: 700 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase;
+    background: var(--ball); color: var(--ink);
+    padding: 4px 8px 4px 6px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .ace::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+  .tag h3 { font: 700 20px/1.15 var(--display); letter-spacing: -.005em; }
+  .tag-desc { font-size: 14px; line-height: 1.45; color: var(--ink-soft); }
+  .tag-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--tint); color: var(--ink);
+    display: grid; place-items: center;
+  }
+  .tag-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .tag-foot {
+    grid-column: 1 / -1;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+    padding-top: 8px; border-top: 1px dashed rgba(13, 42, 34, .22);
+  }
+  .price { font: 600 17px/1.2 var(--score); letter-spacing: .03em; font-variant-numeric: tabular-nums; }
+  .shop, .soon {
+    font: 600 15px/1 var(--score); letter-spacing: .08em; text-transform: uppercase;
+    border-radius: 999px; padding: 9px 14px; min-height: 36px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .shop { background: var(--berry); color: var(--snow); text-decoration: none; transition: transform .2s var(--out), background-color .2s; }
+  .shop:active { transform: scale(.95); background: var(--berry-deep); }
+  .shop:focus-visible { outline-color: var(--ink); }
+  .shop svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .soon { border: 1px dashed rgba(13, 42, 34, .4); color: var(--ink-soft); }
+
+  /* reveal on scroll: the class is only added by script, so content stays visible without it */
+  .rv { opacity: 0; transform: translateY(28px) scale(.97); }
+  .rv.in { opacity: 1; transform: none; transition: opacity .7s var(--out), transform .95s var(--out); }
+
+  /* cards morph between filter states */
+  ::view-transition-group(*) { animation-duration: .5s; animation-timing-function: var(--out); }
+  ::view-transition-old(*):only-child { animation: vt-out .22s ease-in both; }
+  ::view-transition-new(*):only-child { animation: vt-in .45s var(--out) .12s both; }
+  @keyframes vt-out { to { opacity: 0; transform: scale(.94); } }
+  @keyframes vt-in { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+
+  /* ---------- outro ---------- */
+  footer { view-transition-name: outro; }
+  .outro { margin-top: 10px; }
+  .outro h2 em { font-style: italic; color: var(--ball); }
+  .hill { display: block; width: 100%; height: auto; margin: 6px 0 -1px; }
+  .hill .back { fill: #2a5d50; }
+  .hill .trees { fill: #0c2c24; }
+  .hill .xmas { fill: #17604a; }
+  .hill .front { fill: var(--snow); }
+  .glow { animation: bulb 1.7s ease-in-out infinite alternate; }
+  .glow:nth-of-type(2n) { animation-delay: -.9s; }
+  .glow:nth-of-type(3n) { animation-delay: -1.4s; }
+  .bounce { animation: bounce .62s cubic-bezier(.3, .6, .5, 1) infinite alternate; }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+  .bounce-shadow { transform-box: fill-box; transform-origin: center; animation: shadow .62s cubic-bezier(.3, .6, .5, 1) infinite alternate; }
+  @keyframes shadow { from { transform: scale(1); opacity: .22; } to { transform: scale(.45); opacity: .08; } }
+  .drift { background: var(--snow); color: var(--ink-soft); font-size: 14px; padding-block: 4px 28px; }
+
+
+  /* ---------- golden ball hunt ---------- */
+  .gold-spot {
+    position: absolute; z-index: 2; width: 44px; height: 44px; margin: -22px 0 0 -22px;
+    border: 0; padding: 0; border-radius: 50%; background: transparent; cursor: pointer;
+  }
+  .gold-spot.tall { height: 37%; margin-top: 0; border-radius: 22px; }
+  .gold-spot:focus-visible, .gold-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .gold-btn {
+    border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%;
+    display: inline-grid; place-items: center; filter: drop-shadow(0 0 6px rgba(240, 195, 90, .75));
+  }
+  .gold-btn svg { width: 100%; height: 100%; display: block; }
+  .gold-sticker { width: 26px; height: 26px; margin-left: auto; animation: twinkle-gold 2.6s ease-in-out infinite; }
+  .gold-sky { position: absolute; z-index: 2; left: 14%; top: 16%; width: 30px; height: 30px; }
+  @keyframes twinkle-gold { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(16deg) scale(1.12); } }
+  .spark { transform-box: fill-box; transform-origin: center; opacity: 0; animation: spark 2.8s ease-in-out infinite; }
+  @keyframes spark {
+    0%, 60%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); }
+    72% { opacity: 1; transform: scale(1) rotate(45deg); }
+    84% { opacity: 0; transform: scale(.4) rotate(90deg); }
+  }
+  .g-hide.taken { display: none; }
+  .g-swap.taken .gfill { fill: var(--ball); }
+  .g-swap.taken .spark, .g-swap.taken .g-glow { display: none; }
+  .hill-wrap { position: relative; }
+
+  .fall-gold {
+    position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; padding: 8px;
+    border: 0; border-radius: 50%; background: none; cursor: pointer; pointer-events: auto;
+    filter: drop-shadow(0 0 10px rgba(240, 195, 90, .9));
+  }
+  .fall-gold svg { display: block; width: 100%; height: 100%; }
+  .fxgold { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; will-change: transform; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .9)); }
+  .fxgold svg { display: block; width: 100%; height: 100%; }
+
+  .hunt-badge {
+    position: fixed; z-index: 7;
+    top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px));
+    display: inline-flex; align-items: center; gap: 7px; min-height: 42px; padding: 0 14px 0 8px;
+    border-radius: 999px; border: 1px solid rgba(240, 195, 90, .5);
+    background: rgba(4, 18, 16, .74); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    color: var(--snow); font: 700 18px/1 var(--score); letter-spacing: .04em; font-variant-numeric: tabular-nums;
+    cursor: pointer; box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
+    animation: fade 1s ease-out 3.4s both;
+  }
+  .hunt-badge svg { width: 26px; height: 26px; }
+  .hunt-badge .of { color: var(--mist); font-weight: 500; }
+  .hunt-badge.has-coupon { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(240, 195, 90, .18), 0 8px 22px rgba(0, 0, 0, .35); }
+
+  .hunt-intro {
+    position: relative; width: 100%; text-align: left; cursor: pointer;
+    display: grid; grid-template-columns: 52px minmax(0, 1fr) 18px; align-items: center; gap: 12px;
+    padding: 14px 14px 14px 12px; border-radius: 14px;
+    border: 1px dashed rgba(240, 195, 90, .65);
+    background: linear-gradient(135deg, rgba(240, 195, 90, .16), rgba(240, 195, 90, .04));
+    color: var(--snow); font: inherit;
+    transition: transform .2s var(--out);
+  }
+  .hunt-intro:active { transform: scale(.98); }
+  .hunt-intro .ico { position: relative; width: 52px; height: 52px; }
+  .hunt-intro .ico svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; }
+  .hunt-intro strong { display: block; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; }
+  .hunt-intro .sub { display: block; margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--mist); }
+  .hunt-intro .chev { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  button.live { position: relative; background: none; border: 0; padding: 6px 0 6px 6px; min-height: 32px; cursor: pointer; }
+  .live i { position: relative; }
+  .live.has-gold i { animation: bulb 1s ease-in-out infinite alternate, goldflash 7s ease-in-out 2s infinite; }
+  @keyframes goldflash {
+    0%, 80%, 100% { background: var(--berry-lit); box-shadow: 0 0 10px var(--berry-lit); transform: scale(1); }
+    84%, 93% { background: radial-gradient(circle at 35% 30%, #fff4c7, #f5cc5e 50%, #b07f22); box-shadow: 0 0 16px 3px rgba(240, 195, 90, .9); transform: scale(2.1); }
+  }
+  .live.has-gold::after {
+    content: ""; position: absolute; left: -2px; top: -1px; width: 11px; height: 11px; pointer-events: none;
+    background: #fff; opacity: 0;
+    clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+    animation: livespark 7s ease-in-out 2s infinite;
+  }
+  @keyframes livespark {
+    0%, 82%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); }
+    88% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+    95% { opacity: 0; transform: scale(.4) rotate(90deg); }
+  }
+  .live.has-gold { animation: livetext 7s ease-in-out 2s infinite; }
+  @keyframes livetext { 0%, 82%, 100% { color: var(--mist); } 87%, 93% { color: var(--gold); } }
+
+  /* golden ball 7: the "o" in the closing line is a tiny tennis ball */
+  .g-letter { position: relative; }
+  .g-letter .o-plain { display: none; }
+  .g-letter.taken .o-plain { display: inline; }
+  .gold-letter {
+    position: relative; display: inline-block; width: .6em; height: .6em; margin: 0 .02em; vertical-align: -.02em;
+    border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%;
+  }
+  .gold-letter svg { display: block; width: 100%; height: 100%; }
+  .gold-letter::after { content: ""; position: absolute; inset: -16px; border-radius: 50%; }
+  .spark.slow { animation-duration: 11s; }
+
+  .toast {
+    position: fixed; z-index: 10; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+    transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px);
+    padding: 12px 18px; border-radius: 999px; text-align: center;
+    background: #fff6d6; color: var(--ink); font: 600 15px/1.3 var(--body);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .4);
+  }
+
+  .sheet-back { position: fixed; inset: 0; z-index: 8; background: rgba(2, 9, 7, .6); }
+  .sheet {
+    position: fixed; z-index: 8; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: 460px;
+    max-height: calc(100% - env(safe-area-inset-top, 0px) - 24px); overflow-y: auto; overscroll-behavior: contain;
+    background: linear-gradient(180deg, #11402f, #0a2a21 40%);
+    border: 1px solid var(--line); border-bottom: 0; border-radius: 22px 22px 0 0;
+    padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
+    padding-block: 10px calc(env(safe-area-inset-bottom, 0px) + 22px);
+    display: flex; flex-direction: column; gap: 16px;
+    box-shadow: 0 -20px 50px rgba(0, 0, 0, .5);
+  }
+  .sheet-grip { width: 40px; height: 4px; border-radius: 4px; background: rgba(242, 247, 243, .3); margin: 0 auto; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .sheet-head h2 { font: 800 26px/1.1 var(--display); letter-spacing: -.01em; }
+  .x {
+    width: 40px; height: 40px; flex: none; border-radius: 50%; cursor: pointer;
+    border: 1px solid var(--line); background: rgba(242, 247, 243, .06); color: var(--snow);
+    display: grid; place-items: center;
+  }
+  .x svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .slots { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .slot-b { aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; border: 1.5px dashed rgba(242, 247, 243, .3); color: var(--mist); font: 600 14px/1 var(--score); }
+  .slot-b.on { border: 0; filter: drop-shadow(0 0 8px rgba(240, 195, 90, .6)); }
+  .slot-b svg { width: 100%; height: 100%; }
+  .slot-b.mark { border-color: var(--gold); }
+  .sheet-status { font-size: 15px; color: var(--mist); }
+  .sheet-status b { color: var(--snow); font-weight: 600; }
+  .hint-row { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hint-note { font-size: 13px; color: var(--mist); }
+  .hint-text {
+    padding: 10px 14px; border-radius: 12px; font-size: 15px; line-height: 1.4;
+    background: rgba(240, 195, 90, .12); border: 1px solid rgba(240, 195, 90, .35); color: var(--snow);
+  }
+  .locked-coupon {
+    border-radius: 14px; border: 1.5px dashed rgba(242, 247, 243, .25); padding: 16px;
+    display: flex; flex-direction: column; gap: 4px; color: var(--mist); font-size: 14px;
+  }
+  .locked-coupon strong { color: var(--snow); font: 700 17px/1.2 var(--score); letter-spacing: .08em; text-transform: uppercase; }
+  .name-form { display: flex; flex-direction: column; gap: 8px; }
+  .name-form label, .pin-form label { font: 600 13px/1.2 var(--score); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .name-form p { font-size: 15px; color: var(--snow); }
+  .field-row { display: flex; gap: 8px; }
+  .field {
+    flex: 1; min-width: 0; min-height: 48px; padding: 0 14px; border-radius: 12px;
+    border: 1px solid rgba(242, 247, 243, .3); background: rgba(2, 10, 8, .5); color: var(--snow);
+    font: 500 17px/1 var(--body);
+  }
+  .field:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: transparent; }
+  .cta {
+    min-height: 48px; padding: 0 18px; border: 0; border-radius: 12px; cursor: pointer; flex: none;
+    background: var(--gold); color: var(--ink); font: 700 16px/1 var(--score); letter-spacing: .08em; text-transform: uppercase;
+    transition: transform .2s var(--out);
+  }
+  .cta:active { transform: scale(.96); }
+
+  .shot-tip {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px;
+    background: var(--gold); color: var(--ink); font: 700 16px/1.25 var(--score); letter-spacing: .06em; text-transform: uppercase;
+  }
+  .shot-tip svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+  .coupon {
+    --c1: #ffffff; --c2: #d6e0e4; --c3: #7f9198; --rib: #c62a41; --rib2: #931a2e; --bw1: #ffffff; --bw2: #c9d4d8;
+    position: relative; align-self: center; width: min(100%, 330px); overflow: hidden; isolation: isolate;
+    border-radius: 18px; padding: 0 18px 16px; color: var(--ink); text-align: center;
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><g fill='none' stroke='%230d2a22' stroke-opacity='.1' stroke-width='1.2' stroke-linecap='round'><path d='M20 10v16M13 14l14 8M13 22l14-8'/><path d='M86 46v12M81 49l10 6M81 55l10-6'/><path d='M46 88v14M40 91l12 7M40 98l12-7'/><path d='M106 98v8M102 100l8 4M102 104l8-4'/><circle cx='66' cy='18' r='1.4'/><circle cx='14' cy='70' r='1.2'/><circle cx='100' cy='12' r='1'/></g></svg>") 0 0 / 120px 120px,
+      radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .85), transparent 62%),
+      linear-gradient(160deg, var(--c1), var(--c2));
+    -webkit-mask: radial-gradient(circle at 0 64%, transparent 0 11px, #000 11.5px) left / 51% 100% no-repeat,
+                  radial-gradient(circle at 100% 64%, transparent 0 11px, #000 11.5px) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle at 0 64%, transparent 0 11px, #000 11.5px) left / 51% 100% no-repeat,
+          radial-gradient(circle at 100% 64%, transparent 0 11px, #000 11.5px) right / 51% 100% no-repeat;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .coupon.z { --c1: #fff8dc; --c2: #e9bd5f; --c3: #9c7120; --bw1: #f6d27a; --bw2: #c4912c; }
+  /* stitched inner edge, below the ribbon */
+  .coupon::after {
+    content: ""; position: absolute; inset: 46px 8px 8px; border-radius: 0 0 12px 12px; pointer-events: none;
+    border: 1.5px dashed var(--c3); border-top: 0; opacity: .5;
+  }
+  /* a slow sheen sweeping across the paper; it passes under the QR code */
+  .coupon::before {
+    content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: -70%; width: 45%; pointer-events: none;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .75), transparent);
+    transform: skewX(-18deg); animation: sheen 5s ease-in-out 1.2s infinite;
+  }
+  @keyframes sheen { 0% { left: -70%; } 38%, 100% { left: 135%; } }
+  .c-ribbon {
+    position: relative; align-self: stretch; margin: 0 -18px 4px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, var(--rib), var(--rib2));
+    box-shadow: 0 3px 8px rgba(13, 42, 34, .18);
+  }
+  .c-ribbon::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 5px; bottom: 5px;
+    border-block: 1.5px dashed rgba(255, 255, 255, .45);
+  }
+  .coupon-tier { position: relative; color: #fff; font: 700 16px/1 var(--score); letter-spacing: .22em; text-transform: uppercase; text-shadow: 0 1px 0 rgba(0, 0, 0, .25); }
+  .c-bow { position: absolute; left: 6px; top: 1px; width: 62px; height: 44px; filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .3)); }
+  .c-bow .b1 { fill: var(--bw1); } .c-bow .b2 { fill: var(--bw2); }
+  .c-holly { position: absolute; right: 4px; top: 0; width: 58px; height: 44px; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .25)); }
+  .coupon-for { margin-top: 6px; font: 600 12px/1 var(--score); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+  .coupon-name { font: 900 34px/1.05 var(--display); letter-spacing: -.02em; overflow-wrap: anywhere; }
+  .coupon-qr {
+    position: relative; z-index: 1; margin: 8px 0 4px; padding: 8px; border-radius: 16px; background: #fff; line-height: 0;
+    outline: 2px dashed var(--rib); outline-offset: 5px; box-shadow: 0 4px 14px rgba(13, 42, 34, .16);
+  }
+  .coupon-qr canvas { display: block; }
+  .coupon-text { margin-top: 6px; font-size: 13px; line-height: 1.4; color: var(--ink-soft); max-width: 30ch; }
+  .coupon-foot { align-self: stretch; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 2px; text-align: left; }
+  .coupon-meta { display: flex; flex-direction: column; gap: 5px; padding-bottom: 4px; }
+  .coupon-no { font: 700 14px/1 var(--score); letter-spacing: .1em; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .coupon-date { font: 600 12px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+  .c-stamp { width: 78px; height: 78px; flex: none; margin: -12px -6px -8px 0; color: var(--rib2); opacity: .82; transform: rotate(-14deg); mix-blend-mode: multiply; }
+  .sheet-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; }
+
+  .unlock {
+    position: fixed; inset: 0; z-index: 9; overflow-y: auto;
+    background: radial-gradient(ellipse at 50% 18%, rgba(240, 195, 90, .2), transparent 60%) var(--night-deep);
+    padding-block: calc(env(safe-area-inset-top, 0px) + 28px) calc(env(safe-area-inset-bottom, 0px) + 28px);
+  }
+  .unlock-inner {
+    max-width: 420px; min-height: 100%; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center;
+  }
+  .unlock h2 { font: 900 clamp(38px, 12vw, 52px)/1 var(--display); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: anywhere; }
+  .unlock-sub { color: var(--mist); max-width: 32ch; }
+  .unlock-body { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 8px; }
+  .pin-form { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 8px; }
+  .pin-form .field { text-align: center; font: 700 28px/1 var(--score); letter-spacing: .5em; padding-left: calc(14px + .5em); }
+  .pin-err { min-height: 1.4em; color: #ffb3bd; font-size: 14px; }
+  .owner-note { color: var(--gold); font: 600 14px/1.3 var(--score); letter-spacing: .12em; text-transform: uppercase; }
+  .big-gift {
+    position: relative; width: min(260px, 78vw); height: 180px; margin-top: 40px;
+    border: 0; padding: 0; background: none; cursor: pointer; border-radius: 16px;
+    filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .45));
+    animation: wobble 2.6s ease-in-out infinite;
+  }
+  @keyframes wobble { 0%, 70%, 100% { transform: rotate(0); } 76% { transform: rotate(-4deg); } 82% { transform: rotate(4deg); } 88% { transform: rotate(-2deg); } }
+  .big-gift .half { border-radius: 16px; }
+  .big-gift .ribbon { left: calc(50% - 12px); width: 24px; }
+  .big-gift .ribbon-h {
+    position: absolute; left: 0; right: 0; top: calc(50% - 12px); height: 24px;
+    background: linear-gradient(180deg, var(--rb2), var(--rb) 28%, var(--rb) 72%, var(--rb2));
+  }
+  .big-gift .bow { left: 50%; top: -40px; margin: 0 0 0 -54px; width: 108px; height: 74px; }
+  .tap-label { font: 600 14px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
+  .reward {
+    width: 100%; max-width: 340px; border-radius: 18px; padding: 22px 20px; text-align: center;
+    background: linear-gradient(160deg, #fffaf0, #f3dfae); color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+  }
+  .reward.s { background: linear-gradient(160deg, #ffffff, #d9e2e5); }
+  .reward-chip { font: 700 13px/1 var(--score); letter-spacing: .16em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px; background: var(--ink); color: var(--snow); }
+  .reward h3 { font: 900 28px/1.1 var(--display); letter-spacing: -.015em; text-wrap: balance; }
+  .reward p { font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
+  .unlock-close { margin-top: 10px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .par-moon, .par-far, .par-team { transform: none; }
+    .ring { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<svg class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="fb" cx=".36" cy=".3" r=".8">
+      <stop offset="0" stop-color="#fbffa6"/><stop offset=".5" stop-color="#dcee4e"/><stop offset="1" stop-color="#9db528"/>
+    </radialGradient>
+    <radialGradient id="goldGrad" cx=".35" cy=".3" r=".8">
+      <stop offset="0" stop-color="#fff4c7"/><stop offset=".45" stop-color="#f5cc5e"/><stop offset="1" stop-color="#b07f22"/>
+    </radialGradient>
+    <radialGradient id="goldGlow">
+      <stop offset="0" stop-color="#f0c35a" stop-opacity=".85"/><stop offset="1" stop-color="#f0c35a" stop-opacity="0"/>
+    </radialGradient>
+    <symbol id="gball" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="19" fill="url(#goldGrad)"/>
+      <path d="M5.5 8.5C14.5 14 14.5 26 5.5 31.5M34.5 8.5C25.5 14 25.5 26 34.5 31.5" fill="none" stroke="#fffbe8" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M13 9.5C15.5 7.2 18.5 6.4 21.5 6.6" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="ball" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="19" fill="url(#fb)"/>
+      <path d="M5.5 8.5C14.5 14 14.5 26 5.5 31.5M34.5 8.5C25.5 14 25.5 26 34.5 31.5" fill="none" stroke="#fbfdf0" stroke-width="2.6" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<canvas id="snow" aria-hidden="true"></canvas>
+<div class="grain" id="grain" aria-hidden="true"></div>
+<div id="fx" aria-hidden="true"></div>
+<button type="button" class="hunt-badge" id="hunt-badge" aria-label="Złote piłki: postęp i kupon"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg><span id="hunt-count">0</span><span class="of">/7</span></button>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="sheet-back" id="sheet-back" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="sheet-title">Złote piłki Mikołaja</h2>
+    <button type="button" class="x" id="sheet-close" aria-label="Zamknij"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13"/></svg></button>
+  </div>
+  <div class="slots" id="slots" aria-hidden="true"></div>
+  <p class="sheet-status" id="sheet-status"></p>
+  <div class="hint-row" id="hint-row">
+    <button type="button" class="tool" id="hint-btn">Podpowiedź</button>
+    <p class="hint-note" id="hint-note"></p>
+    <p class="hint-text" id="hint-text" hidden></p>
+  </div>
+  <div id="coupon-area" style="display:flex;flex-direction:column;gap:12px"></div>
+  <div class="sheet-links">
+    <button type="button" class="tool quiet" id="rename" hidden>Zmień imię</button>
+    <button type="button" class="tool quiet" id="hunt-reset">Zacznij zabawę od nowa</button>
+  </div>
+</section>
+<section class="unlock" id="unlock" aria-labelledby="unlock-title" hidden>
+  <div class="unlock-inner gutter">
+    <p class="eyebrow" id="unlock-eyebrow">Kupon od Mikołaja</p>
+    <h2 id="unlock-title"></h2>
+    <p class="unlock-sub" id="unlock-sub"></p>
+    <div class="unlock-body" id="unlock-body"></div>
+    <button type="button" class="tool quiet unlock-close" id="unlock-close">Wróć do listy prezentów</button>
+  </div>
+</section>
+
+<main class="page">
+
+  <header class="hero">
+    <div class="scene-wrap">
+      <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+      <svg class="scene" id="scene" viewBox="0 0 390 520" role="img" aria-label="Zaśnieżony kort tenisowy nocą na Biegunie Północnym. Nad lasem wschodzi księżyc w kształcie piłki tenisowej, a na jego tle lecą sanie Świętego Mikołaja z rakietą w dłoni, ciągnięte przez trzy renifery. Pierwszy z nich ma świecący czerwony nos. Siatka kortu jest ozdobiona lampkami.">
+        <defs>
+          <radialGradient id="halo">
+            <stop offset="0" stop-color="#dcee4e" stop-opacity=".5"/>
+            <stop offset=".4" stop-color="#bfe05a" stop-opacity=".2"/>
+            <stop offset=".72" stop-color="#58c08a" stop-opacity=".07"/>
+            <stop offset="1" stop-color="#58c08a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="ballGrad" cx=".36" cy=".3" r=".82">
+            <stop offset="0" stop-color="#fbffa6"/>
+            <stop offset=".34" stop-color="#e8f65f"/>
+            <stop offset=".72" stop-color="#c3d93a"/>
+            <stop offset="1" stop-color="#8fa823"/>
+          </radialGradient>
+          <radialGradient id="ballShade" cx=".32" cy=".28" r=".95">
+            <stop offset=".5" stop-color="#1b3206" stop-opacity="0"/>
+            <stop offset="1" stop-color="#1b3206" stop-opacity=".55"/>
+          </radialGradient>
+          <radialGradient id="noseGlow">
+            <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
+            <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="lampGlow">
+            <stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/>
+            <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="reflect">
+            <stop offset="0" stop-color="#dcee4e" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#dcee4e" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="hillGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7ba598"/>
+            <stop offset=".5" stop-color="#3d6c5f"/>
+            <stop offset="1" stop-color="#1d443a"/>
+          </linearGradient>
+          <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#6a968a"/>
+            <stop offset="1" stop-color="#2a5248"/>
+          </linearGradient>
+          <linearGradient id="courtGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#17604b"/>
+            <stop offset="1" stop-color="#0a2c24"/>
+          </linearGradient>
+          <linearGradient id="bankGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#eef6f2"/>
+            <stop offset="1" stop-color="#9dc0b4"/>
+          </linearGradient>
+          <filter id="felt" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="11" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 .16  0 0 0 0 .24  0 0 0 0 .02  1.9 0 0 0 -.72" result="c"/>
+            <feComposite in="c" in2="SourceGraphic" operator="in"/>
+          </filter>
+          <!-- drifted snow patches, stretched sideways to sit in the court's perspective -->
+          <filter id="snowdrift" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency=".014 .055" numOctaves="3" seed="23" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 .93  0 0 0 0 .97  0 0 0 0 .95  3.6 0 0 0 -1.62" result="c"/>
+            <feComposite in="c" in2="SourceGraphic" operator="in"/>
+          </filter>
+          <filter id="snowspeck" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="1" seed="5" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  7 0 0 0 -4.5" result="c"/>
+            <feComposite in="c" in2="SourceGraphic" operator="in"/>
+          </filter>
+          <clipPath id="moon-clip"><circle cx="195" cy="165" r="92"/></clipPath>
+          <linearGradient id="driftFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff"/>
+            <stop offset=".42" stop-color="#fff"/>
+            <stop offset=".8" stop-color="#3a3a3a"/>
+          </linearGradient>
+          <mask id="driftMask"><rect x="-10" y="338" width="410" height="190" fill="url(#driftFade)"/></mask>
+          <clipPath id="court-clip"><path d="M60.5 345H329.5L472 520H-82Z"/></clipPath>
+          <pattern id="mesh" width="5" height="5" patternUnits="userSpaceOnUse">
+            <path d="M0 0 5 5M5 0 0 5" stroke="#f2f7f3" stroke-opacity=".42" stroke-width=".55"/>
+          </pattern>
+        </defs>
+
+        <g class="stars" id="stars"></g>
+
+        <g class="par-moon">
+          <g class="moon-rise">
+            <circle class="halo" cx="195" cy="165" r="236" fill="url(#halo)"/>
+            <circle class="ring" cx="195" cy="165" r="92"/>
+            <g class="moon-body" id="moon">
+              <circle cx="195" cy="165" r="92" fill="url(#ballGrad)"/>
+              <g clip-path="url(#moon-clip)">
+                <path class="seam-shadow" id="seam-shadow" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
+                <path class="seam" id="seam" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
+              </g>
+              <circle cx="195" cy="165" r="92" fill="#000" filter="url(#felt)" opacity=".5"/>
+              <circle cx="195" cy="165" r="92" fill="url(#ballShade)"/>
+              <circle cx="195" cy="165" r="91.5" fill="none" stroke="#fdffd0" stroke-opacity=".45" stroke-width="1"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- sleigh team: built here, deer added by script so each one gallops on its own beat -->
+        <g transform="translate(74 206) rotate(-13) scale(.6)">
+          <g class="par-team"><g class="team-in"><g class="team-drift" id="team">
+            <g class="dust" id="dust"></g>
+            <path class="sl" stroke-width="1.1" d="M112 31Q160 48 207 37M207 37Q250 50 289 37M289 37Q332 50 371 37"/>
+            <g class="bob">
+              <path class="sl" stroke-width="2.8" d="M2 67C-1 70 0 74 5 74H92C110 74 119 62 114 53 110 47 102 48 102 54 102 58 106 59 108 56"/>
+              <path class="sl" stroke-width="2.3" d="M32 60C32 66 28 70 25 74M82 60C82 66 86 70 89 74"/>
+              <!-- gift and sack full of balls -->
+              <rect class="sf" x="7" y="24" width="15" height="14" transform="rotate(-10 14 31)"/>
+              <path class="sl" stroke-width="1.6" d="M12 23C8 18 13 16 14.5 22 17 16 22 19 17.5 23"/>
+              <path class="sf" d="M20 52C12 36 15 19 23 15L45 15C52 21 54 36 51 52Z"/>
+              <circle class="sf" cx="26.5" cy="11.5" r="5.3"/>
+              <circle class="sf" cx="36.5" cy="7.5" r="5.3"/>
+              <circle class="sf" cx="44.5" cy="13.5" r="4.8"/>
+              <rect class="sf" x="40" y="38" width="32" height="14"/>
+              <!-- Santa in profile -->
+              <ellipse class="sf" cx="66" cy="38" rx="12" ry="14.5"/>
+              <circle class="sf" cx="71.5" cy="19.5" r="6"/>
+              <circle class="sf" cx="78.4" cy="19.3" r="1.7"/>
+              <path class="sf" d="M65.8 20 78 20.6C81 25.5 79.5 32.5 74.5 36 69.5 35 66.4 30 65.8 24Z"/>
+              <path class="sf" d="M63.8 17.2 78.6 14.3C78.3 7 73 1.8 67.5 2.7 61 3.8 56.5 8 55 13.2L58.6 15C60 11.6 62.3 10.5 64.5 11.6Z"/>
+              <path class="sl" stroke-width="3.9" d="M63.6 17.3 79.2 14.3"/>
+              <circle class="sf" cx="54.7" cy="14.6" r="3.5"/>
+              <g id="arm">
+                <path class="sl" stroke-width="5.2" d="M69 31.5 83 23.5"/>
+                <circle class="sf" cx="84" cy="22.7" r="3.2"/>
+                <path class="sl" stroke-width="2.2" d="M84.2 22.3 90.5 13.3"/>
+                <g id="racket">
+                  <ellipse class="sl" stroke-width="1.9" cx="95.5" cy="5.5" rx="5.9" ry="8.3" transform="rotate(35 95.5 5.5)"/>
+                  <path class="sl" stroke-width=".55" d="M91.5 .5 100.5 8.5M90.3 5 98.3 12M95 -2 101.3 4M98.5 -.8 91.5 10M101.3 2.7 95 11.8M95 -1.5 89.8 6.5"/>
+                </g>
+              </g>
+              <!-- hull with scrolls -->
+              <path class="sf" d="M10 22C4 22 2 14 8 11 14 8 20 12 21 20 24 36 30 46 44 48H84C94 48 100 42 102 32 103 26 108 24 112 26 116 28 115 34 110 34 108 44 104 60 88 60H36C18 60 10 44 10 22Z"/>
+              <path d="M13 32C15 47 23 57 37 58H88C99 58 104 49 107 39" fill="none" stroke="#dcee4e" stroke-opacity=".34" stroke-width="1.1" stroke-linecap="round"/>
+              <!-- lantern -->
+              <path class="sl" stroke-width="1.5" d="M111 27C112 17 118 13 124 16.5"/>
+              <g class="lantern">
+                <path class="sl" stroke-width=".9" d="M124 16.5V20"/>
+                <circle cx="124" cy="25.5" r="13" fill="url(#lampGlow)"/>
+                <rect class="sf" x="120.8" y="19.8" width="6.4" height="2.2" rx=".8"/>
+                <rect x="121.4" y="22" width="5.2" height="7" rx="1" fill="#ffe2a0"/>
+                <rect class="sf" x="120.8" y="29" width="6.4" height="1.9" rx=".8"/>
+              </g>
+            </g>
+          </g></g></g>
+        </g>
+
+        <g class="par-far">
+          <path class="pines-far" id="pines-far" d=""/>
+          <path d="M-10 338C40 312 96 322 150 318S262 306 300 314 370 316 400 326V356H-10Z" fill="url(#hillGrad)"/>
+          <path d="M-10 338C40 312 96 322 150 318S262 306 300 314 370 316 400 326" fill="none" stroke="#eef8f3" stroke-opacity=".7" stroke-width="1.6"/>
+        </g>
+
+        <!-- snowy ground, the court in perspective, snow lying on it -->
+        <rect x="-10" y="338" width="410" height="190" fill="url(#groundGrad)"/>
+        <path d="M60.5 345H329.5L472 520H-82Z" fill="url(#courtGrad)"/>
+        <ellipse cx="195" cy="446" rx="170" ry="60" fill="url(#reflect)"/>
+        <path class="court-line" stroke-width="1.3" d="M60.5 345H329.5"/>
+        <path class="court-line" stroke-width="1.5" d="M79 370H311"/>
+        <path class="court-line" stroke-width="1.9" d="M60.5 345 -82 520M329.5 345 472 520M94.1 345 -13 520M295.9 345 403 520M195 370V472"/>
+        <path class="court-line" stroke-width="2.8" d="M16.4 472H373.6"/>
+        <g clip-path="url(#court-clip)"><g mask="url(#driftMask)">
+          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowdrift)" opacity=".82"/>
+          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".32"/>
+        </g></g>
+        <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".18" mask="url(#driftMask)"/>
+        <!-- snow banks swept to the edges -->
+        <path d="M-10 340 58 344C52 356 41 365 37 378 30 393 15 404 10 421 4 441-6 452-10 471Z" fill="url(#bankGrad)" opacity=".92"/>
+        <path d="M400 340 332 344C338 356 349 365 353 378 360 393 375 404 380 421 386 441 396 452 400 471Z" fill="url(#bankGrad)" opacity=".92"/>
+        <path d="M54 348C100 341 140 345 195 343S300 341 336 348L331 350.5C280 347 240 350 195 349S100 348 59 350.5Z" fill="#eef6f2" opacity=".9"/>
+        <!-- balls left in the snow -->
+        <ellipse cx="120" cy="431" rx="9" ry="2.6" fill="#eef6f2" opacity=".85"/>
+        <circle cx="120" cy="425.5" r="5" fill="#dcee4e"/>
+        <path d="M115.3 424.5A5 5 0 0 1 124.7 424.5C122 422.6 118 422.6 115.3 424.5Z" fill="#fff"/>
+        <ellipse cx="287" cy="458" rx="11" ry="3" fill="#eef6f2" opacity=".85"/>
+        <circle cx="287" cy="451.5" r="6.2" fill="#dcee4e"/>
+        <path d="M281.2 450.2A6.2 6.2 0 0 1 292.8 450.2C289.5 447.9 284.5 447.9 281.2 450.2Z" fill="#fff"/>
+
+        <path class="pines-near" id="pines-near" d=""/>
+        <path class="pine-snow" id="pines-near-snow" stroke-width="1.5" d=""/>
+        <ellipse cx="18" cy="359" rx="54" ry="7" fill="#dcebe4"/>
+        <ellipse cx="372" cy="359" rx="54" ry="7" fill="#dcebe4"/>
+        <!-- golden ball 2: half buried at the back corner of the court -->
+        <g class="g-hide" data-gold="g2">
+          <circle cx="70" cy="349.6" r="4.2" fill="url(#goldGrad)"/>
+          <path d="M66.2 347.6C67.6 348.8 67.9 350.4 67.4 351.8M73.8 347.6C72.4 348.8 72.1 350.4 72.6 351.8" fill="none" stroke="#fffbe8" stroke-width=".9" stroke-linecap="round"/>
+          <ellipse cx="70" cy="352.4" rx="10" ry="3.8" fill="#eef6f2"/>
+          <path class="spark slow" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
+        </g>
+
+        <!-- net with lights and snow on the tape -->
+        <path d="M4 372Q195 382 386 372V410H4Z" fill="#04120f" fill-opacity=".34"/>
+        <path d="M4 372Q195 382 386 372V410H4Z" fill="url(#mesh)"/>
+        <path d="M2 411C60 407.5 130 409.5 195 408.5S330 407.5 388 411L388 413H2Z" fill="#eef6f2" opacity=".9"/>
+        <path d="M195 377V410" stroke="#f2f7f3" stroke-width="2.2"/>
+        <rect x="1" y="367" width="5" height="45" rx="1.5" fill="#b7cdc3"/>
+        <rect x="384" y="367" width="5" height="45" rx="1.5" fill="#b7cdc3"/>
+        <path class="net-tape" d="M4 372Q195 382 386 372"/>
+        <path d="M5 369.8Q195 379.8 385 369.8" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="11 7 18 6 7 8 22 7 13 9 9 6"/>
+        <ellipse cx="3.5" cy="366.5" rx="5" ry="2.8" fill="#fff"/>
+        <ellipse cx="386.5" cy="366.5" rx="5" ry="2.8" fill="#fff"/>
+        <g id="bulbs"></g>
+      </svg>
+      <button type="button" class="serve" id="serve" aria-label="Zaserwuj piłki z księżyca"></button>
+      <button type="button" class="gold-spot" data-g="g1" style="left:70.4%;top:73.58%" aria-label="Złota lampka na siatce"></button>
+      <button type="button" class="gold-spot" data-g="g2" style="left:17.95%;top:67.1%" aria-label="Coś błyszczy w śniegu"></button>
+      <span class="hint" id="hint" aria-hidden="true">Stuknij w księżyc</span>
+    </div>
+
+    <div class="hero-copy layer gutter">
+      <p class="eyebrow">Kort centralny · Biegun Północny</p>
+      <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
+      <p class="lead">List do Świętego Mikołaja od Huberta, który w tym roku był bardzo grzeczny. Przynajmniej takie krążą plotki.</p>
+    </div>
+  </header>
+
+  <div class="layer gutter">
+    <button type="button" class="hunt-intro" id="hunt-intro">
+      <span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
+      <span><strong>Mikołaj zgubił 7 złotych piłek</strong>
+      <span class="sub" id="hunt-sub">Są ukryte na tej stronie. Znajdź 3, a dostaniesz srebrny kupon na prezent. Znajdź wszystkie, a złoty.</span></span>
+      <svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg>
+    </button>
+  </div>
+
+  <div class="layer gutter">
+    <section class="board" data-rv aria-labelledby="board-title">
+      <div class="board-head">
+        <h2 id="board-title">Do Wigilii zostało</h2>
+        <button type="button" class="live" id="live"><i></i>Na żywo</button>
+      </div>
+      <div class="cells" aria-hidden="true">
+        <div class="cell"><span class="num" id="cd-d"></span><span class="unit" id="cd-d-unit">dni</span></div>
+        <div class="cell"><span class="num" id="cd-h"></span><span class="unit">godz.</span></div>
+        <div class="cell"><span class="num" id="cd-m"></span><span class="unit">min</span></div>
+        <div class="cell"><span class="num" id="cd-s"></span><span class="unit">sek.</span></div>
+      </div>
+      <p class="sr" role="timer" id="cd-sr"></p>
+      <p class="board-note" id="cd-note"><b>Czas do Świąt leci szybko jak mój serwis.</b> Tyle że Mikołaj zawsze trafia idealnie, a mój serwis… różnie bywa.</p>
+    </section>
+  </div>
+
+  <section class="wishes layer gutter" aria-labelledby="wishes-title">
+    <div class="wishes-head" data-rv>
+      <h2 id="wishes-title">Lista życzeń</h2>
+      <p class="count" id="count" aria-live="polite"></p>
+    </div>
+    <p class="wishes-note" data-rv>Każdy prezent jest zapakowany. Stuknij w paczkę, a piłka tenisowa ją rozpakuje.</p>
+    <div class="seg" id="seg" data-rv role="group" aria-label="Filtruj prezenty"></div>
+    <div class="tools" data-rv>
+      <button type="button" class="tool" id="open-all"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>Odpakuj wszystkie</button>
+      <button type="button" class="tool quiet" id="rewrap" hidden>Zapakuj od nowa</button>
+    </div>
+    <ul class="tags" id="gift-list"></ul>
+    <p class="wishes-foot">Na razie to przykładowe pomysły z orientacyjnymi cenami. Właściwa lista z linkami do sklepów pojawi się tu wkrótce.</p>
+  </section>
+
+  <footer class="layer">
+    <div class="outro gutter" data-rv>
+      <h2>Wesołych Świąt i <em>udanych meczów!</em></h2>
+    </div>
+    <div class="hill-wrap">
+    <svg class="hill" viewBox="0 0 390 170" role="img" aria-label="Zaśnieżone wzgórze z choinką ozdobioną piłkami tenisowymi, prezentami i rakietą opartą o paczkę">
+      <defs>
+        <radialGradient id="bauble">
+          <stop offset="0" stop-color="#dcee4e" stop-opacity=".75"/>
+          <stop offset="1" stop-color="#dcee4e" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="starGlow">
+          <stop offset="0" stop-color="#f0c35a" stop-opacity=".8"/>
+          <stop offset="1" stop-color="#f0c35a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path class="trees" id="ft-pines" d=""/>
+      <path class="pine-snow" id="ft-pines-snow" stroke-width="1.5" d=""/>
+      <path class="back" d="M0 112C80 82 160 98 240 90S350 72 390 86V170H0Z"/>
+      <path class="front" d="M0 128C70 104 150 110 215 122S340 128 390 108V170H0Z"/>
+
+      <ellipse cx="100" cy="117" rx="40" ry="5" fill="#0d2a22" opacity=".12"/>
+      <path class="xmas" id="ft-tree" d=""/>
+      <path class="pine-snow" id="ft-tree-snow" stroke-width="2.4" d=""/>
+      <circle cx="96" cy="15" r="16" fill="url(#starGlow)"/>
+      <path d="M96 5 98.9 11.3 105.8 12.1 100.7 16.8 102.1 23.6 96 20.2 89.9 23.6 91.3 16.8 86.2 12.1 93.1 11.3Z" fill="#f0c35a"/>
+      <g id="ft-baubles"></g>
+
+      <!-- racket leaning on the gifts -->
+      <path d="M140 118 135 99" stroke="#c9a26b" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M135.5 100 131 92M135.5 100 138 91" stroke="#f2f7f3" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="132" cy="80" rx="9" ry="12.5" transform="rotate(-12 132 80)" fill="#0a231e" fill-opacity=".3" stroke="#f2f7f3" stroke-width="2.2"/>
+      <path d="M126 73 139 86M124.5 79 137 91M129 69 141 81M137 70 126 90M141 75 131 92M132 68 123.5 84" stroke="#f2f7f3" stroke-opacity=".6" stroke-width=".5"/>
+
+      <rect x="147" y="94" width="34" height="25" rx="1.5" fill="#cf2e45"/>
+      <rect x="145" y="89" width="38" height="7" rx="1.5" fill="#9a1b30"/>
+      <rect x="161.5" y="89" width="5" height="30" fill="#f0c35a"/>
+      <path d="M164 89C158 81 153 86 160 89M164 89C170 81 175 86 168 89" fill="none" stroke="#f0c35a" stroke-width="2.2" stroke-linecap="round"/>
+      <rect x="178" y="104" width="25" height="17" rx="1.5" fill="#f0c35a"/>
+      <rect x="176.5" y="100" width="28" height="6" rx="1.5" fill="#d9a53c"/>
+      <rect x="188.5" y="100" width="4" height="21" fill="#cf2e45"/>
+
+      <ellipse class="bounce-shadow" cx="306" cy="128" rx="9" ry="2.4" fill="#0d2a22"/>
+      <g class="bounce">
+        <circle cx="306" cy="119" r="7.5" fill="#dcee4e"/>
+        <path d="M301 114.5C305 116.5 306 120.5 304.5 124" fill="none" stroke="#0d2a22" stroke-opacity=".55" stroke-width="1.1" stroke-linecap="round"/>
+      </g>
+    </svg>
+      <button type="button" class="gold-spot" data-g="g6" style="left:29.23%;top:54.7%" aria-label="Złota bombka na choince"></button>
+    </div>
+    <p class="drift gutter">Do zobaczenia na k<span class="g-letter" data-gold="g7"><button type="button" class="gold-letter" data-g="g7" aria-label="Złota piłka zamiast litery o"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></button><span class="o-plain">o</span></span>rcie w nowym roku.</p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+  var OUT = 'cubic-bezier(.16,1,.3,1)', SPRING = 'cubic-bezier(.34,1.4,.5,1)';
+  var seed = 20261224;
+  function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+  function byId(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function svg(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  /* ---------- Scene details drawn by script: firs with snow, stars, net lights, baubles, reindeer ---------- */
+  function pine(x, b, h, w) {
+    var n = Math.max(3, Math.round(h / 11)), L = [], R = [], s = '', i, y, hw;
+    var py = b - h, plx = x, prx = x;             /* where the current tier starts on each side */
+    for (i = 1; i <= n; i++) {
+      y = b - h + h * .96 * i / n;
+      hw = w * .5 * (.22 + .78 * i / n);
+      L.push((x - hw).toFixed(1) + ' ' + y.toFixed(1));
+      R.unshift((x + hw).toFixed(1) + ' ' + y.toFixed(1));
+      /* snow lying along the top edge of this tier */
+      s += 'M' + plx.toFixed(1) + ' ' + py.toFixed(1) + 'L' + (x - hw * .86).toFixed(1) + ' ' + (y - 1.4).toFixed(1) +
+           'M' + prx.toFixed(1) + ' ' + py.toFixed(1) + 'L' + (x + hw * .86).toFixed(1) + ' ' + (y - 1.4).toFixed(1);
+      if (i < n) {
+        plx = x - hw * .42; prx = x + hw * .42; py = y - 1.2;
+        L.push(plx.toFixed(1) + ' ' + py.toFixed(1));
+        R.unshift(prx.toFixed(1) + ' ' + py.toFixed(1));
+      }
+    }
+    var ty = (b - h * .04).toFixed(1), t = Math.max(1, w * .05);
+    return {
+      d: 'M' + x.toFixed(1) + ' ' + (b - h).toFixed(1) + 'L' + L.join('L') +
+        'L' + (x - t).toFixed(1) + ' ' + ty + 'V' + b + 'H' + (x + t).toFixed(1) + 'V' + ty + 'L' + R.join('L') + 'Z',
+      s: s
+    };
+  }
+  function deerSVG(x, y, delay, lead) {
+    var dl = ' style="animation-delay:' + delay + 's"';
+    return '<g transform="translate(' + x + ' ' + y + ')"><g class="gal"' + dl + '>' +
+      '<g class="leg hind"' + dl + '><path class="sl" stroke-width="4.2" d="M27 44 16 51.5M31 46 22 56"/><path class="sl" stroke-width="2.3" d="M16 51.5 4.5 53M22 56 11 61.5"/></g>' +
+      '<g class="leg fore"' + dl + '><path class="sl" stroke-width="4.2" d="M63 45 76 49.5M59.5 46.5 69 54"/><path class="sl" stroke-width="2.3" d="M76 49.5 78.5 60M69 54 67.5 64.5"/></g>' +
+      '<path class="sf" d="M20 40C26 33 44 33 58 35 62 30 66 22 70 16 71 12 75 10 79 11L88 15C90 16 90 19 87 19.5L79 20.5C76 23 75 27 74.5 31 74 37 71 43 68 46 60 51 40 51 30 47 24 46 20 44 20 40Z"/>' +
+      '<path class="sf" d="M21 39 13.5 34 19 43Z"/><path class="sf" d="M72.5 12.5 66.5 7.5 75 10.5Z"/>' +
+      '<path class="sl" stroke-width="1.5" d="M74 11C72.5 4 67 0 60 -3M71.6 5 73.5 -3M67.2 1 66.5 -6.5M76.5 10.5C77.5 4 74.5 -1 69.5 -5M76.6 4 81 -1"/>' +
+      '<path d="M67.5 30.5 74 35" stroke="#f0c35a" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>' +
+      (lead ? '<circle class="nose-glow" cx="88.5" cy="17" r="10" fill="url(#noseGlow)"/><circle class="nose" cx="88.5" cy="17" r="2.9"/>' : '') +
+    '</g></g>';
+  }
+  (function () {
+    var d = '', s = '', x, h, p, i;
+    for (x = -6; x < 398; x += 6 + rnd() * 7) { h = 18 + rnd() * 26; d += pine(x, 338, h, h * .5).d; }
+    byId('pines-far').setAttribute('d', d);
+    d = '';
+    [[-4, 124], [13, 86], [30, 104], [47, 60], [394, 116], [377, 92], [360, 72], [344, 50]].forEach(function (q) {
+      h = q[1] + rnd() * 10; p = pine(q[0] + rnd() * 3, 356, h, h * .44); d += p.d; s += p.s;
+    });
+    byId('pines-near').setAttribute('d', d);
+    byId('pines-near-snow').setAttribute('d', s);
+
+    d = ''; s = '';
+    [[14, 44], [34, 62], [222, 40], [246, 58], [268, 38], [344, 52], [366, 70], [384, 46]].forEach(function (q) {
+      p = pine(q[0], 106, q[1], q[1] * .5); d += p.d; s += p.s;
+    });
+    byId('ft-pines').setAttribute('d', d);
+    byId('ft-pines-snow').setAttribute('d', s);
+    p = pine(96, 117, 100, 70);
+    byId('ft-tree').setAttribute('d', p.d);
+    byId('ft-tree-snow').setAttribute('d', p.s);
+
+    /* reindeer: parsed inside an <svg> wrapper so they land in the SVG namespace */
+    var tmp = document.createElement('div');
+    tmp.innerHTML = '<svg xmlns="' + NS + '">' + deerSVG(138, 6, 0, false) + deerSVG(220, 6, -.17, false) + deerSVG(302, 6, -.34, true) + '</svg>';
+    var team = byId('team'), holder = tmp.firstChild;
+    while (holder.firstChild) team.appendChild(holder.firstChild);
+
+    var dust = byId('dust');
+    for (i = 0; i < 11; i++) {
+      var dc = svg('circle', { cx: (-6 + rnd() * 16).toFixed(1), cy: (38 + rnd() * 34).toFixed(1), r: (1 + rnd() * 1.5).toFixed(1), fill: i % 3 ? '#f0c35a' : '#fff' });
+      dc.style.animationDelay = (-i * .2).toFixed(2) + 's';
+      dust.appendChild(dc);
+    }
+
+    var stars = byId('stars');
+    for (i = 0; i < 54; i++) {
+      var c = svg('circle', { cx: (rnd() * 390).toFixed(1), cy: (rnd() * 300).toFixed(1), r: (.35 + rnd() * .9).toFixed(2) });
+      if (i % 7 === 0) c.setAttribute('class', 'g');
+      c.style.animationDelay = (-rnd() * 3.2).toFixed(2) + 's';
+      c.style.animationDuration = (2.2 + rnd() * 2.6).toFixed(2) + 's';
+      stars.appendChild(c);
+    }
+
+    var bulbs = byId('bulbs'), cols = ['#ff5a6e', '#f0c35a', '#dcee4e', '#f2f7f3'];
+    for (i = 0; i < 19; i++) {
+      var bx = 16 + i * (358 / 18), u = (bx - 195) / 191, by = 372 + 5 * (1 - u * u) + 6.5;
+      if (i === 13) {   /* golden ball 1: one "light" on the net is a golden ball */
+        var gg = svg('g', { 'class': 'g-swap bulb', 'data-gold': 'g1' });
+        gg.style.animationDelay = '2.25s, 3.1s';
+        gg.style.animationDuration = '.5s, 2.2s';
+        gg.appendChild(svg('circle', { 'class': 'g-glow', cx: bx.toFixed(1), cy: by.toFixed(1), r: 8, fill: '#f0c35a', 'fill-opacity': .22 }));
+        gg.appendChild(svg('circle', { 'class': 'gfill', cx: bx.toFixed(1), cy: by.toFixed(1), r: 3, fill: 'url(#goldGrad)' }));
+        gg.appendChild(svg('path', { d: 'M' + (bx - 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q1.2 1.7 0 3.4M' + (bx + 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q-1.2 1.7 0 3.4', fill: 'none', stroke: '#fffbe8', 'stroke-width': .5, 'stroke-linecap': 'round' }));
+        gg.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (bx + 5) + ' ' + (by - 8) + 'l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z', fill: '#fff' }));
+        bulbs.appendChild(gg);
+        continue;
+      }
+      var g = svg('g', { 'class': 'bulb' });
+      g.style.animationDelay = (1.6 + i * .05).toFixed(2) + 's, ' + (2.6 + rnd() * 2).toFixed(2) + 's';
+      g.style.animationDuration = '.5s, ' + (1.3 + rnd() * 1.5).toFixed(2) + 's';
+      g.appendChild(svg('circle', { cx: bx.toFixed(1), cy: by.toFixed(1), r: 8, fill: cols[i % 4], 'fill-opacity': .22 }));
+      g.appendChild(svg('circle', { cx: bx.toFixed(1), cy: by.toFixed(1), r: 2.6, fill: cols[i % 4] }));
+      bulbs.appendChild(g);
+    }
+
+    var baubles = byId('ft-baubles');
+    [[90, 46], [105, 59], [83, 71], [100, 79], [114, 93], [77, 97], [95, 101]].forEach(function (q, k) {
+      if (k === 4) {   /* golden ball 6: one bauble is golden */
+        var gb = svg('g', { 'class': 'g-swap', 'data-gold': 'g6' });
+        gb.appendChild(svg('circle', { 'class': 'glow', cx: q[0], cy: q[1], r: 10, fill: 'url(#bauble)' }));
+        gb.appendChild(svg('circle', { 'class': 'gfill', cx: q[0], cy: q[1], r: 4.2, fill: 'url(#goldGrad)' }));
+        gb.appendChild(svg('path', { d: 'M' + (q[0] - 3) + ' ' + (q[1] - 3.4) + 'q3.8 3 2 7.2', fill: 'none', stroke: '#fffbe8', 'stroke-width': .9, 'stroke-linecap': 'round' }));
+        gb.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (q[0] + 8) + ' ' + (q[1] - 12) + 'l1 3 3 1-3 1-1 3-1-3-3-1 3-1z', fill: '#fff' }));
+        baubles.appendChild(gb);
+        return;
+      }
+      baubles.appendChild(svg('circle', { 'class': 'glow', cx: q[0], cy: q[1], r: 10, fill: 'url(#bauble)' }));
+      baubles.appendChild(svg('circle', { cx: q[0], cy: q[1], r: 4.2, fill: '#dcee4e' }));
+      baubles.appendChild(svg('path', { d: 'M' + (q[0] - 2.6) + ' ' + (q[1] - 3) + 'q3.4 2.6 1.8 6.4', fill: 'none', stroke: '#f2f7f3', 'stroke-width': .8, 'stroke-linecap': 'round' }));
+    });
+  })();
+
+  /* ---------- Film grain ---------- */
+  (function () {
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 128;
+      var g = c.getContext('2d'), im = g.createImageData(128, 128), i, v;
+      for (i = 0; i < im.data.length; i += 4) {
+        v = Math.random() < .5 ? 0 : 255;
+        im.data[i] = im.data[i + 1] = im.data[i + 2] = v;
+        im.data[i + 3] = Math.random() * 255;
+      }
+      g.putImageData(im, 0, 0);
+      byId('grain').style.backgroundImage = 'url(' + c.toDataURL() + ')';
+    } catch (e) {}
+  })();
+
+  /* ---------- The moon is a turning tennis ball: its seam is a 3D curve, rotated and projected each frame ---------- */
+  var seamEl = byId('seam'), seamSh = byId('seam-shadow');
+  var SA = .7, SB = .3, SC = 2 * Math.sqrt(SA * SB), SEG = 160;
+  var spin = .6, spinV = still ? 0 : 3.4, SPIN_BASE = .42;
+  var TZ = -.5, TX = .36, cTZ = Math.cos(TZ), sTZ = Math.sin(TZ), cTX = Math.cos(TX), sTX = Math.sin(TX);
+  function drawSeam() {
+    var d = '', pen = false, ct = Math.cos(spin), st = Math.sin(spin), k, t, x, y, z, x1, z1, y2, z2;
+    for (k = 0; k <= SEG; k++) {
+      t = k / SEG * 6.2831853;
+      x = SA * Math.cos(t) + SB * Math.cos(3 * t);
+      y = SA * Math.sin(t) - SB * Math.sin(3 * t);
+      z = SC * Math.sin(2 * t);
+      x1 = x * ct + z * st; z1 = -x * st + z * ct;       /* spin about the vertical axis */
+      y2 = y * cTX - z1 * sTX; z2 = y * sTX + z1 * cTX;   /* lean toward the viewer */
+      if (z2 > .015) {
+        d += (pen ? 'L' : 'M') + (195 + 92 * (x1 * cTZ - y2 * sTZ)).toFixed(1) + ' ' + (165 - 92 * (x1 * sTZ + y2 * cTZ)).toFixed(1);
+        pen = true;
+      } else pen = false;
+    }
+    seamEl.setAttribute('d', d);
+    seamSh.setAttribute('d', d);
+  }
+  drawSeam();
+
+  /* ---------- Gifts: edit this list. Put a shop address in `url` to turn "Link wkrótce" into a button. ---------- */
+  var CATS = { kort: 'Na kort', stroj: 'Strój', poza: 'Po grze' };
+  var GIFTS = [
+    { cat: 'kort', icon: 'racket', ace: true, name: 'Nowa rakieta',
+      desc: 'Lekka rakieta do regularnej gry. Na przykład Wilson Blade 100 albo Babolat Pure Aero.',
+      price: 'ok. 900–1200 zł', url: '' },
+    { cat: 'kort', icon: 'balls', name: 'Karton piłek',
+      desc: 'Sześć puszek po cztery piłki. Zapas na całą zimę.',
+      price: 'ok. 150–220 zł', url: '' },
+    { cat: 'kort', icon: 'spool', name: 'Zapas strun do rakiety',
+      desc: 'Rolka 200 m. Wystarczy na kilkanaście wymian strun.',
+      price: 'ok. 250–450 zł', url: '' },
+    { cat: 'kort', icon: 'grip', name: 'Owijki na rączkę, 12 sztuk',
+      desc: 'Dzięki nim rakieta nie ślizga się w dłoni.',
+      price: 'ok. 60–90 zł', url: '' },
+    { cat: 'kort', icon: 'bag', name: 'Duża torba tenisowa',
+      desc: 'Mieści sześć rakiet, buty i ubranie na zmianę.',
+      price: 'ok. 300–500 zł', url: '' },
+    { cat: 'stroj', icon: 'shoe', name: 'Buty tenisowe',
+      desc: 'Z podeszwą na korty ziemne, żeby się nie ślizgać.',
+      price: 'ok. 400–600 zł', url: '' },
+    { cat: 'stroj', icon: 'band', gold: true, name: 'Opaski na nadgarstki i czoło',
+      desc: 'Mały prezent, który zmieści się w skarpecie.',
+      price: 'ok. 40–80 zł', url: '' },
+    { cat: 'stroj', icon: 'cap', name: 'Czapka z daszkiem',
+      desc: 'Lekka i przewiewna, na letnie mecze w słońcu.',
+      price: 'ok. 80–130 zł', url: '' },
+    { cat: 'poza', icon: 'ticket', ace: true, name: 'Bilety na turniej',
+      desc: 'Dwa bilety na duży turniej. Na przykład Roland Garros albo Wimbledon.',
+      price: 'zależnie od turnieju', url: '' },
+    { cat: 'poza', icon: 'whistle', name: 'Lekcje z trenerem',
+      desc: 'Voucher na pięć godzin lekcji, żeby grać coraz lepiej.',
+      price: 'ok. 500–800 zł', url: '' },
+    { cat: 'poza', icon: 'roller', name: 'Wałek do masażu',
+      desc: 'Do rozluźnienia nóg i pleców po długim meczu.',
+      price: 'ok. 60–120 zł', url: '' },
+    { cat: 'poza', icon: 'book', name: 'Książka „Open”',
+      desc: 'Autobiografia Andre Agassiego, jednego z najlepszych tenisistów w historii.',
+      price: 'ok. 40–60 zł', url: '' }
+  ];
+
+  var ICONS = {
+    racket: '<ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21M6.5 6l6 5.5M5.5 9.5l5 4.5M9.5 3.5l5 5"/>',
+    balls: '<rect x="7" y="2.5" width="10" height="19" rx="3"/><circle cx="12" cy="7.3" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="16.7" r="2.2"/>',
+    spool: '<circle cx="11" cy="11" r="7.5"/><circle cx="11" cy="11" r="2.5"/><path d="M16.5 16.2c1.5 1.8 3 2.8 5 3.3"/>',
+    grip: '<rect x="9" y="2.5" width="6" height="19" rx="2"/><path d="M9 7.5l6-2.5M9 12l6-2.5M9 16.5l6-2.5M9 20.5l6-2.5"/>',
+    bag: '<rect x="3" y="8" width="18" height="11.5" rx="3.5"/><path d="M8 8c0-3 1.5-4.5 4-4.5S16 5 16 8M3 13.5h18"/>',
+    shoe: '<path d="M3 18h18v-2c0-1.7-1.2-2.5-3-2.9-2.6-.6-4.3-2-5.5-4.6L9.5 10V7.5h-5C3.6 9.5 3 12.5 3 15.5z"/><path d="M3 15.5h17.8M12.5 9.5 11 10.8M14.2 11.6l-1.5 1.3"/>',
+    band: '<rect x="5" y="6" width="14" height="12" rx="3"/><path d="M5 10h14M5 14h14"/>',
+    cap: '<path d="M4 15.5a7.5 7.5 0 0 1 15 0z"/><path d="M19 15.5c1.5.4 2.5 1.2 3 2.5H10M11.5 8v1"/>',
+    ticket: '<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14.5 6v12" stroke-dasharray="2 2.2"/>',
+    whistle: '<circle cx="9" cy="14.5" r="5.5"/><path d="M12.5 10.2H21v3.6h-6.5M9 3.5V6M5.5 4.5l1 2M12.5 4.5l-1 2"/>',
+    roller: '<rect x="3" y="8" width="18" height="8" rx="4"/><path d="M7.5 8v8M12 8v8M16.5 8v8"/>',
+    book: '<path d="M5 4.5h11a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8.5h6"/>'
+  };
+  var ARROW = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg>';
+  var BALL = '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>';
+  var BOW = '<svg class="bow" viewBox="0 0 68 46" aria-hidden="true">' +
+    '<path class="b2" d="M31 27 22 44l8-3 4-12zM37 27l9 17-8-3-4-12z"/>' +
+    '<path class="b1" d="M34 22C22 4 3 6 5 21c2 14 18 12 29 1zM34 22C46 4 65 6 63 21c-2 14-18 12-29 1z"/>' +
+    '<path class="b2" d="M34 22C26 13 14 12 11 19c8-3 15-1 23 3zM34 22c8-9 20-10 23-3-8-3-15-1-23 3z"/>' +
+    '<rect class="b1" x="28" y="15.5" width="12" height="13" rx="4"/></svg>';
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+
+  /* ---------- Golden ball hunt: settings. Edit rewards, hints and the PIN here. ---------- */
+  var HUNT_TOTAL = 7, SILVER_AT = 3;
+  /* the QR code on a coupon opens this address; change it if the page moves (e.g. to GitHub Pages) */
+  var BASE_URL = 'https://wrobhu.github.io/swieta/';
+  var SALT = 'mikolaj-tenis-2026';
+  /* hash of the PIN that opens a scanned coupon on someone else's account; the owner skips it */
+  var PIN_HASH = '181c0204';
+  var REWARDS = {
+    s: [
+      { name: 'Pierniki w kształcie rakiet', desc: 'Domowe pierniki upieczone specjalnie dla Ciebie.' },
+      { name: 'Gorąca czekolada od Mikołaja', desc: 'Duży kubek z piankami i bitą śmietaną, podany pod choinką.' },
+      { name: 'Puszka piłek z Twoim imieniem', desc: 'Cztery piłki tenisowe podpisane tylko dla Ciebie.' },
+      { name: 'Brelok z małą rakietą', desc: 'Do kluczy albo plecaka, żeby Święta zostały z Tobą na dłużej.' },
+      { name: 'Skarpeta pełna słodyczy', desc: 'Ulubione łakocie zapakowane w świąteczną skarpetę.' }
+    ],
+    z: [
+      { name: 'Wspólny mecz tenisa', desc: 'Godzina na korcie razem ze mną. Rakietę pożyczę.' },
+      { name: 'Lekcja serwisu', desc: 'Nauczę Cię serwować tak, że nawet Mikołaj się zdziwi.' },
+      { name: 'Wyjście do kina', desc: 'Bilet na film, który sam wybierzesz, i duży popcorn.' },
+      { name: 'Kosz łakoci', desc: 'Pełen kosz ulubionych słodyczy, czeka pod choinką.' },
+      { name: 'Prezent niespodzianka', desc: 'Coś wyjątkowego, co przygotuję specjalnie dla Ciebie.' }
+    ]
+  };
+  /* hints exist for five balls only; the last two (the "Na żywo" dot and the letter in the closing line) have none */
+  var HINTS = {
+    g1: 'Przyjrzyj się lampkom na siatce kortu. Jedna z nich wcale nie jest lampką.',
+    g2: 'Na końcu kortu, przy lewym rogu, coś wystaje ze śniegu.',
+    g3: 'Co jakiś czas z nieba spada złota piłka. Złap ją palcem.',
+    g5: 'Jeden prezent ma w środku niespodziankę. Rozpakuj paczkę numer 07.',
+    g6: 'Na choince na dole strony jedna bombka ma inny kolor niż reszta.'
+  };
+  var HINT_ORDER = ['g1', 'g2', 'g3', 'g5', 'g6'];
+  var ORDER = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7'];
+  var GBALL = '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg>';
+  function fnv(str) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    return ('0000000' + h.toString(16)).slice(-8);
+  }
+  function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function restore(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+  var found = restore('mikolaj-zlote', []);
+  if (!Array.isArray(found)) found = [];
+  found = found.filter(function (id, i) { return ORDER.indexOf(id) !== -1 && found.indexOf(id) === i; });
+  var holder = restore('mikolaj-kupon', null);
+  if (!holder || typeof holder.name !== 'string' || !holder.name) holder = null;
+
+  /* which presents this viewer already opened (kept only in this browser) */
+  var KEY = 'mikolaj-odpakowane';
+  var list = byId('gift-list');
+  function loadOpened() { try { return JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { return []; } }
+  function saveOpened() {
+    try {
+      var names = [];
+      Array.prototype.forEach.call(list.children, function (li) { if (li.classList.contains('open')) names.push(li.getAttribute('data-name')); });
+      localStorage.setItem(KEY, JSON.stringify(names));
+    } catch (e) {}
+  }
+  var openedBefore = loadOpened();
+
+  function wrapHTML(i, g) {
+    return '<button type="button" class="wrap w' + (i % 3) + '" aria-label="Odpakuj prezent ' + (i + 1) + ', ' + CATS[g.cat] + '">' +
+      '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span>' + BOW +
+      '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.ace ? ' · <b>wymarzony</b>' : '') + '</span>' +
+      '<span class="wrap-cat">' + CATS[g.cat] + '</span></span>' +
+      '<span class="wrap-ball">' + BALL + '</span></button>';
+  }
+
+  list.innerHTML = GIFTS.map(function (g, i) {
+    var link = g.url
+      ? '<a class="shop" href="' + esc(g.url) + '" target="_blank" rel="noopener">Zobacz w sklepie ' + ARROW + '</a>'
+      : '<span class="soon">Link wkrótce</span>';
+    var isOpen = openedBefore.indexOf(g.name) !== -1;
+    return '<li data-rv data-i="' + i + '" data-cat="' + g.cat + '" data-name="' + esc(g.name) + '" class="' + (isOpen ? 'open' : 'wrapped') +
+      '" style="view-transition-name:gift-' + i + '"><div class="reveal"><article class="tag" tabindex="-1">' +
+      '<div class="tag-main">' +
+        '<p class="tag-meta"><span class="tag-cat">' + CATS[g.cat] + '</span>' +
+          (g.ace ? '<span class="ace">Wymarzony</span>' : '') +
+          (g.gold ? '<button type="button" class="gold-btn gold-sticker" data-g="g5" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('g5') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
+        '<h3>' + esc(g.name) + '</h3>' +
+        '<p class="tag-desc">' + esc(g.desc) + '</p>' +
+      '</div>' +
+      '<div class="tag-icon" aria-hidden="true"><svg viewBox="0 0 24 24">' + (ICONS[g.icon] || ICONS.balls) + '</svg></div>' +
+      '<div class="tag-foot"><span class="price">' + esc(g.price) + '</span>' + link + '</div>' +
+    '</article></div>' + (isOpen ? '' : wrapHTML(i, g)) + '</li>';
+  }).join('');
+
+  var count = byId('count'), openAllBtn = byId('open-all'), rewrapBtn = byId('rewrap');
+  function refresh() {
+    var n = 0, next = null;
+    Array.prototype.forEach.call(list.children, function (li) {
+      li.classList.remove('next');
+      if (li.classList.contains('open')) n++;
+      else if (!next && !li.hidden) next = li;
+    });
+    if (next) next.classList.add('next');
+    count.textContent = 'Odpakowane ' + n + ' z ' + GIFTS.length;
+    rewrapBtn.hidden = n === 0;
+    openAllBtn.hidden = n === GIFTS.length;
+  }
+  refresh();
+
+  /* ---------- A served ball tears the wrapping off ---------- */
+  var fx = byId('fx');
+  function fxEl(cls, html) {
+    var e = document.createElement('div'); e.className = cls; if (html) e.innerHTML = html; fx.appendChild(e); return e;
+  }
+  /* keyframes for a thrown object: start point, velocity, gravity */
+  function arc(x, y, vx, vy, g, dur, s0, s1, rot, fadeFrom) {
+    var frames = [], n = 12, i, t, p;
+    for (i = 0; i <= n; i++) {
+      p = i / n; t = p * dur / 1000;
+      frames.push({
+        transform: 'translate(' + (x + vx * t).toFixed(1) + 'px,' + (y + vy * t + .5 * g * t * t).toFixed(1) + 'px) scale(' +
+          (s0 + (s1 - s0) * p).toFixed(3) + ') rotate(' + (rot * p).toFixed(0) + 'deg)',
+        opacity: p <= fadeFrom ? 1 : Math.max(0, 1 - (p - fadeFrom) / (1 - fadeFrom))
+      });
+    }
+    return frames;
+  }
+  function serveBall(x, y, onHit) {
+    var b = fxEl('fxball', BALL);
+    var sx = Math.max(30, Math.min(window.innerWidth - 30, x + (Math.random() - .5) * 220)), sy = window.innerHeight + 70;
+    var a = b.animate([
+      { transform: 'translate(' + sx + 'px,' + sy + 'px) scale(2.3) rotate(0deg)' },
+      { transform: 'translate(' + x + 'px,' + y + 'px) scale(.72) rotate(520deg)' }
+    ], { duration: 330, easing: 'cubic-bezier(.4,0,.85,.55)', fill: 'forwards' });
+    a.onfinish = function () {
+      onHit();
+      var dir = sx < x ? 1 : -1;
+      b.animate(arc(x, y, dir * (90 + Math.random() * 120), -430, 1500, 950, .72, 1.5, dir * 300, .75), { duration: 950, easing: 'linear', fill: 'forwards' })
+        .onfinish = function () { b.remove(); };
+    };
+  }
+  function shards(x, y, colors) {
+    for (var i = 0; i < 18; i++) {
+      var s = fxEl('shard'), ang = Math.PI * (1 + Math.random()), sp = 140 + Math.random() * 380, dur = 700 + Math.random() * 420;
+      var round = i % 5 === 0;
+      s.style.width = (round ? 6 : 6 + Math.random() * 9) + 'px';
+      s.style.height = (round ? 6 : 4 + Math.random() * 6) + 'px';
+      if (round) s.style.borderRadius = '50%';
+      s.style.background = round ? '#fff' : colors[i % colors.length];
+      (function (el, d) {
+        el.animate(arc(x, y, Math.cos(ang) * sp, Math.sin(ang) * sp - 90, 1300, d, 1, .6, (Math.random() - .5) * 900, .6), { duration: d, easing: 'linear', fill: 'forwards' })
+          .onfinish = function () { el.remove(); };
+      })(s, dur);
+    }
+    var ring = fxEl('fxring');
+    ring.animate([
+      { transform: 'translate(' + x + 'px,' + y + 'px) scale(.2)', opacity: .95 },
+      { transform: 'translate(' + x + 'px,' + y + 'px) scale(2.6)', opacity: 0 }
+    ], { duration: 420, easing: OUT, fill: 'forwards' }).onfinish = function () { ring.remove(); };
+  }
+  function finishOpen(li) {
+    var w = li.querySelector('.wrap');
+    if (w) w.remove();
+    li.classList.remove('wrapped'); li.classList.add('open');
+    li._busy = false;
+    saveOpened(); refresh();
+  }
+  function tear(li, x, y) {
+    var w = li.querySelector('.wrap'), reveal = li.querySelector('.reveal'), tag = li.querySelector('.tag');
+    if (!w) return;
+    var cs = getComputedStyle(w), h0 = reveal.offsetHeight, h1 = tag.offsetHeight;
+    shards(x, y, [cs.getPropertyValue('--p1').trim(), cs.getPropertyValue('--p2').trim(), cs.getPropertyValue('--rb').trim()]);
+    try { if (navigator.vibrate) navigator.vibrate(14); } catch (e) {}
+    li.classList.remove('wrapped'); li.classList.add('open');
+    w.style.pointerEvents = 'none';
+    reveal.animate([{ height: h0 + 'px' }, { height: h1 + 'px' }], { duration: 640, easing: OUT });
+    tag.animate([{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 620, easing: SPRING });
+    li.animate([{ transform: 'translateY(0) scale(1)' }, { transform: 'translateY(4px) scale(.975)' }, { transform: 'translateY(-2px) scale(1.012)' }, { transform: 'translateY(0) scale(1)' }], { duration: 380, easing: 'ease-out' });
+    var o = { duration: 620, easing: OUT, fill: 'forwards' };
+    w.querySelector('.half.l').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(-54%, 16px) rotate(-11deg)', opacity: 0 }], o);
+    w.querySelector('.half.r').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(54%, 22px) rotate(10deg)', opacity: 0 }], o);
+    w.querySelector('.ribbon').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(-30px, 70px) rotate(-24deg)', opacity: 0 }], o);
+    w.querySelector('.bow').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(-44px, 90px) rotate(-70deg) scale(.8)', opacity: 0 }], { duration: 720, easing: 'cubic-bezier(.3,0,.8,.4)', fill: 'forwards' });
+    w.querySelector('.wrap-label').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' });
+    w.querySelector('.wrap-ball').animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.4)' }], { duration: 200, fill: 'forwards' });
+    setTimeout(function () { finishOpen(li); }, 660);
+  }
+  function openGift(li, pt, instant) {
+    if (!li.classList.contains('wrapped') || li._busy) return;
+    li._busy = true;
+    if (still || instant) { finishOpen(li); return; }
+    var r = li.querySelector('.wrap').getBoundingClientRect();
+    var x = pt ? pt.x : r.left + r.width * (.35 + Math.random() * .3), y = pt ? pt.y : r.top + r.height / 2;
+    serveBall(x, y, function () { tear(li, x, y); });
+  }
+  list.addEventListener('click', function (e) {
+    var w = e.target.closest('.wrap');
+    if (!w) return;
+    var li = w.parentNode, byTouch = e.clientX || e.clientY;
+    openGift(li, byTouch ? { x: e.clientX, y: e.clientY } : null, false);
+    if (!byTouch) setTimeout(function () { var t = li.querySelector('.tag'); if (t) t.focus({ preventScroll: true }); }, 1050);
+  });
+  openAllBtn.addEventListener('click', function () {
+    var k = 0;
+    Array.prototype.forEach.call(list.children, function (li) {
+      if (li.hidden || !li.classList.contains('wrapped')) return;
+      var r = li.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        (function (target, delay) { setTimeout(function () { openGift(target, null, false); }, delay); })(li, k * 150);
+        k++;
+      } else openGift(li, null, true);
+    });
+  });
+  rewrapBtn.addEventListener('click', function () {
+    Array.prototype.forEach.call(list.children, function (li) {
+      if (!li.classList.contains('open')) return;
+      var i = +li.getAttribute('data-i');
+      li.classList.remove('open'); li.classList.add('wrapped');
+      li.insertAdjacentHTML('beforeend', wrapHTML(i, GIFTS[i]));
+      if (!still) li.querySelector('.wrap').animate([{ opacity: 0, transform: 'scale(.94)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 420, easing: SPRING });
+    });
+    saveOpened(); refresh();
+  });
+
+  /* ---------- Filter: sliding thumb + cards that morph between states ---------- */
+  var seg = byId('seg');
+  var filters = [['all', 'Wszystko']].concat(Object.keys(CATS).map(function (k) { return [k, CATS[k]]; }));
+  seg.innerHTML = '<span class="thumb" aria-hidden="true"></span>' + filters.map(function (f, i) {
+    return '<button type="button" id="seg-' + f[0] + '" data-filter="' + f[0] + '" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + f[1] + '</button>';
+  }).join('');
+  function applyFilter(f) {
+    Array.prototype.forEach.call(list.children, function (li) {
+      var hide = f !== 'all' && li.getAttribute('data-cat') !== f;
+      li.hidden = hide;
+      if (!hide) { li.classList.add('in'); li.style.transitionDelay = ''; }
+    });
+    refresh();
+  }
+  seg.addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn || btn.getAttribute('aria-pressed') === 'true') return;
+    Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    seg.style.setProperty('--i', btn.getAttribute('data-i'));
+    var f = btn.getAttribute('data-filter');
+    if (document.startViewTransition && !still) document.startViewTransition(function () { applyFilter(f); });
+    else applyFilter(f);
+  });
+
+  /* ---------- Reveal on scroll ---------- */
+  if (!still && 'IntersectionObserver' in window) {
+    var first = true;
+    var io = new IntersectionObserver(function (entries) {
+      var k = 0;
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var t = en.target;
+        t.style.transitionDelay = ((first ? 1900 : 0) + k * 80) + 'ms';
+        t.classList.add('in');
+        io.unobserve(t);
+        k++;
+      });
+      first = false;
+    }, { rootMargin: '0px 0px -6% 0px', threshold: .08 });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rv]'), function (t) {
+      t.classList.add('rv');
+      io.observe(t);
+    });
+  }
+
+  /* ---------- Countdown to Christmas Eve (24 December, local time), digits roll on change ---------- */
+  var el = {
+    d: byId('cd-d'), h: byId('cd-h'), m: byId('cd-m'), s: byId('cd-s'),
+    du: byId('cd-d-unit'), note: byId('cd-note'), title: byId('board-title'), sr: byId('cd-sr')
+  };
+  var ROLL = { duration: 520, easing: OUT };
+  function setDigits(node, str, roll) {
+    while (node.children.length > str.length) node.removeChild(node.lastChild);
+    while (node.children.length < str.length) {
+      var sl = document.createElement('span'); sl.className = 'slot'; node.appendChild(sl);
+    }
+    for (var i = 0; i < str.length; i++) {
+      var slot = node.children[i], ch = str.charAt(i);
+      if (slot.getAttribute('data-v') === ch) continue;
+      slot.setAttribute('data-v', ch);
+      while (slot.children.length > 1) slot.removeChild(slot.firstChild);
+      var old = slot.firstElementChild;
+      var nu = document.createElement('span'); nu.textContent = ch; slot.appendChild(nu);
+      if (old && roll && !still && old.animate) {
+        (function (o) {
+          o.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], ROLL)
+            .onfinish = function () { if (o.parentNode) o.parentNode.removeChild(o); };
+        })(old);
+        nu.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], ROLL);
+      } else if (old) {
+        slot.removeChild(old);
+      }
+    }
+  }
+  var lastMin = -1;
+  function tick(roll) {
+    var now = new Date();
+    var y = now.getFullYear();
+    var eve = new Date(y, 11, 24);
+    var after = new Date(y, 11, 27);
+    if (now >= after) eve = new Date(y + 1, 11, 24);
+    var live = now >= eve && now < after;
+    var sec = Math.floor(Math.max(0, eve - now) / 1000);
+    var d = Math.floor(sec / 86400), h = Math.floor(sec % 86400 / 3600), m = Math.floor(sec % 3600 / 60);
+    roll = roll && !document.hidden;
+    setDigits(el.d, pad(d), roll);
+    setDigits(el.h, pad(h), roll);
+    setDigits(el.m, pad(m), roll);
+    setDigits(el.s, pad(sec % 60), roll);
+    el.du.textContent = d === 1 ? 'dzień' : 'dni';
+    if (m !== lastMin) {
+      lastMin = m;
+      el.sr.textContent = live ? 'Święta trwają.' : 'Do Wigilii: ' + d + ' dni, ' + h + ' godz., ' + m + ' min.';
+    }
+    if (live) {
+      el.title.textContent = 'Wesołych Świąt!';
+      el.note.textContent = 'Mikołaj już rozdaje prezenty.';
+    }
+  }
+  tick(false);
+  setInterval(function () { tick(true); }, 1000);
+
+  /* ---------- Hero parallax: the moon lags, the sleigh flies on as the page scrolls ---------- */
+  var scene = byId('scene');
+  if (!still) {
+    var queued = false;
+    window.addEventListener('scroll', function () {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        scene.style.setProperty('--sy', Math.min(520, Math.max(0, window.scrollY)).toFixed(1));
+      });
+    }, { passive: true });
+  }
+
+  /* ---------- Snow with depth: sharp flakes, a few soft out-of-focus ones, the odd tennis ball ---------- */
+  var cv = byId('snow');
+  var ctx = cv.getContext('2d');
+  var css = getComputedStyle(document.documentElement);
+  var SNOW = css.getPropertyValue('--snow').trim() || '#f2f7f3';
+  var BALLC = css.getPropertyValue('--ball').trim() || '#dcee4e';
+  var W = 0, H = 0, flakes = [], shots = [], last = 0, raf = 0;
+  var soft = document.createElement('canvas'); soft.width = soft.height = 64;
+  (function () {
+    var g = soft.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(242,247,243,.9)'); gr.addColorStop(.45, 'rgba(242,247,243,.35)'); gr.addColorStop(1, 'rgba(242,247,243,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  })();
+
+  function flake(i, fromTop) {
+    var kind = i % 13 === 5 ? 2 : (i % 9 === 3 ? 1 : 0);   /* 0 flake, 1 soft, 2 ball */
+    var f = { kind: kind, x: Math.random() * W, ph: Math.random() * 6.28, rot: Math.random() * 6.28 };
+    if (kind === 2) { f.r = 4.5 + Math.random() * 1.5; f.v = 36 + Math.random() * 16; f.a = .92; f.amp = 8 + Math.random() * 10; }
+    else if (kind === 1) { f.r = 7 + Math.random() * 9; f.v = 46 + Math.random() * 26; f.a = .1 + Math.random() * .14; f.amp = 14 + Math.random() * 18; }
+    else { f.r = .7 + Math.random() * 2.1; f.v = 14 + f.r * 12 + Math.random() * 10; f.a = .3 + Math.random() * .65; f.amp = 5 + Math.random() * 12; }
+    f.y = fromTop ? -f.r * 2 - 4 : Math.random() * H;
+    return f;
+  }
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var want = Math.max(50, Math.min(140, Math.round(W * H / 5200)));
+    while (flakes.length < want) flakes.push(flake(flakes.length, false));
+    flakes.length = want;
+    if (still) draw(0);
+  }
+  function ballAt(x, y, r, rot) {
+    ctx.fillStyle = BALLC;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.284); ctx.fill();
+    ctx.strokeStyle = SNOW; ctx.lineWidth = Math.max(1, r * .16);
+    ctx.beginPath();
+    ctx.arc(x + Math.cos(rot) * r, y + Math.sin(rot) * r, r * .95, rot + 2.2, rot + 4.08);
+    ctx.stroke();
+  }
+  function draw(dt) {
+    ctx.clearRect(0, 0, W, H);
+    var i, f, x;
+    for (i = 0; i < flakes.length; i++) {
+      f = flakes[i];
+      f.y += f.v * dt;
+      f.ph += dt * (f.kind ? .8 : 1.3);
+      f.rot += dt * 1.6;
+      if (f.y - f.r * 2 > H) { flakes[i] = f = flake(i, true); }
+      x = f.x + Math.sin(f.ph) * f.amp;
+      ctx.globalAlpha = f.a;
+      if (f.kind === 2) ballAt(x, f.y, f.r, f.rot);
+      else if (f.kind === 1) ctx.drawImage(soft, x - f.r, f.y - f.r, f.r * 2, f.r * 2);
+      else { ctx.fillStyle = SNOW; ctx.beginPath(); ctx.arc(x, f.y, f.r, 0, 6.284); ctx.fill(); }
+    }
+    ctx.globalAlpha = 1;
+    for (i = shots.length - 1; i >= 0; i--) {
+      f = shots[i];
+      f.vy += (f.g || 760) * dt; f.x += f.vx * dt; f.y += f.vy * dt; f.rot += f.spin * dt;
+      if (f.y - f.r > H || f.x < -40 || f.x > W + 40) { shots.splice(i, 1); continue; }
+      ballAt(f.x, f.y, f.r, f.rot);
+    }
+  }
+  function loop(t) {
+    var dt = Math.min(.05, (t - last) / 1000 || 0);
+    last = t;
+    draw(dt);
+    if (window.scrollY < 560) {
+      spinV += (SPIN_BASE - spinV) * Math.min(1, dt * 1.1);
+      spin += spinV * dt;
+      drawSeam();
+    }
+    raf = requestAnimationFrame(loop);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  if (!still) {
+    raf = requestAnimationFrame(loop);
+    document.addEventListener('visibilitychange', function () {
+      cancelAnimationFrame(raf);
+      if (!document.hidden) { last = 0; raf = requestAnimationFrame(loop); }
+    });
+  }
+
+  /* ---------- Santa swings his racket and sends a ball flying every few seconds ---------- */
+  var arm = byId('arm'), racket = byId('racket');
+  function santaServe() {
+    setTimeout(santaServe, 4200 + Math.random() * 3200);
+    if (still || document.hidden || window.scrollY > 300 || !arm.animate) return;
+    arm.animate(
+      [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-42deg)', offset: .38 }, { transform: 'rotate(40deg)', offset: .62 }, { transform: 'rotate(0deg)' }],
+      { duration: 950, easing: 'ease-in-out' }
+    );
+    setTimeout(function () {
+      var r = racket.getBoundingClientRect();
+      shots.push({ x: r.left + r.width / 2, y: r.top + r.height / 2, r: 3.2, vx: 150 + Math.random() * 130, vy: -210 - Math.random() * 90, rot: 0, spin: 10, g: 520 });
+    }, 540);
+  }
+  setTimeout(santaServe, 6000);
+
+  /* ---------- Tap the moon: it spins up and serves a burst of balls ---------- */
+  var serveBtn = byId('serve');
+  var moon = byId('moon');
+  var hint = byId('hint');
+  serveBtn.addEventListener('click', function () {
+    hint.classList.add('gone');
+    if (still) return;
+    spinV += 9;
+    if (moon.animate) {
+      moon.animate(
+        [{ transform: 'scale(1)' }, { transform: 'scale(.9)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }],
+        { duration: 620, easing: 'cubic-bezier(.3,.7,.3,1)' }
+      );
+    }
+    var r = serveBtn.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (var i = 0; i < 11; i++) {
+      var a = Math.PI * (1 + .1 + Math.random() * .8);   /* upward fan */
+      var sp = 240 + Math.random() * 320;
+      shots.push({
+        x: cx + Math.cos(a) * r.width * .3, y: cy + Math.sin(a) * r.width * .3, r: 5 + Math.random() * 4,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        rot: Math.random() * 6.28, spin: (Math.random() - .5) * 14
+      });
+    }
+    if (shots.length > 70) shots.splice(0, shots.length - 70);
+  });
+
+  /* ---------- Golden ball hunt: finding, counter, sheet, coupon ---------- */
+  var badge = byId('hunt-badge'), countEl = byId('hunt-count'), live = byId('live');
+  var sheet = byId('sheet'), back = byId('sheet-back'), toastEl = byId('toast');
+  var lastFocus = null, toastTimer = 0;
+
+  function markTaken(id) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-gold="' + id + '"]'), function (n) { n.classList.add('taken'); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-g="' + id + '"]'), function (n) { n.hidden = true; });
+    if (id === 'g4') live.classList.remove('has-gold');
+  }
+  function unmarkAll() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-gold]'), function (n) { n.classList.remove('taken'); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-g]'), function (n) { n.hidden = false; });
+    live.classList.add('has-gold');
+  }
+  live.classList.add('has-gold');
+  found.forEach(markTaken);
+
+  function updateBadge(bump) {
+    var n = found.length;
+    countEl.textContent = n;
+    badge.classList.toggle('has-coupon', n >= SILVER_AT);
+    badge.setAttribute('aria-label', 'Złote piłki: ' + n + ' z ' + HUNT_TOTAL + '. Pokaż postęp i kupon.');
+    var sub = byId('hunt-sub');
+    if (n === 0) sub.textContent = 'Są ukryte na tej stronie. Znajdź 3, a dostaniesz srebrny kupon na prezent. Znajdź wszystkie, a złoty.';
+    else if (n < SILVER_AT) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + '. Do srebrnego kuponu brakuje ' + (SILVER_AT - n) + '.';
+    else if (n < HUNT_TOTAL) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + ' i srebrny kupon. Znajdź resztę, a zmieni się na złoty.';
+    else sub.textContent = 'Wszystkie znalezione! Stuknij, żeby zobaczyć złoty kupon.';
+    if (bump && !still) badge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.28)' }, { transform: 'scale(1)' }], { duration: 520, easing: SPRING });
+  }
+  updateBadge(false);
+
+  function toast(msg) {
+    clearTimeout(toastTimer);
+    toastEl.textContent = msg;
+    toastEl.hidden = false;
+    if (!still) toastEl.animate([{ opacity: 0, transform: 'translate(-50%, 16px)' }, { opacity: 1, transform: 'translate(-50%, 0)' }], { duration: 380, easing: OUT });
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, 2800);
+  }
+
+  function flyToBadge(x, y, done) {
+    if (still) { done(); return; }
+    var r = badge.getBoundingClientRect(), bx = r.left + 21, by = r.top + r.height / 2;
+    var cx = (x + bx) / 2, cy = Math.min(y, by) - 140, frames = [], i, t, px, py;
+    var b = fxEl('fxgold', GBALL);
+    for (i = 0; i <= 16; i++) {
+      t = i / 16;
+      px = (1 - t) * (1 - t) * x + 2 * (1 - t) * t * cx + t * t * bx;
+      py = (1 - t) * (1 - t) * y + 2 * (1 - t) * t * cy + t * t * by;
+      frames.push({ transform: 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px) scale(' + (1.9 - 1.2 * t).toFixed(2) + ') rotate(' + (t * 540).toFixed(0) + 'deg)' });
+    }
+    b.animate(frames, { duration: 820, easing: 'cubic-bezier(.45,0,.6,1)', fill: 'forwards' }).onfinish = function () { b.remove(); done(); };
+  }
+
+  function collect(id, x, y) {
+    if (found.indexOf(id) !== -1) return;
+    found.push(id);
+    store('mikolaj-zlote', found);
+    markTaken(id);
+    try { if (navigator.vibrate) navigator.vibrate([10, 40, 18]); } catch (e) {}
+    if (!still) shards(x, y, ['#f0c35a', '#fff4c7', '#ffffff']);
+    flyToBadge(x, y, function () {
+      updateBadge(true);
+      var n = found.length;
+      if (n === SILVER_AT || n === HUNT_TOTAL) {
+        var top = n === HUNT_TOTAL;
+        if (!still) {
+          var cols = top ? ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e'] : ['#ffffff', '#c9d4d8', '#f0c35a'];
+          shards(window.innerWidth * .3, window.innerHeight * .45, cols);
+          setTimeout(function () { shards(window.innerWidth * .7, window.innerHeight * .4, cols); }, 160);
+        }
+        toast(top ? 'Wszystkie 7! Masz złoty kupon!' : 'Masz srebrny kupon!');
+        setTimeout(openSheet, still ? 0 : 1000);
+      } else {
+        toast('Złota piłka! Masz już ' + n + ' z ' + HUNT_TOTAL + '.');
+      }
+    });
+  }
+  function centerOf(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-g]');
+    if (!b) return;
+    var c = centerOf(b), id = b.getAttribute('data-g');
+    if (b._anim) { b._anim.cancel(); b.remove(); }
+    collect(id, c.x, c.y);
+  });
+  live.addEventListener('click', function () {
+    if (found.indexOf('g4') !== -1) return;
+    var dot = live.querySelector('i'), c = centerOf(dot);
+    if (still) { collect('g4', c.x, c.y); return; }
+    var pop = fxEl('fxgold', GBALL);
+    pop.animate([
+      { transform: 'translate(' + c.x + 'px,' + c.y + 'px) scale(.2)' },
+      { transform: 'translate(' + c.x + 'px,' + (c.y - 46) + 'px) scale(1.5)', offset: .7 },
+      { transform: 'translate(' + c.x + 'px,' + (c.y - 40) + 'px) scale(1.3)' }
+    ], { duration: 420, easing: OUT, fill: 'forwards' }).onfinish = function () { pop.remove(); collect('g4', c.x, c.y - 40); };
+  });
+
+  /* golden ball 3 falls from the sky now and then; with reduced motion it rests in the sky instead */
+  function scheduleDrop(ms) { if (found.indexOf('g3') === -1) setTimeout(dropGold, ms); }
+  function dropGold() {
+    if (found.indexOf('g3') !== -1 || fx.querySelector('.fall-gold')) return;
+    if (document.hidden || !sheet.hidden || !byId('unlock').hidden) { scheduleDrop(5000); return; }
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'fall-gold'; b.setAttribute('data-g', 'g3');
+    b.setAttribute('aria-label', 'Złota piłka spada z nieba. Złap ją!');
+    b.innerHTML = GBALL;
+    fx.appendChild(b);
+    var W = window.innerWidth, H = window.innerHeight, x0 = W * (.15 + Math.random() * .7), frames = [], i, t;
+    for (i = 0; i <= 24; i++) {
+      t = i / 24;
+      frames.push({ transform: 'translate(' + (x0 + Math.sin(t * Math.PI * 3) * 34).toFixed(1) + 'px,' + (-50 + (H + 110) * t).toFixed(1) + 'px) rotate(' + (t * 420).toFixed(0) + 'deg)' });
+    }
+    b._anim = b.animate(frames, { duration: 8500, easing: 'linear', fill: 'forwards' });
+    b._anim.onfinish = function () { b.remove(); scheduleDrop(14000 + Math.random() * 10000); };
+  }
+  if (still) {
+    var sky = document.createElement('button');
+    sky.type = 'button'; sky.className = 'gold-btn gold-sky'; sky.setAttribute('data-g', 'g3');
+    sky.setAttribute('aria-label', 'Złota piłka na niebie'); sky.innerHTML = GBALL;
+    if (found.indexOf('g3') !== -1) sky.hidden = true;
+    document.querySelector('.scene-wrap').appendChild(sky);
+  } else {
+    scheduleDrop(9000);
+  }
+
+  /* ---------- coupon ---------- */
+  function toHex(str) {
+    var bytes = new TextEncoder().encode(str), out = '';
+    for (var i = 0; i < bytes.length; i++) out += ('0' + bytes[i].toString(16)).slice(-2);
+    return out;
+  }
+  function fromHex(hex) {
+    try {
+      var bytes = new Uint8Array(hex.length / 2);
+      for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+      return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    } catch (e) { return ''; }
+  }
+  function couponCode(tier, hex) { return fnv(SALT + '|' + tier + '|' + hex).slice(0, 6); }
+  function couponFor(name, tier) {
+    var hex = toHex(name), code = couponCode(tier, hex);
+    return { url: BASE_URL + '#kupon-' + tier + '-' + hex + '-' + code, code: code.toUpperCase() };
+  }
+  var COUPON_BOW = '<svg class="c-bow" viewBox="0 0 68 46" aria-hidden="true">' +
+    '<path class="b2" d="M31 27 22 44l8-3 4-12zM37 27l9 17-8-3-4-12z"/>' +
+    '<path class="b1" d="M34 22C22 4 3 6 5 21c2 14 18 12 29 1zM34 22C46 4 65 6 63 21c-2 14-18 12-29 1z"/>' +
+    '<path class="b2" d="M34 22C26 13 14 12 11 19c8-3 15-1 23 3zM34 22c8-9 20-10 23-3-8-3-15-1-23 3z"/>' +
+    '<rect class="b1" x="28" y="15.5" width="12" height="13" rx="4"/></svg>';
+  var COUPON_HOLLY = '<svg class="c-holly" viewBox="0 0 58 44" aria-hidden="true">' +
+    '<path d="M29 22C24 14 15 10 5 12c3 2 3 5 1 7 4 0 6 2 5 6 3-2 6-2 8 1 1-3 4-4 7-3-1-2 0-3 3-1z" fill="#1f7a52"/>' +
+    '<path d="M29 22C34 13 43 8 53 9c-2 2-2 5 0 7-4 0-6 3-4 6-3-1-6 0-8 3-1-3-4-4-7-2 1-2 0-3-5-1z" fill="#17604a"/>' +
+    '<path d="M28 21C21 17 14 15 8 15M30 21C37 16 44 13 50 12" fill="none" stroke="#0e3d2d" stroke-width=".9" stroke-linecap="round"/>' +
+    '<circle cx="26" cy="25" r="4.2" fill="#c62a41"/><circle cx="33" cy="26" r="4.2" fill="#d63a50"/><circle cx="29.5" cy="20.5" r="4.2" fill="#b3233a"/>' +
+    '<circle cx="24.6" cy="23.6" r="1.1" fill="#fff" opacity=".8"/><circle cx="31.6" cy="24.6" r="1.1" fill="#fff" opacity=".8"/><circle cx="28.1" cy="19.1" r="1.1" fill="#fff" opacity=".8"/></svg>';
+  var COUPON_STAMP = '<svg class="c-stamp" viewBox="0 0 80 80" aria-hidden="true">' +
+    '<defs><path id="stamp-ring" d="M40 40m-27 0a27 27 0 1 1 54 0a27 27 0 1 1-54 0"/></defs>' +
+    '<g fill="none" stroke="currentColor"><circle cx="40" cy="40" r="36" stroke-width="2.4"/><circle cx="40" cy="40" r="20" stroke-width="1.2"/></g>' +
+    '<text fill="currentColor" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="8.6" letter-spacing="1.6">' +
+    '<textPath href="#stamp-ring">MIKOŁAJ · BIEGUN PÓŁNOCNY · </textPath></text>' +
+    '<g fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="40" cy="37" r="9" stroke-width="1.6"/>' +
+    '<path d="M33.2 31.5c4 3.4 4 7.6 0 11M46.8 31.5c-4 3.4-4 7.6 0 11" stroke-width="1.3"/></g>' +
+    '<text x="40" y="54.5" text-anchor="middle" fill="currentColor" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="7.5" letter-spacing="1">2026</text></svg>';
+
+  /* a festive QR: rounded dots, rounded corner eyes, a golden tennis ball in the middle (high error correction) */
+  function drawQR(holderEl, text) {
+    if (typeof window.qrcode !== 'function') {
+      holderEl.textContent = 'Kod QR nie wczytał się. Odśwież stronę.';
+      holderEl.style.cssText = 'padding:18px;font-size:13px;line-height:1.4;max-width:150px';
+      return;
+    }
+    var q = window.qrcode(0, 'H');
+    q.addData(text);
+    q.make();
+    var n = q.getModuleCount(), quiet = 1, cssSize = 180, dpr = Math.min(3, window.devicePixelRatio || 1);
+    var px = Math.round(cssSize * dpr), cell = px / (n + quiet * 2);
+    var cv2 = document.createElement('canvas');
+    cv2.width = cv2.height = px;
+    cv2.style.width = cv2.style.height = cssSize + 'px';
+    cv2.setAttribute('role', 'img');
+    cv2.setAttribute('aria-label', 'Kod QR kuponu');
+    var g = cv2.getContext('2d'), INK = '#0d2a22', EYE = '#9a1b30';
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, px, px);
+    function rr(x, y, w, h, r) {
+      g.beginPath();
+      g.moveTo(x + r, y); g.lineTo(x + w - r, y); g.quadraticCurveTo(x + w, y, x + w, y + r);
+      g.lineTo(x + w, y + h - r); g.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      g.lineTo(x + r, y + h); g.quadraticCurveTo(x, y + h, x, y + h - r);
+      g.lineTo(x, y + r); g.quadraticCurveTo(x, y, x + r, y);
+      g.closePath(); g.fill();
+    }
+    function finder(r, c) { return (r < 7 && c < 7) || (r < 7 && c >= n - 7) || (r >= n - 7 && c < 7); }
+    var mid = n / 2, R = n * .14;
+    function logo(r, c) { var dr = r + .5 - mid, dc = c + .5 - mid; return dr * dr + dc * dc < (R + .9) * (R + .9); }
+    g.fillStyle = INK;
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      if (!q.isDark(r, c) || finder(r, c) || logo(r, c)) continue;
+      g.beginPath();
+      g.arc((c + quiet + .5) * cell, (r + quiet + .5) * cell, cell * .47, 0, 6.2832);
+      g.fill();
+    }
+    [[0, 0], [0, n - 7], [n - 7, 0]].forEach(function (f) {
+      var x = (f[1] + quiet) * cell, y = (f[0] + quiet) * cell;
+      g.fillStyle = INK; rr(x, y, 7 * cell, 7 * cell, 2.2 * cell);
+      g.fillStyle = '#ffffff'; rr(x + cell, y + cell, 5 * cell, 5 * cell, 1.5 * cell);
+      g.fillStyle = EYE; rr(x + 2 * cell, y + 2 * cell, 3 * cell, 3 * cell, 1.1 * cell);
+    });
+    var cx = (mid + quiet) * cell, cy = cx, br = R * cell;
+    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(cx, cy, br + cell * .7, 0, 6.2832); g.fill();
+    var gr = g.createRadialGradient(cx - br * .35, cy - br * .4, br * .1, cx, cy, br);
+    gr.addColorStop(0, '#fff4c7'); gr.addColorStop(.5, '#f5cc5e'); gr.addColorStop(1, '#b07f22');
+    g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, br, 0, 6.2832); g.fill();
+    g.save(); g.beginPath(); g.arc(cx, cy, br, 0, 6.2832); g.clip();
+    g.strokeStyle = '#fffbe8'; g.lineWidth = Math.max(1, br * .13); g.lineCap = 'round';
+    g.beginPath(); g.moveTo(cx - br * .78, cy - br * .62); g.quadraticCurveTo(cx - br * .18, cy, cx - br * .78, cy + br * .62); g.stroke();
+    g.beginPath(); g.moveTo(cx + br * .78, cy - br * .62); g.quadraticCurveTo(cx + br * .18, cy, cx + br * .78, cy + br * .62); g.stroke();
+    g.restore();
+    holderEl.appendChild(cv2);
+  }
+  var DATE_FMT = { day: 'numeric', month: 'long', year: 'numeric' };
+
+  function renderSheet() {
+    var n = found.length, i, slots = byId('slots'), html = '';
+    for (i = 0; i < HUNT_TOTAL; i++) {
+      html += i < n ? '<span class="slot-b on">' + GBALL + '</span>' : '<span class="slot-b' + (i + 1 === SILVER_AT ? ' mark' : '') + '">' + (i + 1) + '</span>';
+    }
+    slots.innerHTML = html;
+    var st = byId('sheet-status');
+    if (n < SILVER_AT) st.innerHTML = 'Znalezione: <b>' + n + ' z ' + HUNT_TOTAL + '</b>. Do srebrnego kuponu brakuje ' + (SILVER_AT - n) + '.';
+    else if (n < HUNT_TOTAL) st.innerHTML = 'Znalezione: <b>' + n + ' z ' + HUNT_TOTAL + '</b>. Masz srebrny kupon! Znajdź wszystkie, a zmieni się na złoty.';
+    else st.innerHTML = '<b>Wszystkie 7 znalezione.</b> Masz złoty kupon!';
+    byId('hint-row').hidden = n === HUNT_TOTAL;
+    byId('hint-text').hidden = true;
+    var hintsLeft = HINT_ORDER.filter(function (id) { return found.indexOf(id) === -1; }).length;
+    byId('hint-note').textContent = hintsLeft
+      ? 'Podpowiedzi są tylko do 5 piłek. Zostało ich ' + hintsLeft + '. Dwie ostatnie trzeba znaleźć samodzielnie.'
+      : 'Podpowiedzi się skończyły. Dwie ostatnie piłki trzeba znaleźć samodzielnie.';
+
+    var area = byId('coupon-area');
+    area.innerHTML = '';
+    byId('rename').hidden = !(n >= SILVER_AT && holder);
+    if (n < SILVER_AT) {
+      area.innerHTML = '<div class="locked-coupon"><strong>Kupon zablokowany</strong>Znajdź jeszcze ' + (SILVER_AT - n) + ', a odblokujesz srebrny kupon na prezent od Mikołaja.</div>';
+      return;
+    }
+    if (!holder) {
+      area.innerHTML = '<form class="name-form" id="name-form"><p>Brawo! Wpisz swoje imię, żeby Mikołaj wiedział, dla kogo jest kupon.</p>' +
+        '<label for="hunt-name">Twoje imię</label><div class="field-row"><input class="field" id="hunt-name" name="hunt-name" maxlength="24" autocomplete="given-name" required>' +
+        '<button class="cta" type="submit">Odbierz</button></div></form>';
+      byId('name-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = byId('hunt-name').value.replace(/\s+/g, ' ').trim().slice(0, 24);
+        if (!v) return;
+        holder = { name: v, date: new Date().toISOString() };
+        store('mikolaj-kupon', holder);
+        renderSheet();
+        var cp = area.querySelector('.coupon');
+        if (cp && !still) cp.animate([{ opacity: 0, transform: 'translateY(20px) scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: SPRING });
+      });
+      return;
+    }
+    var tier = n >= HUNT_TOTAL ? 'z' : 's', cp = couponFor(holder.name, tier);
+    var when = new Date(holder.date);
+    area.innerHTML = '<p class="shot-tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>Zrób zrzut ekranu tego kuponu</p>' +
+      '<div class="coupon ' + tier + '">' +
+        '<div class="c-ribbon"><span class="coupon-tier">' + (tier === 'z' ? 'Złoty kupon' : 'Srebrny kupon') + '</span></div>' +
+        COUPON_BOW + COUPON_HOLLY +
+        '<p class="coupon-for">dla</p><p class="coupon-name" id="coupon-name"></p>' +
+        '<div class="coupon-qr" id="coupon-qr"></div>' +
+        '<p class="coupon-text">Pokaż ten kod Mikołajowi w Święta. Co dostaniesz, okaże się dopiero po zeskanowaniu.</p>' +
+        '<div class="coupon-foot"><div class="coupon-meta"><span class="coupon-no">Nr ' + cp.code + '</span>' +
+        '<span class="coupon-date">Wydany ' + (isNaN(when) ? '' : when.toLocaleDateString('pl-PL', DATE_FMT)) + '</span></div>' + COUPON_STAMP + '</div>' +
+      '</div>';
+    byId('coupon-name').textContent = holder.name;
+    drawQR(byId('coupon-qr'), cp.url);
+  }
+
+  function openSheet() {
+    if (!sheet.hidden) { renderSheet(); return; }
+    renderSheet();
+    lastFocus = document.activeElement;
+    sheet.hidden = false; back.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    if (!still) {
+      sheet.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: 520, easing: OUT });
+      back.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320 });
+    }
+    byId('sheet-close').focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    if (sheet.hidden) return;
+    function done() {
+      sheet.hidden = true; back.hidden = true;
+      document.documentElement.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+    if (still) { done(); return; }
+    sheet.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(100%)' }], { duration: 300, easing: 'cubic-bezier(.5,0,.75,0)' }).onfinish = done;
+    back.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).onfinish = function () { this.cancel(); };
+  }
+  badge.addEventListener('click', openSheet);
+  byId('hunt-intro').addEventListener('click', openSheet);
+  byId('sheet-close').addEventListener('click', closeSheet);
+  back.addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+  byId('hint-btn').addEventListener('click', function () {
+    var next = HINT_ORDER.filter(function (id) { return found.indexOf(id) === -1; })[0];
+    var ht = byId('hint-text');
+    ht.textContent = next ? HINTS[next] : 'Podpowiedzi się skończyły. Ostatnie piłki są dobrze schowane. Rozglądaj się uważnie, czasem coś błyśnie złotem.';
+    ht.hidden = false;
+    if (!still) ht.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: OUT });
+  });
+  byId('rename').addEventListener('click', function () { holder = null; store('mikolaj-kupon', null); renderSheet(); var f = byId('hunt-name'); if (f) f.focus(); });
+  var resetArmed = false;
+  byId('hunt-reset').addEventListener('click', function () {
+    var btn = byId('hunt-reset');
+    if (!resetArmed) { resetArmed = true; btn.textContent = 'Na pewno? Stuknij jeszcze raz'; setTimeout(function () { resetArmed = false; btn.textContent = 'Zacznij zabawę od nowa'; }, 4000); return; }
+    resetArmed = false; btn.textContent = 'Zacznij zabawę od nowa';
+    found = []; holder = null;
+    store('mikolaj-zlote', found); store('mikolaj-kupon', null);
+    unmarkAll(); updateBadge(false); renderSheet();
+    if (!still) scheduleDrop(6000);
+    toast('Złote piłki wróciły na swoje miejsca.');
+  });
+
+  /* ---------- a scanned coupon: #kupon-<tier>-<name in hex>-<code> ---------- */
+  var unlock = byId('unlock'), ubody = byId('unlock-body'), current = null;
+  function parseCoupon(h) {
+    var m = /^#kupon-([sz])-((?:[0-9a-f]{2}){1,96})-([0-9a-f]{6})$/.exec(h);
+    if (!m) return { ok: false };
+    var name = fromHex(m[2]);
+    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3] };
+  }
+  function rewardFor(c) { var pool = REWARDS[c.tier]; return pool[parseInt(c.code.slice(0, 4), 16) % pool.length]; }
+  function showUnlock(c) {
+    current = c;
+    closeSheet();
+    unlock.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    if (!still) unlock.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400 });
+    var title = byId('unlock-title'), sub = byId('unlock-sub'), eb = byId('unlock-eyebrow');
+    if (!c.ok) {
+      eb.textContent = 'Kupon od Mikołaja';
+      title.textContent = 'Ten kupon nie działa';
+      sub.textContent = 'Kod jest niepełny albo ktoś go zmienił. Poproś o nowy zrzut ekranu z kuponem.';
+      ubody.innerHTML = '';
+      return;
+    }
+    eb.textContent = c.tier === 'z' ? 'Złoty kupon · 7 z 7 piłek' : 'Srebrny kupon · 3 z 7 piłek';
+    title.textContent = c.name;
+    sub.textContent = 'Ten kupon jest prawdziwy. Nagrodę odkrywa Mikołaj.';
+    ubody.innerHTML = '<form class="pin-form" id="pin-form"><label for="pin">Kod Mikołaja</label>' +
+      '<input class="field" id="pin" name="pin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*">' +
+      '<button class="cta" type="submit">Odkryj nagrodę</button><p class="pin-err" id="pin-err" role="alert"></p></form>';
+    byId('pin-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = byId('pin').value.trim();
+      if (fnv('pin|' + v) === PIN_HASH) { showGift(false); return; }
+      byId('pin-err').textContent = 'To nie ten kod. Spróbuj jeszcze raz.';
+      if (!still) byId('pin').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(9px)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 380 });
+    });
+    /* the owner of the page skips the PIN */
+    try {
+      if (window.claude && typeof window.claude.use === 'function') {
+        window.claude.use('user').then(function (u) { return u ? u.isOwner() : false; }).then(function (own) {
+          if (own && current === c && byId('pin-form')) showGift(true);
+        }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  function showGift(owner) {
+    var c = current, theme = c.tier === 'z' ? 'w0' : 'w1';
+    ubody.innerHTML = (owner ? '<p class="owner-note">Witaj, Mikołaju</p>' : '') +
+      '<button type="button" class="big-gift ' + theme + '" id="big-gift" aria-label="Odpakuj nagrodę">' +
+      '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span><span class="ribbon-h"></span>' + BOW + '</button>' +
+      '<p class="tap-label">Stuknij w paczkę</p>';
+    var g = byId('big-gift');
+    if (!still) g.animate([{ opacity: 0, transform: 'translateY(30px) scale(.8)' }, { opacity: 1, transform: 'none' }], { duration: 640, easing: SPRING });
+    g.addEventListener('click', function () { openBigGift(g); }, { once: true });
+  }
+  function openBigGift(g) {
+    var c = current, rw = rewardFor(c), r = g.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    function reveal() {
+      ubody.innerHTML = '<div class="reward ' + c.tier + '"><span class="reward-chip">' + (c.tier === 'z' ? 'Złota nagroda' : 'Srebrna nagroda') + '</span>' +
+        '<h3 id="reward-name"></h3><p id="reward-desc"></p></div>';
+      byId('reward-name').textContent = rw.name;
+      byId('reward-desc').textContent = rw.desc;
+      byId('unlock-sub').textContent = 'Wesołych Świąt!';
+      if (!still) {
+        ubody.firstChild.animate([{ opacity: 0, transform: 'scale(.7) rotate(-3deg)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: SPRING });
+        var cols = ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e', '#ffffff'];
+        shards(x, y, cols); setTimeout(function () { shards(x - 60, y + 20, cols); shards(x + 60, y + 20, cols); }, 140);
+      }
+    }
+    if (still) { reveal(); return; }
+    g.style.animation = 'none';
+    var o = { duration: 560, easing: OUT, fill: 'forwards' };
+    g.querySelector('.half.l').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(-60%, 30px) rotate(-16deg)', opacity: 0 }], o);
+    g.querySelector('.half.r').animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(60%, 36px) rotate(14deg)', opacity: 0 }], o);
+    g.querySelector('.ribbon').animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(60px)' }], o);
+    g.querySelector('.ribbon-h').animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(60px) rotate(8deg)' }], o);
+    g.querySelector('.bow').animate([{ transform: 'none', opacity: 1 }, { transform: 'translateY(-90px) rotate(30deg) scale(1.2)', opacity: 0 }], { duration: 640, easing: OUT, fill: 'forwards' });
+    shards(x, y, ['#c62a41', '#f0c35a', '#ffffff']);
+    setTimeout(reveal, 420);
+  }
+  function hideUnlock() {
+    if (unlock.hidden) return;
+    unlock.hidden = true;
+    document.documentElement.style.overflow = '';
+    current = null;
+  }
+  function route() {
+    if (location.hash.indexOf('#kupon-') === 0) showUnlock(parseCoupon(location.hash));
+    else hideUnlock();
+  }
+  byId('unlock-close').addEventListener('click', function () {
+    hideUnlock();
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+  });
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+</body>
+</html>
