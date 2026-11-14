@@ -11,13 +11,25 @@
     "hosts": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid && newData.val() === 'TU-WPISZ-SWOJ-TAJNY-KOD'"
+        ".write": "auth != null && auth.uid === $uid && newData.val() === 'TU-WPISZ-4-CYFRY'"
       }
     },
     "attempts": {
       ".read": "auth != null && root.child('hosts').child(auth.uid).exists()",
       "$id": {
         ".write": "auth != null && !data.exists() && newData.child('uid').val() === auth.uid"
+      }
+    },
+    "safe": {
+      ".read": "auth != null && root.child('hosts').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('hosts').child(auth.uid).exists()"
+    },
+    "joins": {
+      ".read": "auth != null && root.child('hosts').child(auth.uid).exists()",
+      ".write": "auth != null && root.child('hosts').child(auth.uid).exists()",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid && root.child('safe/sign').exists() && newData.child('sign').val() === root.child('safe/sign').val() && newData.child('gate').val() === root.child('game/gate/id').val()"
       }
     },
     "game": {
@@ -28,10 +40,14 @@
       "history": {
         ".write": "auth != null && root.child('hosts').child(auth.uid).exists()"
       },
+      "gate": {
+        ".write": "auth != null && root.child('hosts').child(auth.uid).exists()"
+      },
       "scores": {
         "$round": {
           "$uid": {
-            ".write": "auth != null && auth.uid === $uid",
+            ".write": "auth != null && auth.uid === $uid && $round === root.child('game/state/roundKey').val() && now < root.child('game/state/startAt').val() + root.child('game/state/duration').val() + 15000 && root.child('joins').child($uid).child('gate').val() === root.child('game/gate/id').val()",
+            ".validate": "newData.hasChildren(['score', 'name']) && newData.child('name').isString() && newData.child('name').val().length <= 20",
             "score": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" }
           }
         }
