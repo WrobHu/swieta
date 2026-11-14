@@ -1167,6 +1167,7 @@
   .bi-vs { font: 600 17px/1.35 var(--body); color: var(--snow); }
   .bi-hint { font-size: 14px; color: var(--mist); }
   @media (prefers-reduced-motion: reduce) { .bi-yeti { animation: none; } }
+
   .live-top .lt-n { align-self: center; margin-left: auto; font: 600 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
   .host-sign { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: rgba(240, 195, 90, .1); border: 1px solid rgba(240, 195, 90, .35); font-size: 14px; line-height: 1.4; color: var(--mist); }
   .host-sign b { color: var(--gold); }
@@ -1512,6 +1513,21 @@
 @keyframes sf-twinkle{0%,100%{opacity:0}50%{opacity:1}}
 @keyframes sf-jump{0%{transform:none}35%{transform:translateY(-16%) scale(.98,1.04)}70%{transform:none}82%{transform:scale(1.05,.93)}100%{transform:none}}
 .sf-burst{position:absolute;left:50%;top:48%;z-index:6;width:0;height:0;pointer-events:none}
+/* Yeti peeking from behind the safe, with a speech bubble */
+.sf-yeti{position:absolute;z-index:0;right:-1%;top:15%;width:25%;pointer-events:none;transform-origin:30% 100%;animation:sf-ypeek 6.5s ease-in-out infinite}
+.sf-yeti svg{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 12px rgba(0,0,0,.4))}
+@keyframes sf-ypeek{0%,100%{transform:translateX(-14%) rotate(3deg)}30%,72%{transform:translateX(6%) rotate(13deg)}82%{transform:translateX(4%) rotate(9deg)}}
+.safe.is-err .sf-yeti{animation:sf-yno .6s ease-in-out}
+@keyframes sf-yno{0%,100%{transform:translateX(4%) rotate(12deg)}25%{transform:translateX(4%) rotate(2deg)}50%{transform:translateX(4%) rotate(18deg)}75%{transform:translateX(4%) rotate(6deg)}}
+.safe.is-win .sf-yeti{animation:sf-yjump .55s var(--sf-out) 1.6s 4 both}
+@keyframes sf-yjump{0%,100%{transform:translateX(6%) rotate(12deg)}40%{transform:translateX(10%) translateY(-18%) rotate(4deg)}}
+.sf-ysay{position:absolute;z-index:5;right:-1%;top:-3%;max-width:54%;margin:0;padding:7px 11px;border-radius:14px 14px 4px 14px;background:#f2f9ff;color:#14304a;
+  font:700 13px/1.25 var(--body,sans-serif);text-align:left;text-wrap:balance;box-shadow:0 6px 16px rgba(0,0,0,.35);transform-origin:85% 100%;pointer-events:none}
+.sf-ysay:empty{display:none}
+.sf-ysay::after{content:"";position:absolute;right:18%;bottom:-5px;width:11px;height:11px;background:inherit;transform:rotate(45deg);border-radius:2px}
+.sf-ysay.is-pop{animation:sf-pop .38s var(--sf-spring)}
+.safe.is-err .sf-ysay{background:#ffe3e6;color:#7a1020}
+
 .sf-bit{position:absolute;left:-4px;top:-3px;width:8px;height:5px;border-radius:1.5px;opacity:0;animation:sf-fly 1.6s var(--sf-out) forwards}
 .sf-bit--o{width:7px;height:7px;border-radius:50%}
 @keyframes sf-fly{0%{opacity:1;transform:translate(0,0) scale(.4)}75%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1)}}
@@ -2248,10 +2264,10 @@
         <div class="card boss-card" id="boss-card" hidden></div>
         <div class="card next-card" id="next-card" hidden></div>
         <div class="card">
-          <p class="notice" id="game-status">Czekamy, aż Mikołaj rozpocznie turniej.</p>
+          <p class="notice" id="game-status">Czekamy, aż gospodarz otworzy turniej.</p>
           <p class="host-sign" id="host-sign" hidden></p>
           <button type="button" class="cta wide join-btn" id="join-btn" hidden><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.6 6.2h12.8v6.2a6.4 6.4 0 0 1-12.8 0Z"/><path d="M9.6 8.4H6.9a3.1 3.1 0 0 0 3.6 4.7M22.4 8.4h2.7a3.1 3.1 0 0 1-3.6 4.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 18.6v3.4" stroke="currentColor" stroke-width="2.4"/><rect x="11.2" y="22.2" width="9.6" height="3.6" rx="1.2"/></svg>Dołącz do turnieju</button>
-          <p class="joined-note" id="joined-note" hidden>Jesteś w turnieju. Gry ruszą same, gdy Mikołaj je uruchomi.</p>
+          <p class="joined-note" id="joined-note" hidden>Jesteś w turnieju. Każda gra ruszy sama na Twoim telefonie.</p>
           <p class="notice" id="inapp-note" hidden>Ta strona jest otwarta w przeglądarce wbudowanej w aplikację (np. Messenger). Dla pewności otwórz ją w Safari albo Chrome i zostań tam do końca turnieju.</p>
           <div class="actions" id="host-actions" hidden>
             <a class="tool quiet" href="#panel">Panel Mikołaja</a>
@@ -2262,7 +2278,7 @@
           </div>
           <p class="card-label" id="people-label">Na stronie teraz</p>
           <div class="people" id="game-people"></div>
-          <div class="actions"><button type="button" class="tool quiet" id="i-am-host">Jestem Mikołajem</button></div>
+          <div class="actions"><button type="button" class="tool quiet" id="i-am-host">Jestem gospodarzem</button></div>
         </div>
         <div class="card" id="standings-card" hidden>
           <p class="card-label">Klasyfikacja turnieju</p>
@@ -2327,7 +2343,7 @@
     <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
     <a class="tab" href="#start" data-tab="start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 11v8.5h11V11"/><path d="M10.3 19.5v-4h3.4v4"/><path d="M15.6 8.6V5.4h2.2v5"/><path d="M3.6 12.2 12 4.9l8.4 7.3" stroke="#f2f7f3" stroke-width="2.5"/><circle cx="18.2" cy="2.9" r="1" fill="#f2f7f3" stroke="none" opacity=".55"/></svg>Start</a>
     <a class="tab" href="#list" data-tab="prezenty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6.5" width="17" height="12.5" rx="2"/><path d="M4 7.6l8 6.1 8-6.1"/><circle cx="12" cy="14.2" r="2.3" fill="#cf2e45" stroke="none"/><path d="M16.4 4.6c1.2-1.2 2.9-1 3.6.2-1.3.9-2.7.9-3.6-.2ZM20.2 4.8c.2-1.6 1.6-2.5 2.9-2-.2 1.5-1.5 2.4-2.9 2Z" fill="#2fa36b" stroke="none"/><circle cx="19.4" cy="5.9" r="1" fill="#ff5a6e" stroke="none"/></svg>List</a>
-    <button type="button" class="tab tab-cup" id="tab-cup" data-tab="turniej" aria-label="Turniej: sejf Mikołaja"><span class="cup"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.6 6.2h12.8v6.2a6.4 6.4 0 0 1-12.8 0Z" fill="#0f2f26"/><path d="M9.6 8.4H6.9a3.1 3.1 0 0 0 3.6 4.7M22.4 8.4h2.7a3.1 3.1 0 0 1-3.6 4.7" fill="none" stroke="#0f2f26" stroke-width="2" stroke-linecap="round"/><path d="M16 18.6v3.4" stroke="#0f2f26" stroke-width="2.4"/><rect x="11.2" y="22.2" width="9.6" height="3.6" rx="1.2" fill="#0f2f26"/><path d="M12.6 8.6c1.8 1.2 1.8 4 0 5.2M19.4 8.6c-1.8 1.2-1.8 4 0 5.2" fill="none" stroke="#dcee4e" stroke-width="1.1" stroke-linecap="round"/><path d="M13.2 4.6c1.4-1.5 3.1-1.3 3.8.2-1.5 1-3 .9-3.8-.2ZM18.8 4.6c-1.4-1.5-3.1-1.3-3.8.2 1.5 1 3 .9 3.8-.2Z" fill="#1f7a52"/><circle cx="16" cy="5.2" r="1.3" fill="#cf2e45"/></svg></span><span class="cup-l">Turniej</span><i class="live-dot" id="cup-live" hidden></i></button>
+    <button type="button" class="tab tab-cup" id="tab-cup" data-tab="turniej" aria-label="Turniej: sejf"><span class="cup"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.6 6.2h12.8v6.2a6.4 6.4 0 0 1-12.8 0Z" fill="#0f2f26"/><path d="M9.6 8.4H6.9a3.1 3.1 0 0 0 3.6 4.7M22.4 8.4h2.7a3.1 3.1 0 0 1-3.6 4.7" fill="none" stroke="#0f2f26" stroke-width="2" stroke-linecap="round"/><path d="M16 18.6v3.4" stroke="#0f2f26" stroke-width="2.4"/><rect x="11.2" y="22.2" width="9.6" height="3.6" rx="1.2" fill="#0f2f26"/><path d="M12.6 8.6c1.8 1.2 1.8 4 0 5.2M19.4 8.6c-1.8 1.2-1.8 4 0 5.2" fill="none" stroke="#dcee4e" stroke-width="1.1" stroke-linecap="round"/><path d="M13.2 4.6c1.4-1.5 3.1-1.3 3.8.2-1.5 1-3 .9-3.8-.2ZM18.8 4.6c-1.4-1.5-3.1-1.3-3.8.2 1.5 1 3 .9 3.8-.2Z" fill="#1f7a52"/><circle cx="16" cy="5.2" r="1.3" fill="#cf2e45"/></svg></span><span class="cup-l">Turniej</span><i class="live-dot" id="cup-live" hidden></i></button>
     <a class="tab" href="#szukanie" data-tab="szukanie"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4v2.2"/><rect x="9.7" y="4.5" width="4.6" height="2.8" rx=".9" fill="#f0c35a" stroke="none"/><circle cx="12" cy="14.3" r="7.1"/><path d="M5.7 11.6c2.5 1.4 2.5 4.1 0 5.5M18.3 11.6c-2.5 1.4-2.5 4.1 0 5.5"/><path d="M19.8 3.6l.5 1.3 1.3.5-1.3.5-.5 1.3-.5-1.3-1.3-.5 1.3-.5z" fill="#f0c35a" stroke="none"/></svg>Szukanie<b class="dot" id="tab-hunt" hidden></b></a>
     <a class="tab" href="#gra" data-tab="gra"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.4" cy="8.6" rx="5.4" ry="6.4" transform="rotate(-38 9.4 8.6)"/><path d="M6.6 6.4l5.6 4.7M8.6 4.4l5.2 4.4M5.1 9l4.8 4" stroke-width="1" opacity=".55"/><path d="M13.6 13.5 20.4 21" stroke="#f2f7f3" stroke-width="2.7"/><path d="M15.3 15.3l1-.9M17.1 17.3l1-.9M18.9 19.3l1-.9" stroke="#cf2e45" stroke-width="1.7"/><circle cx="19.2" cy="5.4" r="2.3" fill="#dcee4e" stroke="none"/></svg>Gra</a>
   </div>
@@ -3891,11 +3907,20 @@ function createSafe(opts) {
   var GOLD = '#f0c35a', LIME = '#dcee4e', GF = 'fill="' + GOLD + '" fill-opacity=".16"', DOT = '" stroke="none" r="1.7" fill="' + LIME + '"/>';
   var OOPS = 'Coś poszło nie tak. Spróbuj jeszcze raz.';
   var TXT = {
-    code: ['Krok 1 z 2', 'Sejf <em>Mikołaja</em>', 'Wpisz 4-cyfrowy kod.'],
+    code: ['Krok 1 z 2', 'Sejf <em>turnieju</em>', 'Wpisz 4-cyfrowy kod.'],
     sign: ['Krok 2 z 2', 'Losuję <em>znak</em> turnieju', 'Sejf sam wybiera znak. Zapamiętaj go i podaj wszystkim: każdy musi go wybrać, żeby wejść.'],
-    join: ['Turniej świąteczny', 'Wejście do <em>turnieju</em>', 'Wybierz znak, który podał Mikołaj.'],
-    closed: ['Turniej świąteczny', 'Sejf <em>Mikołaja</em>', 'Sejf jest jeszcze zamknięty. Mikołaj otworzy go przed turniejem.']
+    join: ['Turniej świąteczny', 'Wejście do <em>turnieju</em>', 'Wybierz znak, który ogłosił gospodarz.'],
+    closed: ['Turniej świąteczny', 'Sejf <em>turnieju</em>', 'Sejf jest jeszcze zamknięty. Gospodarz otworzy go przed turniejem.']
   };
+
+  /* what Yeti says over the safe, per step */
+  var YSAY = { code: 'Kod znam tylko ja. Mrrr…', sign: 'Zaraz wylosuję znak!', join: 'Znak, proszę!', closed: 'Zzz… Jeszcze śpię.' };
+  function say(t) {
+    var b = els.ysay;
+    if (!b) return;
+    b.textContent = t || '';
+    b.classList.remove('is-pop'); void b.offsetWidth; if (t) b.classList.add('is-pop');
+  }
 
   /* ---------- the 6 tournament signs (self-contained SVG strings) ---------- */
   function ico(b) {
@@ -4142,6 +4167,7 @@ function createSafe(opts) {
 
   function scene() {
     return '<div class="sf-scene" aria-hidden="true"><div class="sf-halo"></div>' + ground() +
+      (opts.yeti ? '<div class="sf-yeti">' + opts.yeti + '</div><p class="sf-ysay"></p>' : '') +
       '<div class="sf-safe">' + safeBody() +
       '<div class="sf-inside"><div class="sf-rays"></div>' + trophy() + '</div>' +
       '<div class="sf-door"><div class="sf-face">' + doorFace() + '</div><div class="sf-back"></div><div class="sf-edge"></div></div></div>' +
@@ -4183,10 +4209,10 @@ function createSafe(opts) {
       '<div class="sf-pad" role="group" aria-label="Klawiatura sejfu">' + keys + '</div>' +
       '<div class="sf-signs" role="group" aria-label="Znaki turnieju">' + signs + '</div>' +
       '<button type="button" class="sf-cta" disabled>Zamknij sejf z tym znakiem</button>' +
-      '<button type="button" class="sf-link">Jestem Mikołajem, mam kod</button></div>';
+      '<button type="button" class="sf-link">Mam kod gospodarza</button></div>';
     function q(s) { return root.querySelector(s); }
     els = { kicker: q('.sf-kicker'), title: q('.sf-title'), sub: q('.sf-sub'), dots: q('.sf-dots'), msg: q('.sf-msg'), pad: q('.sf-pad'),
-      signs: q('.sf-signs'), cta: q('.sf-cta'), link: q('.sf-link'), burst: q('.sf-burst') };
+      signs: q('.sf-signs'), cta: q('.sf-cta'), link: q('.sf-link'), burst: q('.sf-burst'), ysay: q('.sf-ysay') };
     root.addEventListener('click', onClick);
   }
 
@@ -4198,6 +4224,8 @@ function createSafe(opts) {
     els.title.innerHTML = t[1];
     els.sub.textContent = t[2];
     if (s === 'sign' && typeof opts.signNote === 'function') { var note = opts.signNote(); if (note) els.sub.textContent = t[2] + ' ' + note; }
+    if (s === 'join' && typeof opts.who === 'function') { var who = opts.who(); if (who) els.sub.textContent = t[2] + ' Grasz jako ' + who + '.'; }
+    say(YSAY[s]);
     els.dots.hidden = els.pad.hidden = s !== 'code';
     els.signs.hidden = !(s === 'sign' || s === 'join');
     els.cta.hidden = s !== 'sign';
@@ -4286,10 +4314,10 @@ function createSafe(opts) {
     var pick = 0, n = SIGNS.length;
     try { var a = new Uint32Array(1); crypto.getRandomValues(a); pick = a[0] % n; } catch (e) { pick = Math.floor(Math.random() * n); }
     var steps = still ? 0 : 3 * n + pick + 1 - 0, i = 0, cur = 0, delay = 55;
-    busy = true; els.cta.disabled = true; setMsg('Losuję…', '');
+    busy = true; els.cta.disabled = true; setMsg('Losuję…', ''); say('Kręć się, kręć…');
     function land() {
       selected = SIGNS[pick].id; renderSigns(); busy = false; els.cta.disabled = false;
-      setMsg('Wylosowany znak: ' + SIGNS[pick].name + '!', 'good'); pulse('is-ok', 900); buzz([20, 40, 60]);
+      setMsg('Wylosowany znak: ' + SIGNS[pick].name + '!', 'good'); pulse('is-ok', 900); buzz([20, 40, 60]); say('Mam! ' + SIGNS[pick].name + '. Ogłoś ten znak wszystkim.');
       later(function () { els.cta.focus({ preventScroll: true }); }, 60);
     }
     if (!steps) { land(); return; }
@@ -4306,6 +4334,7 @@ function createSafe(opts) {
     setMsg(typeof r === 'string' && r ? r : def, 'bad');
     buzz([70, 50, 70]);
     pulse('is-err', 750);
+    say(kind === 'code' ? 'Grrr! To nie mój kod.' : kind === 'join' ? 'Grrr! Nie ten znak.' : 'Grrr… coś nie działa.');
     if (kind === 'code') { code = ''; later(renderDots, still ? 0 : 450); }
     if (kind === 'join') { selected = null; renderSigns(); }
   }
@@ -4342,7 +4371,9 @@ function createSafe(opts) {
   function win(m, id) {
     done = true;
     els.link.hidden = true;
-    setMsg(m === 'host' ? 'Gotowe! Znak turnieju: ' + signById(id).name + '.' : 'Brawo! Wchodzisz do turnieju!', 'good');
+    var nm = m === 'join' && typeof opts.who === 'function' ? opts.who() : '';
+    setMsg(m === 'host' ? 'Gotowe! Znak turnieju: ' + signById(id).name + '.' : 'Brawo' + (nm ? ', ' + nm : '') + '! Wchodzisz do turnieju!', 'good');
+    say(m === 'host' ? 'Sejf zamknięty. Czas na turniej!' : 'Witaj w moim turnieju!');
     root.classList.add('is-win');
     buzz([40, 60, 40, 60, 140]);
     if (!still) later(burst, 1500);
@@ -4458,7 +4489,7 @@ function createSafe(opts) {
   function hostAutoJoin() {
     if (!FB || !isHost || !safeSign || !gate || !gate.open || !gate.id || joinedNow() || autoJoinFor === gate.id) return;
     autoJoinFor = gate.id;
-    FB.D.set(R('joins/' + myUid), { sign: safeSign, gate: gate.id, name: visitorName() || 'Mikołaj', at: FB.D.serverTimestamp() }).catch(function () { autoJoinFor = ''; });
+    FB.D.set(R('joins/' + myUid), { sign: safeSign, gate: gate.id, name: visitorName() || 'Yeti', at: FB.D.serverTimestamp() }).catch(function () { autoJoinFor = ''; });
   }
   function joinedNow() { return !!(gate && gate.id && myJoin && myJoin.gate === gate.id && !joinPending); }
   function codeFail(code) {
@@ -4470,6 +4501,8 @@ function createSafe(opts) {
     if (safeUI) return safeUI;
     safeUI = createSafe({
       still: still,
+      yeti: YETI_SVG.replace(/yt([FS])/g, 'ys$1'),
+      who: function () { return visitorName(); },
       checkCode: function (code) {
         if (!FB) return Promise.resolve('Sejf działa tylko na stronie wrobhu.github.io/swieta, z internetem.');
         if (Date.now() < lockUntil) return Promise.resolve('Elfy pilnują sejfu jeszcze ' + Math.ceil((lockUntil - Date.now()) / 1000) + ' s.');
@@ -4482,7 +4515,7 @@ function createSafe(opts) {
         });
       },
       setSign: function (sign) {
-        var who = visitorName() || 'Mikołaj';
+        var who = visitorName() || 'Yeti';
         return FB.D.get(R('game/gate')).then(function (gs) {
           var cur = gs.val(), keep = !!(cur && cur.open && cur.id), id = keep ? cur.id : Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
           return FB.D.set(R('safe'), { sign: sign, at: FB.D.serverTimestamp() })
@@ -4515,7 +4548,8 @@ function createSafe(opts) {
         safeUI.close();
         if (!gameActive) { byId('game-results').hidden = true; byId('game-play').hidden = true; byId('game-lobby').hidden = false; resultsFor = 0; }
         go('turniej');
-        toast(r.mode === 'host' ? 'Sejf zamknięty. Powiedz wszystkim znak i rozpocznij turniej!' : 'Jesteś w turnieju! Czekaj na start.');
+        var sgn = r.mode === 'host' ? signInfo(r.sign) : null;
+        toast(r.mode === 'host' ? 'Sejf zamknięty. Ogłoś znak' + (sgn ? ' „' + sgn.name + '”' : '') + ' i rozpocznij turniej!' : 'Jesteś w turnieju! Czekaj na start.');
         renderLobby();
         if (gameState) onGameState(gameState);
       },
@@ -4655,7 +4689,7 @@ function createSafe(opts) {
     FB.D.onValue(R('joins'), function (s) { allJoins = s.val() || {}; renderLobby(); }, noop);
     FB.D.onValue(R('safe'), function (s) { var v = s.val(); safeSign = v && v.sign || null; hostAutoJoin(); renderLobby(); }, noop);
     renderLobby();
-    if (!silent) toast('Witaj, Mikołaju! Możesz rozpocząć rundę.');
+    if (!silent) toast('Witaj, Yeti! Możesz rozpocząć rundę.');
   }
   function openHost() {
     var m = byId('host-modal');
@@ -4687,9 +4721,9 @@ function createSafe(opts) {
   function showElf() {
     var el = byId('elf'), n = tries, who = visitorName() || 'tajemniczy gościu';
     var lines = [
-      'Pudło! Psotek wszystko widział i już leci z donosem do Mikołaja.',
-      'Znowu? To już druga próba. Mikołaj dostanie pełny raport.',
-      n + ' prób i nic! Psotek zapisał każdą. Mikołaj wie, że to Ty, ' + who + '.'
+      'Pudło! Psotek wszystko widział i już leci z donosem do gospodarza.',
+      'Znowu? To już druga próba. Gospodarz dostanie pełny raport.',
+      n + ' prób i nic! Psotek zapisał każdą. Gospodarz wie, że to Ty, ' + who + '.'
     ];
     byId('elf-count').textContent = 'Nieudana próba nr ' + n;
     byId('elf-text').textContent = lines[Math.min(n, 3) - 1] + (Date.now() < lockUntil ? ' Za karę 30 sekund bez prób.' : '');
@@ -5489,7 +5523,7 @@ function createSafe(opts) {
     top.forEach(function (e) { allowed[e.uid] = true; }); allowed[myUid] = true;
     var round = Math.max(gameState.round || 0, maxH) + 1, upd = {};
     upd.state = { session: session, boss: true, final: true, idx: GAME_ORDER.length, game: game, round: round, roundKey: String(round), startAt: serverNow() + 9000, duration: GAMES[game].dur,
-      seed: Math.floor(Math.random() * 2147483646) + 1, by: visitorName() || 'Mikołaj', at: serverNow(), allowed: allowed, bossUid: myUid, names: top.map(function (e) { return e.name; }) };
+      seed: Math.floor(Math.random() * 2147483646) + 1, by: visitorName() || 'Yeti', at: serverNow(), allowed: allowed, bossUid: myUid, names: top.map(function (e) { return e.name; }) };
     upd['history/' + round] = { session: session, game: game, boss: true, bossUid: myUid };
     FB.D.update(R('game'), upd).catch(function () { toast('Nie udało się uruchomić finału. Sprawdź połączenie.'); });
   }
@@ -5654,14 +5688,14 @@ function createSafe(opts) {
       } else if (live && st.boss && !(st.allowed && st.allowed[myUid])) {
         if (bossIntroFor !== st.round && visitor && splash.hidden) { bossIntroFor = st.round; showBossIntro(st); if (currentView !== 'turniej') { location.hash = 'turniej'; showView('turniej'); } }
       } else if (live && st.round !== lastJoined && !joinedNow()) {
-        if (nagRound !== st.round && visitor && splash.hidden) { nagRound = st.round; toast('Turniej trwa! Stuknij puchar i wybierz znak od Mikołaja.'); }
+        if (nagRound !== st.round && visitor && splash.hidden) { nagRound = st.round; toast('Turniej trwa! Stuknij puchar i wybierz znak od Yetiego.'); }
       } else if (live && st.round !== lastJoined) {
         if (!visitor || !splash.hidden) pendingRound = st;
         else {
           lastJoined = st.round;
           if (currentView !== 'turniej') { location.hash = 'turniej'; showView('turniej'); }
           if (st.boss) { if (bossIntroFor !== st.round) { bossIntroFor = st.round; showBossIntro(st); } }
-          else if (st.startAt - serverNow() > 0) toast(gameTag(st.idx) + ': ' + GAMES[st.game].name + '!');
+          else if (st.startAt - serverNow() > 0) toast(st.boss ? gameTag(st.idx) + ': ' + GAMES[st.game].name + '!' : 'Yeti uruchamia grę! ' + GAMES[st.game].name + '!');
           startGame({ game: st.game, seed: st.seed, duration: st.duration, startAt: st.startAt, clock: serverNow, round: st.round, idx: st.idx, boss: !!st.boss });
         }
       }
@@ -5827,8 +5861,8 @@ function createSafe(opts) {
     /* what comes next, for everyone, while Mikołaj decides when to start it */
     var ng = GAME_ORDER[idx + 1], nge = byId('res-nextgame');
     nge.hidden = false;
-    nge.innerHTML = ng ? '<span class="ng-ico" aria-hidden="true">' + GAMES[ng].icon + '</span><span class="ng-txt"><small>Następnie · ' + gameTag(idx + 1) + ' · ' + GAMES[ng].time + '</small><b>' + GAMES[ng].name + '</b><span>' + GAMES[ng].desc + '</span>' + (isHost ? '' : '<em>Mikołaj uruchomi ją, gdy wszyscy będą gotowi.</em>') + '</span>'
-      : '<span class="ng-ico" aria-hidden="true">🏆</span><span class="ng-txt"><small>Następnie</small><b>Ogłoszenie Mistrza Świąt</b><span>A potem Finał z Bossem: TOP 3 kontra Yeti Śnieżnik.</span></span>';
+    nge.innerHTML = ng ? '<span class="ng-ico" aria-hidden="true">' + GAMES[ng].icon + '</span><span class="ng-txt"><small>Następnie · ' + gameTag(idx + 1) + ' · ' + GAMES[ng].time + '</small><b>' + GAMES[ng].name + '</b><span>' + GAMES[ng].desc + '</span>' + (isHost ? '' : '<em>Yeti uruchomi ją, gdy wszyscy będą gotowi.</em>') + '</span>'
+      : '<span class="ng-ico" aria-hidden="true">🏆</span><span class="ng-txt"><small>Następnie</small><b>Ogłoszenie Mistrza Świąt</b><span>A potem… zobaczycie.</span></span>';
     if (resAnimFor !== rd) { resAnimFor = rd; animateResults(gains); }
     var nxt = byId('res-next'), last = idx >= GAME_ORDER.length - 1, wait = isHost && gameState && String(gameState.round) === String(rd) && collecting(gameState);
     nxt.hidden = !isHost;
@@ -5908,14 +5942,14 @@ function createSafe(opts) {
     if (!fbConnected) { toast('Telefon nie ma teraz internetu. Poczekaj chwilę i spróbuj jeszcze raz.'); return; }
     var maxH = Object.keys(history || {}).concat(Object.keys(allScores || {})).reduce(function (m, k) { return Math.max(m, +k || 0); }, 0);
     var game = GAME_ORDER[idx], round = Math.max((gameState && gameState.round) || 0, maxH) + 1, upd = {};
-    upd.state = { session: session, idx: idx, game: game, round: round, roundKey: String(round), startAt: serverNow() + 5200, duration: GAMES[game].dur, seed: Math.floor(Math.random() * 2147483646) + 1, by: visitorName() || 'Mikołaj' };
+    upd.state = { session: session, idx: idx, game: game, round: round, roundKey: String(round), startAt: serverNow() + 5200, duration: GAMES[game].dur, seed: Math.floor(Math.random() * 2147483646) + 1, by: visitorName() || 'Yeti' };
     upd['history/' + round] = { session: session, game: game };
     FB.D.update(R('game'), upd).catch(function () { toast('Nie udało się uruchomić gry. Sprawdź połączenie.'); });
   }
   function finishTournament() {
     if (!FB || !isHost || !gameState || !gameState.session) return;
     if (collecting(gameState)) { toast('Chwila, zbieram ostatnie wyniki…'); return; }
-    FB.D.set(R('game/state'), { session: gameState.session, idx: GAME_ORDER.length, round: gameState.round, final: true, at: serverNow(), by: visitorName() || 'Mikołaj' }).catch(noop);
+    FB.D.set(R('game/state'), { session: gameState.session, idx: GAME_ORDER.length, round: gameState.round, final: true, at: serverNow(), by: visitorName() || 'Yeti' }).catch(noop);
   }
   /* the last scores of a game may still be on their way for a few seconds after it ends */
   function collecting(st) { return !!(st && st.startAt && !st.final && serverNow() < st.startAt + st.duration + 3500); }
@@ -5942,7 +5976,7 @@ function createSafe(opts) {
     byId('tour-list').innerHTML = GAME_ORDER.map(function (k, i) {
       var g = GAMES[k], state = i === cur ? (roundLive(st) ? 'Trwa' : 'Ostatnia') : i < cur ? 'Rozegrana' : '';
       return '<li class="tl' + (i === cur ? ' now' : i < cur ? ' done' : '') + (g.bonus ? ' bonus' : '') + '"><span class="tl-n">' + (g.bonus ? '★' : i + 1) + '</span><span class="tl-name">' + g.name + '<small>' + g.time + (g.bonus ? ' · punkty ×' + g.mult : '') + '</small></span>' + (state ? '<span class="tl-state">' + state + '</span>' : '') + '</li>';
-    }).join('') + '<li class="tl boss' + (st && st.boss ? ' now' : '') + '"><span class="tl-n tl-yeti">' + YETI_SVG + '</span><span class="tl-name">Finał z Bossem<small>TOP 3 kontra Yeti Śnieżnik · poza punktacją</small></span>' + (st && st.boss ? '<span class="tl-state">' + (roundLive(st) ? 'Trwa' : 'Rozegrany') + '</span>' : '') + '</li>';
+    }).join('') + (!(st && st.boss) ? '' : '<li class="tl boss now"><span class="tl-n tl-yeti">' + YETI_SVG + '</span><span class="tl-name">Finał z Bossem<small>TOP 3 kontra Yeti Śnieżnik · poza punktacją</small></span>' + '<span class="tl-state">' + (roundLive(st) ? 'Trwa' : 'Rozegrany') + '</span></li>');
     var list = byId('game-list');
     list.innerHTML = GAME_ORDER.map(function (k, i) {
       var g = GAMES[k], cls = g.bonus ? ' bonus' : '';
@@ -6004,7 +6038,7 @@ function createSafe(opts) {
     var nc = byId('next-card'), nk = !(st && st.boss) && !roundLive(st) && gate && gate.open ? (active ? GAME_ORDER[nextIdx] : (!st || st.final ? GAME_ORDER[0] : null)) : null;
     nc.hidden = !nk;
     if (nk) nc.innerHTML = '<p class="card-label">' + (active ? 'Następna gra' : 'Na start turnieju') + '</p><div class="nc-row"><span class="ng-ico" aria-hidden="true">' + GAMES[nk].icon + '</span><span class="ng-txt"><small>' + gameTag(GAME_ORDER.indexOf(nk)) + ' · ' + GAMES[nk].time + '</small><b>' + GAMES[nk].name + '</b><span>' + GAMES[nk].desc + '</span></span></div>' +
-      '<p class="nc-wait">' + (isHost ? 'Gdy wszyscy będą gotowi, stuknij „' + (active ? 'Następna gra' : 'Rozpocznij turniej') + '”.' : joinedNow() ? 'Jesteś gotowy. Gra wystartuje sama, gdy Mikołaj ją uruchomi.' : 'Dołącz przez złoty puchar, żeby zagrać.') + '</p>';
+      '<p class="nc-wait">' + (isHost ? 'Gdy wszyscy będą gotowi, stuknij „' + (active ? 'Następna gra' : 'Rozpocznij turniej') + '”.' : joinedNow() ? 'Jesteś gotowy. Gra wystartuje sama, gdy ' + (active ? 'Yeti' : 'gospodarz') + ' ją uruchomi.' : 'Dołącz przez złoty puchar, żeby zagrać.') + '</p>';
     var bc = byId('boss-card');
     bc.hidden = !(st && st.boss);
     if (st && st.boss) {
@@ -6015,10 +6049,10 @@ function createSafe(opts) {
     if (st && st.boss && roundLive(st)) status.innerHTML = '<b>Trwa Finał z Bossem!</b> ' + (st.allowed && st.allowed[myUid] ? 'Grasz w finale.' : 'Kibicuj: wyniki zmieniają się na żywo poniżej.');
     else if (st && st.boss) status.innerHTML = 'Finał z Bossem rozegrany. ' + (isHost ? 'Możesz rozpocząć nowy turniej albo kolejny finał.' : 'Dziękujemy za grę!');
     else if (roundLive(st)) status.innerHTML = '<b>Trwa ' + gameTag(st.idx).toLowerCase() + ': ' + GAMES[st.game].name + '.</b> Dołączasz automatycznie.';
-    else if (active && nextIdx < GAME_ORDER.length) status.innerHTML = 'Turniej trwa. Za chwilę ' + gameTag(nextIdx).toLowerCase() + ': <b>' + GAMES[GAME_ORDER[nextIdx]].name + '</b>.' + (isHost ? '' : ' Czekamy na Mikołaja.');
-    else if (active) status.innerHTML = 'Wszystkie gry rozegrane. ' + (isHost ? 'Ogłoś Mistrza Świąt!' : 'Mikołaj zaraz ogłosi Mistrza Świąt.');
-    else if (st && st.final) status.innerHTML = 'Turniej zakończony. ' + (isHost ? 'Możesz rozpocząć kolejny.' : 'Może Mikołaj zarządzi rewanż?');
-    else status.textContent = isHost ? (gate && gate.open ? 'Sejf zamknięty, znak ustawiony. Gdy wszyscy dołączą, rozpocznij turniej.' : 'Najpierw otwórz sejf swoim kodem i wybierz znak turnieju.') : (gate && gate.open ? 'Mikołaj otworzył turniej. Dołącz, wybierając znak, który poda.' : 'Czekamy, aż Mikołaj otworzy sejf z turniejem.');
+    else if (active && nextIdx < GAME_ORDER.length) status.innerHTML = 'Turniej trwa. Za chwilę ' + gameTag(nextIdx).toLowerCase() + ': <b>' + GAMES[GAME_ORDER[nextIdx]].name + '</b>.' + (isHost ? '' : ' Czekamy na Yetiego.');
+    else if (active) status.innerHTML = 'Wszystkie gry rozegrane. ' + (isHost ? 'Ogłoś Mistrza Świąt!' : 'Yeti zaraz ogłosi Mistrza Świąt.');
+    else if (st && st.final) status.innerHTML = 'Turniej zakończony. ' + (isHost ? 'Możesz rozpocząć kolejny.' : 'Może Yeti zarządzi rewanż?');
+    else status.textContent = isHost ? (gate && gate.open ? 'Sejf zamknięty, znak ustawiony. Gdy wszyscy dołączą, rozpocznij turniej.' : 'Najpierw otwórz sejf swoim kodem i wybierz znak turnieju.') : (gate && gate.open ? 'Turniej otwarty! Dołącz, wybierając znak, który ogłosi gospodarz.' : 'Czekamy, aż gospodarz otworzy sejf z turniejem.');
     var canJoin = !!(gate && gate.open) && !joinedNow();
     var cupT = byId('tab-cup');
     cupT.classList.toggle('call', canJoin && !isHost);
