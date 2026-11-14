@@ -1012,6 +1012,11 @@
   .tab-cup .cup svg { width: 36px; height: 36px; stroke: none; }
   .tab-cup:active .cup { transform: scale(.9); }
   .tab-cup .cup-l { color: var(--gold); }
+  /* the safe is open and you have not joined: the cup sends out a ring and says "Dołącz" */
+  .tab-cup.call .cup::before { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--gold); pointer-events: none; animation: cup-call 1.8s ease-out infinite; }
+  @keyframes cup-call { from { opacity: .9; transform: scale(.92); } to { opacity: 0; transform: scale(1.45); } }
+  .tab-cup.call .cup-l { color: var(--ball); }
+  @media (prefers-reduced-motion: reduce) { .tab-cup.call .cup::before { animation: none; opacity: .7; } }
   .tab-cup[aria-current="page"] .cup { box-shadow: 0 0 0 4px #0d3229, 0 0 0 6px var(--ball), 0 12px 24px rgba(0, 0, 0, .55), 0 0 30px rgba(220, 238, 78, .45); }
   .tab-cup[aria-current="page"] .cup-l { color: var(--ball); }
   .tab-cup .live-dot { top: -26px; left: calc(50% + 18px); }
@@ -2186,6 +2191,7 @@
           <p class="host-sign" id="host-sign" hidden></p>
           <button type="button" class="cta wide join-btn" id="join-btn" hidden><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.6 6.2h12.8v6.2a6.4 6.4 0 0 1-12.8 0Z"/><path d="M9.6 8.4H6.9a3.1 3.1 0 0 0 3.6 4.7M22.4 8.4h2.7a3.1 3.1 0 0 1-3.6 4.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 18.6v3.4" stroke="currentColor" stroke-width="2.4"/><rect x="11.2" y="22.2" width="9.6" height="3.6" rx="1.2"/></svg>Dołącz do turnieju</button>
           <p class="joined-note" id="joined-note" hidden>Jesteś w turnieju. Gry ruszą same, gdy Mikołaj je uruchomi.</p>
+          <p class="notice" id="inapp-note" hidden>Ta strona jest otwarta w przeglądarce wbudowanej w aplikację (np. Messenger). Dla pewności otwórz ją w Safari albo Chrome i zostań tam do końca turnieju.</p>
           <div class="actions" id="host-actions" hidden>
             <a class="tool quiet" href="#panel">Panel Mikołaja</a>
             <button type="button" class="tool quiet" id="host-safe">Zmień znak w sejfie</button>
@@ -4275,7 +4281,7 @@ function createSafe(opts) {
     buzz([40, 60, 40, 60, 140]);
     if (!still) later(burst, 1500);
     pendingDone = function () { if (typeof opts.onDone === 'function') opts.onDone({ mode: m, sign: id }); };
-    later(flushDone, still ? 800 : 3400);
+    later(flushDone, still ? 800 : (typeof opts.quick === 'function' && opts.quick() ? 1300 : 3400));
   }
 
   function burst() {
@@ -4416,8 +4422,14 @@ function createSafe(opts) {
         if (!FB || !gate || !gate.id) return Promise.resolve('Sejf jest jeszcze zamknięty.');
         if (Date.now() < signLock) return Promise.resolve('Za dużo prób. Poczekaj ' + Math.ceil((signLock - Date.now()) / 1000) + ' s.');
         joinPending = true;
-        return FB.D.set(R('joins/' + myUid), { sign: sign, gate: gate.id, name: visitorName() || 'Gość', at: FB.D.serverTimestamp() }).then(function () {
+        var write = FB.D.set(R('joins/' + myUid), { sign: sign, gate: gate.id, name: visitorName() || 'Gość', at: FB.D.serverTimestamp() });
+        var slow = new Promise(function (res) { setTimeout(function () { res('slow'); }, 10000); });
+        var done = write.then(function () { return 'ok'; });
+        done.catch(noop);
+        return Promise.race([done, slow]).then(function (r) {
           joinPending = false;
+          if (r === 'slow') return 'Słabe połączenie z internetem. Sprawdź sieć i wybierz znak jeszcze raz.';
+          renderLobby();
           return true;
         }, function () {
           joinPending = false;
@@ -4436,12 +4448,16 @@ function createSafe(opts) {
         if (gameState) onGameState(gameState);
       },
       onClose: function () {},
+      quick: function () { return roundLive(gameState); },
       signNote: function () { var sg = safeSign && gate && gate.open ? signInfo(safeSign) : null; return sg ? 'Teraz obowiązuje znak „' + sg.name + '”. Kto już dołączył, zostaje w turnieju; nowy znak wpisują tylko nowe osoby. Żeby zostawić stary, zamknij sejf krzyżykiem.' : ''; }
     });
     return safeUI;
   }
+  var gateLoaded = false;
   function openSafeFlow(forceHost) {
+    if (!FB && FIREBASE_CONFIG) { toast('Łączę się z serwerem turnieju… Spróbuj za kilka sekund.'); go('turniej'); return; }
     if (!FB) { toast('Turniej działa na stronie wrobhu.github.io/swieta, z internetem.'); go('turniej'); return; }
+    if (!forceHost && !gateLoaded) { toast('Sprawdzam sejf… Spróbuj za sekundę.'); return; }
     if (!forceHost && joinedNow()) { go('turniej'); toast('Już jesteś w turnieju.'); return; }
     safeApi().open(forceHost ? 'host' : gate && gate.open ? 'join' : 'closed');
   }
@@ -4537,7 +4553,7 @@ function createSafe(opts) {
     }).catch(noop);
     D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
     D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); }, noop);
-    D.onValue(R('game/gate'), function (s) { gate = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
+    D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('game/state'), function (s) { gsLoaded = true; onGameState(s.val()); }, noop);
     D.onValue(D.query(R('game/scores'), D.limitToLast(30)), function (s) { allScores = s.val() || {}; onScores(); }, noop);
@@ -5783,11 +5799,19 @@ function createSafe(opts) {
     else if (st && st.final) status.innerHTML = 'Turniej zakończony. ' + (isHost ? 'Możesz rozpocząć kolejny.' : 'Może Mikołaj zarządzi rewanż?');
     else status.textContent = isHost ? (gate && gate.open ? 'Sejf zamknięty, znak ustawiony. Gdy wszyscy dołączą, rozpocznij turniej.' : 'Najpierw otwórz sejf swoim kodem i wybierz znak turnieju.') : (gate && gate.open ? 'Mikołaj otworzył turniej. Dołącz, wybierając znak, który poda.' : 'Czekamy, aż Mikołaj otworzy sejf z turniejem.');
     var canJoin = !!(gate && gate.open) && !joinedNow();
+    var cupT = byId('tab-cup');
+    cupT.classList.toggle('call', canJoin && !isHost);
+    cupT.querySelector('.cup-l').textContent = canJoin && !isHost ? 'Dołącz' : 'Turniej';
     byId('join-btn').hidden = !canJoin;
     byId('joined-note').hidden = !joinedNow();
+    var inApp = /FBAN|FBAV|FB_IAB|Instagram|Messenger|Line\/|wv\)/i.test(navigator.userAgent || '');
+    byId('inapp-note').hidden = !inApp;
     if (isHost) {
       var nj = Object.keys(allJoins).filter(function (u) { return gate && allJoins[u] && allJoins[u].gate === gate.id; }).length;
-      if (gate && gate.open && !roundLive(st)) status.innerHTML += ' <b>Dołączyło: ' + nj + '.</b>';
+      if (gate && gate.open && !roundLive(st)) {
+        var notYet = on.filter(function (pp) { return !(allJoins[pp.uid] && allJoins[pp.uid].gate === gate.id); }).map(function (pp) { return esc(pp.name); });
+        status.innerHTML += ' <b>Dołączyło: ' + nj + '.</b>' + (notYet.length ? ' Jeszcze nie: ' + notYet.join(', ') + '.' : ' Wszyscy obecni są w turnieju.');
+      }
     }
     var hs = byId('host-sign'), sg = isHost && safeSign && gate && gate.open ? signInfo(safeSign) : null;
     hs.hidden = !sg;
