@@ -3562,7 +3562,7 @@ function createSafe(opts) {
   var OOPS = 'Coś poszło nie tak. Spróbuj jeszcze raz.';
   var TXT = {
     code: ['Krok 1 z 2', 'Sejf <em>Mikołaja</em>', 'Wpisz 4-cyfrowy kod.'],
-    sign: ['Krok 2 z 2', 'Wybierz <em>znak</em> turnieju', 'Ten znak podasz wszystkim. Każdy musi go wybrać, żeby wejść do turnieju.'],
+    sign: ['Krok 2 z 2', 'Losuję <em>znak</em> turnieju', 'Sejf sam wybiera znak. Zapamiętaj go i podaj wszystkim: każdy musi go wybrać, żeby wejść.'],
     join: ['Turniej świąteczny', 'Wejście do <em>turnieju</em>', 'Wybierz znak, który podał Mikołaj.'],
     closed: ['Turniej świąteczny', 'Sejf <em>Mikołaja</em>', 'Sejf jest jeszcze zamknięty. Mikołaj otworzy go przed turniejem.']
   };
@@ -3948,7 +3948,27 @@ function createSafe(opts) {
     buzz(30);
     setMsg('Kod dobry!', 'good');
     pulse('is-ok', 900);
-    later(function () { busy = false; setStep('sign'); focusFirst(); }, still ? 300 : 900);
+    later(function () { busy = false; setStep('sign'); drawSign(); }, still ? 300 : 900);
+  }
+  /* the safe draws the sign itself: a roulette over the six signs that slows down and stops on a random one */
+  function drawSign() {
+    var pick = 0, n = SIGNS.length;
+    try { var a = new Uint32Array(1); crypto.getRandomValues(a); pick = a[0] % n; } catch (e) { pick = Math.floor(Math.random() * n); }
+    var steps = still ? 0 : 3 * n + pick + 1 - 0, i = 0, cur = 0, delay = 55;
+    busy = true; els.cta.disabled = true; setMsg('Losuję…', '');
+    function land() {
+      selected = SIGNS[pick].id; renderSigns(); busy = false; els.cta.disabled = false;
+      setMsg('Wylosowany znak: ' + SIGNS[pick].name + '!', 'good'); pulse('is-ok', 900); buzz([20, 40, 60]);
+      later(function () { els.cta.focus({ preventScroll: true }); }, 60);
+    }
+    if (!steps) { land(); return; }
+    (function tick() {
+      selected = SIGNS[cur % n].id; renderSigns(); buzz(4);
+      i++; cur++;
+      if (i >= steps) { later(land, 120); return; }
+      var left = steps - i; delay = left > 8 ? 60 : 60 + (9 - left) * 55;
+      later(tick, delay);
+    })();
   }
 
   function fail(r, def, kind) {
@@ -3962,8 +3982,7 @@ function createSafe(opts) {
   function pickSign(id) {
     if (busy || done) return;
     if (step === 'sign') {
-      selected = id; renderSigns(); els.cta.disabled = false; buzz(8);
-      if (els.msg.textContent) setMsg('', '');
+      return;
     } else if (step === 'join') {
       selected = id; renderSigns(); submitSign(opts.joinSign, id, 'join');
     }
@@ -4144,6 +4163,7 @@ function createSafe(opts) {
       },
       onDone: function (r) {
         safeUI.close();
+        if (!gameActive) { byId('game-results').hidden = true; byId('game-play').hidden = true; byId('game-lobby').hidden = false; resultsFor = 0; }
         go('turniej');
         toast(r.mode === 'host' ? 'Sejf zamknięty. Powiedz wszystkim znak i rozpocznij turniej!' : 'Jesteś w turnieju! Czekaj na start.');
         renderLobby();
@@ -5018,7 +5038,7 @@ function createSafe(opts) {
     if (byId('unlock').hidden) {
       if (st && st.final && st.session !== finalShownFor) {
         if (!visitor || !splash.hidden) pendingRound = st;
-        else { finalShownFor = st.session; showFinal(st.session, currentView === 'turniej'); }
+        else { finalShownFor = st.session; if (serverNow() - (st.at || 0) < 45 * 60000) showFinal(st.session, currentView === 'turniej'); }
       } else if (live && st.round !== lastJoined && !joinedNow()) {
         if (nagRound !== st.round && visitor && splash.hidden) { nagRound = st.round; toast('Turniej trwa! Stuknij puchar i wybierz znak od Mikołaja.'); }
       } else if (live && st.round !== lastJoined) {
