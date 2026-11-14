@@ -2657,27 +2657,10 @@
   /* the QR code on a coupon opens this address; change it if the page moves (e.g. to GitHub Pages) */
   var BASE_URL = 'https://wrobhu.github.io/swieta/';
   var SALT = 'mikolaj-tenis-2026';
-  /* hash of the PIN that opens a scanned coupon on someone else's account; the owner skips it */
-  var PIN_HASH = '181c0204';
   var REWARDS = {
-    b: [
-      { name: 'Gorąca czekolada od Mikołaja', desc: 'Duży kubek z piankami i bitą śmietaną, podany pod choinką.' },
-      { name: 'Pierniki w kształcie rakiet', desc: 'Domowe pierniki upieczone specjalnie dla Ciebie.' },
-      { name: 'Garść cukierków z choinki', desc: 'Wybierasz dowolne słodkości, które wiszą na choince.' },
-      { name: 'Wolne od zmywania', desc: 'Jeden świąteczny wieczór bez zmywania. Ja zmywam za Ciebie.' }
-    ],
-    s: [
-      { name: 'Wieczór filmowy z popcornem', desc: 'Wybierasz film, a ja robię popcorn i kakao.' },
-      { name: 'Brelok z małą rakietą', desc: 'Do kluczy albo plecaka, żeby Święta zostały z Tobą na dłużej.' },
-      { name: 'Skarpeta pełna słodyczy', desc: 'Ulubione łakocie zapakowane w świąteczną skarpetę.' }
-    ],
-    z: [
-      { name: 'Wspólne wyjście na łyżwy', desc: 'Lodowisko, gorąca herbata i zero upadków. No, prawie zero.' },
-      { name: 'Kolacja ugotowana dla Ciebie', desc: 'Przygotuję Twoje ulubione danie, a Ty tylko siadasz do stołu.' },
-      { name: 'Wyjście do kina', desc: 'Bilet na film, który sam wybierzesz, i duży popcorn.' },
-      { name: 'Kosz łakoci', desc: 'Pełen kosz ulubionych słodyczy, czeka pod choinką.' },
-      { name: 'Prezent niespodzianka', desc: 'Coś wyjątkowego, co przygotuję specjalnie dla Ciebie.' }
-    ]
+    b: [{ name: 'Czekoladowa złota piłka i cukierkowa laska', desc: 'Złota piłka do zjedzenia, bo tamte Mikołaj chciał z powrotem. Do tego słodka laska na drogę.' }],
+    s: [{ name: 'Słoik gorącej czekolady z piankami', desc: 'Kakao, czekolada i pianki zamknięte w słoiku z kokardką. Zalej gorącym mlekiem i ogrzej się po polowaniu.' }],
+    z: [{ name: 'Złota Piłka Mikołaja', desc: 'Prawdziwe trofeum: złota piłka na podstawce z Twoim imieniem, a do tego skarpeta pełna słodyczy. Dla mistrza szukania.' }]
   };
   /* every hiding place: its tab, how hard it is (rank), a text for Mikołaj and a hint; hints exist for a visitor's five easiest balls only */
   var SPOT_INFO = {
@@ -3615,31 +3598,12 @@
     }
     eb.textContent = { b: 'Brązowy kupon · 3 z 7 piłek', s: 'Srebrny kupon · 5 z 7 piłek', z: 'Złoty kupon · 7 z 7 piłek' }[c.tier];
     title.textContent = c.name;
-    sub.textContent = 'Ten kupon jest prawdziwy. Nagrodę odkrywa Mikołaj.';
-    ubody.innerHTML = '<form class="pin-form" id="pin-form"><label for="pin">Kod Mikołaja</label>' +
-      '<input class="field" id="pin" name="pin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*">' +
-      '<button class="cta" type="submit">Odkryj nagrodę</button><p class="pin-err" id="pin-err" role="alert"></p></form>';
-    byId('pin-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var v = byId('pin').value.trim();
-      if (fnv('pin|' + v) === PIN_HASH) { showGift(false); return; }
-      byId('pin-err').textContent = 'To nie ten kod. Spróbuj jeszcze raz.';
-      if (!still) byId('pin').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-10px)' }, { transform: 'translateX(9px)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 380 });
-    });
-    /* Mikołaj skips the PIN: on GitHub Pages after entering his code, in Claude as the artifact owner */
-    if (isHost) { showGift(true); return; }
-    try {
-      if (window.claude && typeof window.claude.use === 'function') {
-        window.claude.use('user').then(function (u) { return u ? u.isOwner() : false; }).then(function (own) {
-          if (own && current === c && byId('pin-form')) showGift(true);
-        }).catch(function () {});
-      }
-    } catch (e) {}
+    sub.textContent = 'Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.';
+    showGift();
   }
-  function showGift(owner) {
+  function showGift() {
     var c = current, theme = { b: 'w2', s: 'w1', z: 'w0' }[c.tier];
-    ubody.innerHTML = (owner ? '<p class="owner-note">Witaj, Mikołaju</p>' : '') +
-      '<button type="button" class="big-gift ' + theme + '" id="big-gift" aria-label="Odpakuj nagrodę">' +
+    ubody.innerHTML = '<button type="button" class="big-gift ' + theme + '" id="big-gift" aria-label="Odpakuj nagrodę">' +
       '<span class="half l"></span><span class="half r"></span><span class="ribbon"></span><span class="ribbon-h"></span>' + BOW + '</button>' +
       '<p class="tap-label">Stuknij w paczkę</p>';
     var g = byId('big-gift');
