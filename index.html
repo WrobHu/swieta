@@ -82,7 +82,7 @@
   /* ---------- hero scene ---------- */
   .hero { display: flex; flex-direction: column; }
   .scene-wrap {
-    position: relative; z-index: 0;
+    position: relative; z-index: 0; will-change: transform; content-visibility: auto; contain-intrinsic-size: auto 500px;
     -webkit-mask-image: linear-gradient(#000 80%, transparent);
     mask-image: linear-gradient(#000 80%, transparent);
   }
@@ -95,9 +95,13 @@
     }
   }
   .scene { position: relative; z-index: 1; display: block; width: 100%; height: auto; --sy: 0; }
+  /* the still layer is painted once; only the back (sky, moon, sleigh) and front (lights, smoke) layers repaint */
+  .scene-still, .scene-fx { position: absolute; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+  .scene-still { will-change: transform; }
 
   .aurora { position: absolute; z-index: 0; inset: 0 0 50% 0; overflow: hidden; pointer-events: none; animation: fade 3s ease-out .4s both; }
   .aurora i {
+    will-change: transform;
     position: absolute; left: -30%; width: 160%; height: 17%; border-radius: 50%;
     filter: blur(15px); opacity: .7;
     background: linear-gradient(90deg, transparent 8%, rgba(40, 214, 150, .7) 30%, rgba(160, 250, 205, .5) 55%, rgba(40, 200, 170, .35) 75%, transparent 94%);
@@ -112,7 +116,8 @@
   }
   @keyframes fade { from { opacity: 0; } }
 
-  .stars circle { fill: var(--snow); animation: star 3.2s ease-in-out infinite alternate; }
+  .stars circle { fill: var(--snow); }
+  .stars .tw { animation: star 3.2s ease-in-out infinite alternate; }
   .stars circle.g { fill: var(--gold); }
   .stars { animation: fade 2.4s ease-out .2s both; }
   @keyframes star { from { opacity: .15; } to { opacity: .95; } }
@@ -175,7 +180,8 @@
   .pine-snow { fill: none; stroke: #e6f2ec; stroke-linecap: round; stroke-opacity: .4; }
   .court-line { fill: none; stroke: var(--snow); stroke-linecap: round; opacity: .92; }
   .net-tape { fill: none; stroke: var(--snow); stroke-width: 3.2; stroke-linecap: round; }
-  .bulb { animation: bulb-on .5s ease-out both, bulb 1.9s ease-in-out infinite alternate; }
+  .bulb { animation: bulb-on .5s ease-out both; }
+  .btw { animation: bulb 1.9s ease-in-out infinite alternate; }
   @keyframes bulb-on { from { opacity: 0; } }
   @keyframes bulb { from { opacity: 1; } to { opacity: .35; } }
 
@@ -256,8 +262,7 @@
     --i: 0;
     position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
     padding: 4px; border: 1px solid var(--line); border-radius: 999px;
-    background: rgba(6, 26, 21, .72);
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    background: rgba(6, 26, 21, .94);
   }
   .thumb {
     position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 4);
@@ -335,7 +340,8 @@
     animation: pulse 1.8s ease-out infinite;
   }
   @keyframes pulse { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
-  li.next .wrap-ball { animation: nudge 1.8s var(--spring) infinite; }
+  li.next .wrap-ball { animation: nudge 1.8s var(--spring) infinite; will-change: transform; }
+  li.next .wrap-ball::after { will-change: transform, opacity; }
   @keyframes nudge { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
 
   /* flying ball and paper shards */
@@ -408,7 +414,7 @@
   @keyframes vt-in { from { opacity: 0; transform: translateY(18px) scale(.96); } }
 
   /* ---------- outro ---------- */
-  footer { view-transition-name: outro; }
+  footer { view-transition-name: outro; content-visibility: auto; contain-intrinsic-size: auto 460px; }
   .outro { margin-top: 10px; }
   .outro h2 em { font-style: italic; color: var(--ball); }
   .hill { display: block; width: 100%; height: auto; margin: 6px 0 -1px; }
@@ -438,7 +444,7 @@
     display: inline-grid; place-items: center; filter: drop-shadow(0 0 6px rgba(240, 195, 90, .75));
   }
   .gold-btn svg { width: 100%; height: 100%; display: block; }
-  .gold-sticker { width: 26px; height: 26px; margin-left: auto; animation: twinkle-gold 2.6s ease-in-out infinite; }
+  .gold-sticker { width: 26px; height: 26px; margin-left: auto; animation: twinkle-gold 2.6s ease-in-out infinite; will-change: transform; }
   .gold-sky { position: absolute; z-index: 2; left: 14%; top: 16%; width: 30px; height: 30px; }
   @keyframes twinkle-gold { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(16deg) scale(1.12); } }
   .spark { transform-box: fill-box; transform-origin: center; opacity: 0; animation: spark 2.8s ease-in-out infinite; }
@@ -466,7 +472,7 @@
     top: calc(env(safe-area-inset-top, 0px) + 12px); right: max(12px, env(safe-area-inset-right, 0px));
     display: inline-flex; align-items: center; gap: 7px; min-height: 42px; padding: 0 14px 0 8px;
     border-radius: 999px; border: 1px solid rgba(240, 195, 90, .5);
-    background: rgba(4, 18, 16, .74); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    background: rgba(4, 18, 16, .93);
     color: var(--snow); font: 700 18px/1 var(--score); letter-spacing: .04em; font-variant-numeric: tabular-nums;
     cursor: pointer; box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
     animation: fade 1s ease-out 3.4s both;
@@ -486,7 +492,7 @@
   }
   .hunt-intro:active { transform: scale(.98); }
   .hunt-intro .ico { position: relative; width: 52px; height: 52px; }
-  .hunt-intro .ico svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; }
+  .hunt-intro .ico svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; will-change: transform; }
   .hunt-intro strong { display: block; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; }
   .hunt-intro .sub { display: block; margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--mist); }
   .hunt-intro .chev { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -735,7 +741,7 @@
   .tabbar {
     position: fixed; z-index: 7; left: 0; right: 0; bottom: 0;
     padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 6px) max(10px, env(safe-area-inset-left, 0px));
-    background: rgba(4, 18, 16, .84); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    background: rgba(4, 18, 16, .97);
     border-top: 1px solid var(--line); display: flex; justify-content: center;
     transition: transform .4s var(--out), opacity .3s;
   }
@@ -758,7 +764,7 @@
   .hello {
     display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px;
     padding: 12px 12px 12px 12px; border-radius: 16px; border: 1px solid var(--line);
-    background: rgba(6, 26, 21, .6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    background: rgba(6, 26, 21, .92);
   }
   .avatar { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; font: 700 13px/1 var(--score); color: var(--ink); text-transform: uppercase; }
   .avatar.big { width: 46px; height: 46px; font-size: 20px; }
@@ -777,7 +783,7 @@
   .navcard .ico { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 14px; background: rgba(2, 10, 8, .35); }
   .navcard .ico svg { width: 30px; height: 30px; }
   .navcard.gold .ico { background: none; }
-  .navcard.gold .ico svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; }
+  .navcard.gold .ico svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; will-change: transform; }
   .navcard strong { display: block; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; }
   .navcard .sub { display: block; margin-top: 3px; font-size: 14px; line-height: 1.4; color: var(--mist); }
   .navcard .chev { width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -861,7 +867,7 @@
   .guesses { display: block; font: 500 12px/1.4 ui-monospace, Menlo, monospace; color: #ffc2ca; margin-top: 3px; overflow-wrap: anywhere; }
 
   /* ---------- modal + the elf ---------- */
-  .modal-back { position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); background: rgba(2, 9, 7, .72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .modal-back { position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); background: rgba(2, 9, 7, .84); }
   .modal { width: min(100%, 360px); display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(180deg, #11402f, #0a2a21); box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
   .modal h2 { font: 800 26px/1.1 var(--display); }
   .modal p { font-size: 15px; color: var(--mist); }
@@ -878,6 +884,10 @@
   @keyframes hop { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-9px) rotate(4deg); } }
   .elf-text { font-size: 16px; line-height: 1.45; color: var(--snow); max-width: 30ch; }
   .elf-count { font: 700 14px/1 var(--score); letter-spacing: .14em; text-transform: uppercase; color: #ff8b9a; }
+
+  /* light mode, switched on automatically when a device cannot keep up */
+  .lite .aurora, .lite .grain { display: none; }
+  .lite .stars .tw, .lite .dust circle, .lite .smoke circle, .lite .twk, .lite .glint, .lite .halo { animation: none; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -1029,22 +1039,7 @@
             <stop offset="0" stop-color="#eef6f2"/>
             <stop offset="1" stop-color="#9dc0b4"/>
           </linearGradient>
-          <filter id="felt" x="-5%" y="-5%" width="110%" height="110%">
-            <feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="11" result="n"/>
-            <feColorMatrix in="n" type="matrix" values="0 0 0 0 .16  0 0 0 0 .24  0 0 0 0 .02  1.9 0 0 0 -.72" result="c"/>
-            <feComposite in="c" in2="SourceGraphic" operator="in"/>
-          </filter>
-          <!-- drifted snow patches, stretched sideways to sit in the court's perspective -->
-          <filter id="snowdrift" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency=".014 .055" numOctaves="3" seed="23" result="n"/>
-            <feColorMatrix in="n" type="matrix" values="0 0 0 0 .93  0 0 0 0 .97  0 0 0 0 .95  3.6 0 0 0 -1.62" result="c"/>
-            <feComposite in="c" in2="SourceGraphic" operator="in"/>
-          </filter>
-          <filter id="snowspeck" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="1" seed="5" result="n"/>
-            <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  7 0 0 0 -4.5" result="c"/>
-            <feComposite in="c" in2="SourceGraphic" operator="in"/>
-          </filter>
+          <pattern id="speckPat" width="48" height="48" patternUnits="userSpaceOnUse"><image id="speck-img" width="48" height="48"/></pattern>
           <clipPath id="moon-clip"><circle cx="195" cy="165" r="92"/></clipPath>
           <linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#1f5144"/><stop offset="1" stop-color="#0f3329"/>
@@ -1094,7 +1089,7 @@
                 <path class="seam-shadow" id="seam-shadow" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
                 <path class="seam" id="seam" d="M125 103C173 131 173 199 125 227M265 103C217 131 217 199 265 227"/>
               </g>
-              <circle cx="195" cy="165" r="92" fill="#000" filter="url(#felt)" opacity=".5"/>
+              <image id="moon-felt" x="103" y="73" width="184" height="184" clip-path="url(#moon-clip)" opacity=".55" preserveAspectRatio="none"/>
               <circle cx="195" cy="165" r="92" fill="url(#ballShade)"/>
               <circle cx="195" cy="165" r="91.5" fill="none" stroke="#fdffd0" stroke-opacity=".45" stroke-width="1"/>
             </g>
@@ -1150,6 +1145,8 @@
           </g></g></g>
         </g>
 
+      </svg>
+      <svg class="scene-still" viewBox="0 0 390 520" aria-hidden="true">
         <g class="par-far">
           <!-- far range: the moon rises behind it -->
           <path d="M-10 312 18 290 34 298 62 266 84 284 104 276 132 250 160 280 178 272 208 290 236 268 262 246 290 276 312 266 340 284 364 262 400 290V345H-10Z" fill="url(#mtnFar)"/>
@@ -1177,19 +1174,18 @@
           <!-- clubhouse -->
           <g transform="translate(9 0)">
             <ellipse cx="123" cy="340" rx="34" ry="3.6" fill="#0b2620" opacity=".3"/>
-            <circle class="win" cx="110" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
-            <circle class="win" cx="136" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
+            <circle cx="110" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
+            <circle cx="136" cy="329.5" r="15" fill="url(#winGlow)" opacity=".7"/>
             <rect x="136" y="303" width="6.5" height="13" fill="#4a3226"/>
             <rect x="135" y="301.5" width="8.5" height="3.2" rx="1.4" fill="#eef6f2"/>
-            <g class="smoke"><circle cx="139" cy="297" r="2.6"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-2s"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-4s"/></g>
             <rect x="102" y="319" width="42" height="21" fill="#3b2a22"/>
             <path d="M102 323.5H144M102 328H144M102 332.5H144M102 337H144" stroke="#2a1d17" stroke-width=".8"/>
             <rect x="102" y="319" width="42" height="21" fill="#000" opacity=".12"/>
             <path d="M96 322 123 302 150 322Z" fill="#4a2f25"/>
             <path d="M94 323.5 123 299.5 152 323.5Q148 327 144 323.8 139 327.5 134 323.8 129 327.5 123 323.8 117 327.5 112 323.8 107 327.5 102 323.8 98 327 94 323.5Z" fill="#eef6f2"/>
             <path d="M123 299.5 152 323.5Q148 327 144 323.8 139 327.5 134 323.8 129 327.5 123 323.8Z" fill="#c4d9d1"/>
-            <rect class="win" x="106" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
-            <rect class="win" x="132" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
+            <rect x="106" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
+            <rect x="132" y="325.5" width="8" height="7" rx=".6" fill="#ffd27a"/>
             <path d="M110 325.5V332.5M106 329H114M136 325.5V332.5M132 329H140" stroke="#5a3a2a" stroke-width=".8"/>
             <rect x="119" y="327" width="8" height="13" fill="#24170f"/>
             <circle cx="123" cy="330.8" r="2.4" fill="none" stroke="#2c7a58" stroke-width="1.5"/>
@@ -1201,15 +1197,9 @@
         </g>
 
         <!-- floodlights -->
-        <g class="cone">
-          <path d="M58 277 65 276 152 378 82 386Z" fill="url(#coneL)"/>
-          <path d="M325 276 332 277 308 386 238 378Z" fill="url(#coneR)"/>
-        </g>
         <path d="M60.5 344V274M329.5 344V274" stroke="#0b1f1a" stroke-width="2.2"/>
         <rect x="56" y="270.5" width="11" height="4.5" rx="1.2" fill="#e8f0ec" transform="rotate(14 61.5 272.8)"/>
         <rect x="323" y="270.5" width="11" height="4.5" rx="1.2" fill="#e8f0ec" transform="rotate(-14 328.5 272.8)"/>
-        <circle cx="62" cy="274" r="11" fill="url(#lampGlow)"/>
-        <circle cx="328" cy="274" r="11" fill="url(#lampGlow)"/>
 
         <!-- snowy ground, the court in perspective, snow lying on it -->
         <rect x="-10" y="338" width="410" height="190" fill="url(#groundGrad)"/>
@@ -1222,7 +1212,7 @@
         <ellipse cx="118" cy="386" rx="62" ry="13" fill="url(#pool)"/>
         <ellipse cx="272" cy="386" rx="62" ry="13" fill="url(#pool)"/>
         <g clip-path="url(#court-clip)">
-          <rect x="-10" y="338" width="410" height="190" fill="#fff" filter="url(#snowspeck)" opacity=".16"/>
+          <rect x="-10" y="338" width="410" height="190" fill="url(#speckPat)" opacity=".16"/>
         </g>
         <!-- snow banks swept to the edges -->
         <path d="M-10 340 58 344C52 356 41 365 37 378 30 393 15 404 10 421 4 441-6 452-10 471Z" fill="url(#bankGrad)" opacity=".92"/>
@@ -1244,7 +1234,6 @@
           <circle cx="70" cy="349.6" r="4.2" fill="url(#goldGrad)"/>
           <path d="M66.2 347.6C67.6 348.8 67.9 350.4 67.4 351.8M73.8 347.6C72.4 348.8 72.1 350.4 72.6 351.8" fill="none" stroke="#fffbe8" stroke-width=".9" stroke-linecap="round"/>
           <ellipse cx="70" cy="352.4" rx="10" ry="3.8" fill="#eef6f2"/>
-          <path class="spark slow" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
         </g>
 
         <!-- net with lights and snow on the tape -->
@@ -1258,6 +1247,18 @@
         <path d="M5 369.8Q195 379.8 385 369.8" fill="none" stroke="#fff" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="11 7 18 6 7 8 22 7 13 9 9 6"/>
         <ellipse cx="3.5" cy="366.5" rx="5" ry="2.8" fill="#fff"/>
         <ellipse cx="386.5" cy="366.5" rx="5" ry="2.8" fill="#fff"/>
+      </svg>
+      <svg class="scene-fx" viewBox="0 0 390 520" aria-hidden="true">
+        <g transform="translate(9 0)">
+            <g class="smoke"><circle cx="139" cy="297" r="2.6"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-2s"/><circle cx="139" cy="297" r="2.6" style="animation-delay:-4s"/></g>
+        </g>
+        <g>
+          <path d="M58 277 65 276 152 378 82 386Z" fill="url(#coneL)"/>
+          <path d="M325 276 332 277 308 386 238 378Z" fill="url(#coneR)"/>
+        </g>
+        <circle cx="62" cy="274" r="11" fill="url(#lampGlow)"/>
+        <circle cx="328" cy="274" r="11" fill="url(#lampGlow)"/>
+          <path class="spark slow g-hide" data-gold="g2" d="M77 340.5 78 343.5 81 344.5 78 345.5 77 348.5 76 345.5 73 344.5 76 343.5Z" fill="#fff"/>
         <g id="bulbs"></g>
       </svg>
       <button type="button" class="serve" id="serve" aria-label="Zaserwuj piłki z księżyca"></button>
@@ -1635,7 +1636,7 @@
     firs(byId('ft-tree'), [[TX, TB, TH, TW, 1, TT]], { dark: '#14523f', lit: '#1f6c53', snow: '#f2f7f3', trunk: '#4a3226' });
 
     /* garlands of lights sagging across the tree */
-    var gar = byId('ft-garland'), crown = TH * .91, trunkH = TH * .09, warm = ['#ffd27a', '#ff6b7e', '#fff3c4', '#9be7ff', '#dcee4e'], n = 0;
+    var gar = byId('ft-garland'), garTw = [0, 1, 2].map(function (k) { var g = svg('g', { 'class': 'twk' }); g.style.animationDelay = (-k * .55).toFixed(2) + 's'; g.style.animationDuration = (1.1 + k * .35).toFixed(2) + 's'; return g; }), crown = TH * .91, trunkH = TH * .09, warm = ['#ffd27a', '#ff6b7e', '#fff3c4', '#9be7ff', '#dcee4e'], n = 0;
     for (i = 1; i < TT; i++) {
       var ya = TB - TH + crown * (i / TT) * .78, yb = TB - trunkH - crown * (1 - (i + 1) / TT) * .98;
       var hw = TW / 2 * (.34 + .66 * (i + 1) / TT), y0 = ya + (yb - ya) * .55, half = hw * .62 * .86;
@@ -1644,14 +1645,13 @@
       var count = 3 + i;
       for (var k = 1; k <= count; k++) {
         var t = k / (count + 1), bx = (1 - t) * (1 - t) * p0x + 2 * (1 - t) * t * cx + t * t * p2x, by = (1 - t) * (1 - t) * p0y + 2 * (1 - t) * t * cy + t * t * p2y;
-        var gl = svg('g', { 'class': 'twk' });
-        gl.style.animationDelay = (-rnd() * 2).toFixed(2) + 's';
-        gl.style.animationDuration = (1 + rnd() * 1.4).toFixed(2) + 's';
+        var gl = garTw[(n + i) % 3];
         gl.appendChild(svg('circle', { cx: f1(bx), cy: f1(by), r: 4.2, fill: 'url(#bulbGlow)' }));
         gl.appendChild(svg('circle', { cx: f1(bx), cy: f1(by + .8), r: 1.5, fill: warm[n++ % warm.length] }));
-        gar.appendChild(gl);
       }
     }
+
+    garTw.forEach(function (g) { gar.appendChild(g); });
 
     /* tennis-ball ornaments; one of them is golden ball 6 */
     var orn = byId('ft-orn');
@@ -1668,7 +1668,7 @@
 
     /* glints on the snow */
     var gl2 = byId('ft-glints');
-    [[30, 170], [70, 182], [140, 176], [210, 168], [240, 186], [330, 176], [370, 160], [190, 160]].forEach(function (q) {
+    [[70, 182], [210, 168], [330, 176], [190, 160]].forEach(function (q) {
       var st = svg('path', { 'class': 'glint', d: 'M' + q[0] + ' ' + (q[1] - 3) + 'l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z' });
       st.style.animationDelay = (-rnd() * 4).toFixed(2) + 's';
       st.style.animationDuration = (3 + rnd() * 3).toFixed(2) + 's';
@@ -1682,43 +1682,62 @@
     while (holder.firstChild) team.appendChild(holder.firstChild);
 
     var dust = byId('dust');
-    for (i = 0; i < 11; i++) {
+    for (i = 0; i < 3; i++) {
       var dc = svg('circle', { cx: (-6 + rnd() * 16).toFixed(1), cy: (38 + rnd() * 34).toFixed(1), r: (1 + rnd() * 1.5).toFixed(1), fill: i % 3 ? '#f0c35a' : '#fff' });
-      dc.style.animationDelay = (-i * .2).toFixed(2) + 's';
+      dc.style.animationDelay = (-i * .73).toFixed(2) + 's';
       dust.appendChild(dc);
     }
 
-    var stars = byId('stars');
+    var stars = byId('stars'), tw = [0, 1, 2].map(function (k) {
+      var g = svg('g', { 'class': 'tw' });
+      g.style.animationDelay = (-k * 1.15).toFixed(2) + 's';
+      g.style.animationDuration = (2.4 + k * .9).toFixed(2) + 's';
+      stars.appendChild(g);
+      return g;
+    });
     for (i = 0; i < 54; i++) {
       var c = svg('circle', { cx: (rnd() * 390).toFixed(1), cy: (rnd() * 300).toFixed(1), r: (.35 + rnd() * .9).toFixed(2) });
       if (i % 7 === 0) c.setAttribute('class', 'g');
-      c.style.animationDelay = (-rnd() * 3.2).toFixed(2) + 's';
-      c.style.animationDuration = (2.2 + rnd() * 2.6).toFixed(2) + 's';
-      stars.appendChild(c);
+      tw[i % 3].appendChild(c);
     }
 
-    var bulbs = byId('bulbs'), cols = ['#ff5a6e', '#f0c35a', '#dcee4e', '#f2f7f3'];
+    var bulbs = byId('bulbs'), cols = ['#ff5a6e', '#f0c35a', '#dcee4e', '#f2f7f3'], btw = [0, 1, 2].map(function (k) {
+      var g = svg('g', { 'class': 'btw' }); g.style.animationDelay = (2.6 + k * .5).toFixed(2) + 's'; g.style.animationDuration = (1.4 + k * .45).toFixed(2) + 's'; bulbs.appendChild(g); return g;
+    });
     for (i = 0; i < 19; i++) {
       var bx = 16 + i * (358 / 18), u = (bx - 195) / 191, by = 372 + 5 * (1 - u * u) + 6.5;
       if (i === 13) {   /* golden ball 1: one "light" on the net is a golden ball */
         var gg = svg('g', { 'class': 'g-swap bulb', 'data-gold': 'g1' });
-        gg.style.animationDelay = '2.25s, 3.1s';
-        gg.style.animationDuration = '.5s, 2.2s';
+        gg.style.animationDelay = '2.25s';
         gg.appendChild(svg('circle', { 'class': 'g-glow', cx: bx.toFixed(1), cy: by.toFixed(1), r: 8, fill: '#f0c35a', 'fill-opacity': .22 }));
         gg.appendChild(svg('circle', { 'class': 'gfill', cx: bx.toFixed(1), cy: by.toFixed(1), r: 3, fill: 'url(#goldGrad)' }));
         gg.appendChild(svg('path', { d: 'M' + (bx - 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q1.2 1.7 0 3.4M' + (bx + 2.2).toFixed(1) + ' ' + (by - 1.7).toFixed(1) + 'q-1.2 1.7 0 3.4', fill: 'none', stroke: '#fffbe8', 'stroke-width': .5, 'stroke-linecap': 'round' }));
         gg.appendChild(svg('path', { 'class': 'spark slow', d: 'M' + (bx + 5) + ' ' + (by - 8) + 'l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z', fill: '#fff' }));
-        bulbs.appendChild(gg);
+        btw[i % 3].appendChild(gg);
         continue;
       }
       var g = svg('g', { 'class': 'bulb' });
-      g.style.animationDelay = (1.6 + i * .05).toFixed(2) + 's, ' + (2.6 + rnd() * 2).toFixed(2) + 's';
-      g.style.animationDuration = '.5s, ' + (1.3 + rnd() * 1.5).toFixed(2) + 's';
+      g.style.animationDelay = (1.6 + i * .05).toFixed(2) + 's';
       g.appendChild(svg('circle', { cx: bx.toFixed(1), cy: by.toFixed(1), r: 8, fill: cols[i % 4], 'fill-opacity': .22 }));
       g.appendChild(svg('circle', { cx: bx.toFixed(1), cy: by.toFixed(1), r: 2.6, fill: cols[i % 4] }));
-      bulbs.appendChild(g);
+      btw[i % 3].appendChild(g);
     }
 
+  })();
+
+  /* ---------- Textures for the moon felt and the snow on the court, painted once ---------- */
+  (function () {
+    try {
+      function noise(w, h, px) {
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        var g = c.getContext('2d'), im = g.createImageData(w, h), d = im.data;
+        for (var i = 0; i < d.length; i += 4) px(d, i, Math.random());
+        g.putImageData(im, 0, 0);
+        return c.toDataURL();
+      }
+      byId('moon-felt').setAttribute('href', noise(256, 256, function (d, i, v) { d[i] = 41; d[i + 1] = 61; d[i + 2] = 5; d[i + 3] = v > .5 ? (v - .5) * 330 : 0; }));
+      byId('speck-img').setAttribute('href', noise(96, 96, function (d, i, v) { d[i] = d[i + 1] = d[i + 2] = 255; d[i + 3] = v > .94 ? 255 : 0; }));
+    } catch (e) {}
   })();
 
   /* ---------- Film grain ---------- */
@@ -1738,7 +1757,7 @@
 
   /* ---------- The moon is a turning tennis ball: its seam is a 3D curve, rotated and projected each frame ---------- */
   var seamEl = byId('seam'), seamSh = byId('seam-shadow');
-  var SA = .7, SB = .3, SC = 2 * Math.sqrt(SA * SB), SEG = 160;
+  var SA = .7, SB = .3, SC = 2 * Math.sqrt(SA * SB), SEG = 96, seamAt = -1;
   var spin = .6, spinV = still ? 0 : 3.4, SPIN_BASE = .42;
   var TZ = -.5, TX = .36, cTZ = Math.cos(TZ), sTZ = Math.sin(TZ), cTX = Math.cos(TX), sTX = Math.sin(TX);
   function drawSeam() {
@@ -2172,7 +2191,7 @@
   var css = getComputedStyle(document.documentElement);
   var SNOW = css.getPropertyValue('--snow').trim() || '#f2f7f3';
   var BALLC = css.getPropertyValue('--ball').trim() || '#dcee4e';
-  var W = 0, H = 0, flakes = [], shots = [], last = 0, raf = 0;
+  var W = 0, H = 0, flakes = [], shots = [], last = 0, raf = 0, snowCleared = false;
   var soft = document.createElement('canvas'); soft.width = soft.height = 64;
   (function () {
     var g = soft.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
@@ -2190,11 +2209,12 @@
     return f;
   }
   function resize() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     W = window.innerWidth; H = window.innerHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     var want = Math.max(50, Math.min(140, Math.round(W * H / 5200)));
+    if (lite) want = Math.max(30, Math.round(want * .45));
     while (flakes.length < want) flakes.push(flake(flakes.length, false));
     flakes.length = want;
     if (still) draw(0);
@@ -2230,14 +2250,30 @@
       ballAt(f.x, f.y, f.r, f.rot);
     }
   }
+  /* watch the frame rate for a while; on a device that cannot keep up, switch to light mode */
+  var perfN = 0, perfSum = 0, perfFrom = performance.now() + 4000, lite = false;
+  function watchPerf(rawDt) {
+    if (lite || gameActive || document.hidden || !splash.hidden || performance.now() < perfFrom || rawDt > 250) return;
+    perfN++; perfSum += rawDt;
+    if (perfN < 150) return;
+    if (perfSum / perfN > 22) {
+      lite = true;
+      html.classList.add('lite');
+      flakes.length = Math.max(30, Math.round(flakes.length * .45));
+    }
+    perfN = 0; perfSum = 0; perfFrom = performance.now() + 20000;
+  }
   function loop(t) {
     var dt = Math.min(.05, (t - last) / 1000 || 0);
+    if (last) watchPerf(t - last);
     last = t;
-    draw(dt);
-    if (window.scrollY < 560) {
+    if (gameActive) {
+      if (!snowCleared) { ctx.clearRect(0, 0, W, H); snowCleared = true; }
+    } else { snowCleared = false; draw(dt); }
+    if (window.scrollY < 560 && currentView === 'start' && !gameActive) {
       spinV += (SPIN_BASE - spinV) * Math.min(1, dt * 1.1);
       spin += spinV * dt;
-      drawSeam();
+      if (Math.abs(spin - seamAt) > .008) { seamAt = spin; drawSeam(); }
     }
     raf = requestAnimationFrame(loop);
   }
@@ -2255,7 +2291,7 @@
   var arm = byId('arm'), racket = byId('racket');
   function santaServe() {
     setTimeout(santaServe, 4200 + Math.random() * 3200);
-    if (still || document.hidden || window.scrollY > 300 || !arm.animate) return;
+    if (still || document.hidden || window.scrollY > 300 || currentView !== 'start' || gameActive || !arm.animate) return;
     arm.animate(
       [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-42deg)', offset: .38 }, { transform: 'rotate(40deg)', offset: .62 }, { transform: 'rotate(0deg)' }],
       { duration: 950, easing: 'ease-in-out' }
