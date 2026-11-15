@@ -1310,6 +1310,54 @@
   .tl.done { opacity: .62; }
   .join-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
   .join-btn svg { width: 22px; height: 22px; fill: currentColor; }
+  .lobby-stack { display: flex; flex-direction: column; gap: 16px; }
+  .lobby-stack > .boss-card { order: 0; } .lobby-stack > .lobby-hero { order: 1; } .lobby-stack > .host-card { order: 2; } .lobby-stack > .roster-card { order: 3; }
+  .lobby-stack > .next-card { order: 4; } .lobby-stack > #standings-card { order: 5; } .lobby-stack > .prog-card { order: 6; }
+  .lobby-stack.in-session > .next-card { order: 3; } .lobby-stack.in-session > #standings-card { order: 4; } .lobby-stack.in-session > .roster-card { order: 5; }
+  .lobby-hero { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 0% 0%, rgba(240, 195, 90, .2), transparent 55%), linear-gradient(180deg, #134b39, var(--board)); border-color: rgba(240, 195, 90, .35); }
+  .lh-top { display: flex; align-items: center; gap: 14px; }
+  .lh-ico { flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 17px; font-size: 30px; line-height: 1;
+    background: radial-gradient(circle at 35% 28%, #fff4c7, #f0c35a 58%, #c8912e); box-shadow: 0 0 0 2px rgba(240, 195, 90, .3), 0 10px 22px rgba(0, 0, 0, .35); }
+  .lobby-hero.ok .lh-ico { background: radial-gradient(circle at 35% 28%, #d9ffe8, #5be38f 58%, #1f8f55); box-shadow: 0 0 0 2px rgba(91, 227, 143, .35), 0 10px 22px rgba(0, 0, 0, .35); }
+  .lobby-hero.ok { border-color: rgba(91, 227, 143, .45); background: radial-gradient(120% 90% at 0% 0%, rgba(91, 227, 143, .2), transparent 55%), linear-gradient(180deg, #134b39, var(--board)); }
+  .lobby-hero.live .lh-ico { background: radial-gradient(circle at 35% 28%, #ffd0d6, #ff6b6f 58%, #b51f33); animation: lh-live 1.3s ease-in-out infinite; }
+  @keyframes lh-live { 50% { box-shadow: 0 0 0 7px rgba(255, 107, 111, .18), 0 10px 22px rgba(0, 0, 0, .35); } }
+  .lobby-hero.wait .lh-ico { animation: lh-wait 2.4s ease-in-out infinite; }
+  @keyframes lh-wait { 0%, 100% { transform: none; } 50% { transform: translateY(-3px) rotate(-4deg); } }
+  .lh-kick { font: 600 12px/1 var(--score); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+  .lobby-hero.ok .lh-kick { color: #8ff0b6; }
+  .lh-title { margin-top: 5px; font: 800 clamp(23px, 6.6vw, 28px)/1.08 var(--display); letter-spacing: -.01em; text-wrap: balance; }
+  .lobby-hero .notice { padding: 0; border: 0; font-size: 15px; color: var(--mist); }
+  .lobby-hero .notice b { color: var(--snow); }
+  .host-card { border-color: rgba(240, 195, 90, .4); background: linear-gradient(180deg, #1a3f2f, #0d2a21); }
+  .host-actions { display: flex; flex-direction: column; gap: 10px; }
+  .host-sec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 12px; }
+  .host-sec .tool { justify-content: flex-start; text-align: left; }
+  .ro-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .ro-count { font: 600 13px/1 var(--score); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); }
+  .ro-count b { font-size: 20px; color: #8ff0b6; margin-right: 4px; }
+  .ro-ticker { min-height: 0; font: 600 14px/1.3 var(--body); color: var(--gold); }
+  .ro-ticker:empty { display: none; }
+  .ro-ticker.pop { animation: ro-tick .5s cubic-bezier(.34, 1.4, .5, 1); }
+  @keyframes ro-tick { from { opacity: 0; transform: translateY(6px) scale(.96); } to { opacity: 1; transform: none; } }
+  .roster { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ro-tile { position: relative; display: flex; align-items: center; gap: 9px; min-width: 0; padding: 8px 10px 8px 8px; border-radius: 14px;
+    background: rgba(242, 247, 243, .05); border: 1px solid rgba(242, 247, 243, .08); transition: background .3s, border-color .3s; }
+  .ro-tile.in { background: rgba(91, 227, 143, .1); border-color: rgba(91, 227, 143, .35); }
+  .ro-tile.me { box-shadow: 0 0 0 2px rgba(220, 238, 78, .55); }
+  .ro-tile.off { opacity: .55; }
+  .ro-av { position: relative; flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; font: 700 16px/1 var(--score); color: var(--ink); text-transform: uppercase; }
+  .ro-av.ro-sym { font-size: 20px; background: radial-gradient(circle at 35% 30%, #fff4c7, #f0c35a 60%, #c8912e) !important; }
+  .ro-tile.in .ro-av::after { content: "✓"; position: absolute; right: -4px; bottom: -3px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%;
+    background: #5be38f; color: var(--ink); font: 800 11px/1 var(--body); box-shadow: 0 0 0 2px var(--board); }
+  .ro-tx { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .ro-tx b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; font: 600 15px/1.15 var(--body); color: var(--snow); }
+  .ro-tx small { font-size: 12px; line-height: 1.2; color: var(--mist); }
+  .ro-tile.in .ro-tx small { color: #8ff0b6; }
+  .ro-tile.new { animation: ro-new 1.1s cubic-bezier(.34, 1.4, .5, 1); }
+  @keyframes ro-new { 0% { transform: scale(.6); opacity: 0; box-shadow: 0 0 0 0 rgba(240, 195, 90, .8); } 55% { transform: scale(1.04); opacity: 1; box-shadow: 0 0 0 8px rgba(240, 195, 90, .25); } 100% { transform: none; box-shadow: 0 0 0 0 rgba(240, 195, 90, 0); } }
+  .ro-empty { grid-column: 1 / -1; font-size: 14px; color: var(--mist); }
+  @media (prefers-reduced-motion: reduce) { .ro-tile.new, .ro-ticker.pop, .lobby-hero.live .lh-ico, .lobby-hero.wait .lh-ico { animation: none; } }
   .joined-note { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #8ff0b6; }
   .joined-note::before { content: "✓"; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #5be38f; color: var(--ink); font-weight: 800; flex: none; }
   .person.in { box-shadow: inset 0 0 0 1.5px #5be38f; }
@@ -2379,34 +2427,42 @@
       <p class="vlead">Siedem krótkich gier i niespodzianka na koniec. Wszyscy grają w tej samej chwili, każdy na swoim telefonie. Kto zbierze najwięcej punktów, zostaje Mistrzem Świąt.</p>
     </header>
     <div class="layer gutter" id="game-lobby">
-      <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="lobby-stack" id="lobby-stack">
         <div class="card boss-card" id="boss-card" hidden></div>
-        <div class="card next-card" id="next-card" hidden></div>
-        <div class="card">
+        <div class="card lobby-hero" id="lobby-hero">
+          <div class="lh-top"><span class="lh-ico" id="lh-ico" aria-hidden="true">🔒</span><div class="lh-txt"><p class="lh-kick" id="lh-kick">Turniej na żywo</p><h2 class="lh-title" id="lh-title">Sejf jeszcze zamknięty</h2></div></div>
           <p class="notice" id="game-status">Czekamy, aż gospodarz otworzy turniej.</p>
-          <p class="host-sign" id="host-sign" hidden></p>
           <button type="button" class="cta wide join-btn" id="join-btn" hidden><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9.6 6.2h12.8v6.2a6.4 6.4 0 0 1-12.8 0Z"/><path d="M9.6 8.4H6.9a3.1 3.1 0 0 0 3.6 4.7M22.4 8.4h2.7a3.1 3.1 0 0 1-3.6 4.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 18.6v3.4" stroke="currentColor" stroke-width="2.4"/><rect x="11.2" y="22.2" width="9.6" height="3.6" rx="1.2"/></svg>Dołącz do turnieju</button>
-          <p class="joined-note" id="joined-note" hidden>Jesteś w turnieju. Każda gra ruszy sama na Twoim telefonie.</p>
           <p class="notice" id="inapp-note" hidden>Ta strona jest otwarta w przeglądarce wbudowanej w aplikację (np. Messenger). Dla pewności otwórz ją w Safari albo Chrome i zostań tam do końca turnieju.</p>
-          <div class="actions" id="host-actions" hidden>
-            <a class="tool quiet" href="#panel">Panel Mikołaja</a>
-            <button type="button" class="tool quiet" id="host-safe">Zmień znak w sejfie</button>
+        </div>
+        <div class="card host-card" id="host-card" hidden>
+          <p class="card-label">Panel gospodarza</p>
+          <p class="host-sign" id="host-sign" hidden></p>
+          <div class="host-actions" id="host-actions" hidden>
             <button type="button" class="cta wide" id="host-go">Rozpocznij turniej</button>
-            <button type="button" class="tool quiet" id="host-final" hidden>Zakończ i pokaż wyniki</button>
-            <button type="button" class="tool quiet" id="host-preview">Podgląd wejścia gościa</button>
-            <button type="button" class="tool quiet host-danger" id="host-reset">Resetuj turniej</button>
             <div class="boss-launch" id="boss-launch-lobby" hidden></div>
+            <button type="button" class="tool quiet" id="host-final" hidden>Zakończ i pokaż wyniki</button>
+            <div class="host-sec">
+              <button type="button" class="tool quiet" id="host-safe">Zmień znak w sejfie</button>
+              <button type="button" class="tool quiet" id="host-preview">Podgląd wejścia gościa</button>
+              <a class="tool quiet" href="#panel">Panel Mikołaja</a>
+              <button type="button" class="tool quiet host-danger" id="host-reset">Resetuj turniej</button>
+            </div>
           </div>
-          <p class="card-label" id="people-label">Na stronie teraz</p>
-          <div class="people" id="game-people"></div>
+        </div>
+        <div class="card roster-card" id="roster-card">
+          <div class="ro-head"><p class="card-label" id="people-label">Gracze</p><span class="ro-count" id="ro-count"></span></div>
+          <p class="ro-ticker" id="ro-ticker" aria-live="polite"></p>
+          <div class="roster" id="game-people"></div>
           <div class="actions"><button type="button" class="tool quiet" id="i-am-host">Jestem gospodarzem</button></div>
         </div>
+        <div class="card next-card" id="next-card" hidden></div>
         <div class="card" id="standings-card" hidden>
           <p class="card-label">Klasyfikacja turnieju</p>
           <ol class="rank" id="standings"></ol>
           <p class="hint-note">Za każdą grę: 15 pkt za 1. miejsce, 12 za 2., 10 za 3., dalej 8, 7, 6, 5, 4, 3 i 2, a każdy kolejny gracz 1 pkt. Kto nie zagra, nie dostaje nic. W grze bonusowej punkty liczą się podwójnie.</p>
         </div>
-        <div class="card">
+        <div class="card prog-card">
           <p class="card-label">Program turnieju</p>
           <ol class="tour-list" id="tour-list"></ol>
         </div>
@@ -4784,6 +4840,80 @@ function createSafe(opts) {
     autoJoinFor = gate.id;
     FB.D.set(R('joins/' + myUid), { sign: safeSign, gate: gate.id, name: visitorName() || 'Yeti', at: FB.D.serverTimestamp() }).catch(function () { autoJoinFor = ''; });
   }
+  var lastInGate;
+  function syncInGate() {
+    if (!FB || !myUid) return;
+    var g = myJoin && myJoin.gate || null;
+    if (g === lastInGate) return;
+    lastInGate = g;
+    FB.D.update(R('players/' + myUid), { inGate: g }).catch(function () { lastInGate = undefined; });
+  }
+  function hasJoined(uid) {
+    if (!gate || !gate.id || !gate.open) return false;
+    if (uid === myUid) return joinedNow();
+    if (isHost && allJoins[uid]) return allJoins[uid].gate === gate.id;
+    var pp = players[uid];
+    return !!(pp && pp.inGate === gate.id);
+  }
+  /* the players card: who is in the tournament, who is still outside; newcomers pop in */
+  var rosterSeen = null, rosterNew = {}, tickerT = 0;
+  function renderRoster() {
+    var open = !!(gate && gate.open), now = Date.now(), list = [];
+    Object.keys(players).forEach(function (u) {
+      var pp = players[u];
+      if (!pp || !pp.name) return;
+      var j = hasJoined(u);
+      if (!pp.online && !j && u !== myUid) return;
+      list.push({ uid: u, name: pp.name, on: !!pp.online || u === myUid, j: j });
+    });
+    if (myUid && visitor && !players[myUid]) list.push({ uid: myUid, name: visitor.name, on: true, j: hasJoined(myUid) });
+    var seen = {}, fresh = [];
+    list.forEach(function (e) { if (e.j) { seen[e.uid] = 1; if (rosterSeen && !rosterSeen[e.uid]) { rosterNew[e.uid] = now + 1600; fresh.push(e.name); } } });
+    rosterSeen = open ? seen : {};
+    list.sort(function (a, b) { return (b.j - a.j) || (b.on - a.on) || (a.uid === myUid ? -1 : b.uid === myUid ? 1 : 0) || a.name.localeCompare(b.name, 'pl'); });
+    var nIn = list.filter(function (e) { return e.j; }).length, nOut = list.filter(function (e) { return !e.j && e.on; }).length;
+    byId('people-label').textContent = open ? 'Gracze turnieju' : 'Na stronie teraz';
+    byId('ro-count').innerHTML = open ? '<b>' + nIn + '</b>w turnieju' + (nOut ? ' · ' + nOut + ' jeszcze nie' : '') : list.length ? '<b>' + list.length + '</b>' + plural(list.length, ['osoba', 'osoby', 'osób']) : '';
+    var mySym = visitor && visitor.sym ? symOf(visitor.sym) : null;
+    setHTML(byId('game-people'), list.map(function (e) {
+      var me = e.uid === myUid, cls = 'ro-tile' + (e.j ? ' in' : '') + (me ? ' me' : '') + (!e.on ? ' off' : '') + (rosterNew[e.uid] > now ? ' new' : '');
+      var av = me && mySym ? '<span class="ro-av ro-sym" aria-hidden="true">' + mySym[1] + '</span>' : '<span class="ro-av" style="background:' + avColor(e.name) + '" aria-hidden="true">' + esc(e.name.charAt(0)) + '</span>';
+      var stt = !open ? (me ? 'to Ty' : 'na stronie') : e.j ? (me ? 'Ty · w turnieju' : !e.on ? 'w turnieju · poza stroną' : 'w turnieju') : (me ? 'Ty · jeszcze nie w turnieju' : 'jeszcze nie w turnieju');
+      return '<div class="' + cls + '">' + av + '<span class="ro-tx"><b>' + esc(e.name) + '</b><small>' + stt + '</small></span></div>';
+    }).join('') || '<p class="ro-empty">Nikogo jeszcze nie ma.</p>');
+    if (fresh.length && !still) {
+      var tk = byId('ro-ticker');
+      tk.textContent = (fresh.length > 2 ? fresh.slice(0, 2).join(', ') + ' i inni dołączają' : fresh.join(' i ') + (fresh.length > 1 ? ' dołączają' : ' dołącza')) + ' do turnieju!';
+      tk.classList.remove('pop'); void tk.offsetWidth; tk.classList.add('pop');
+      clearTimeout(tickerT); tickerT = setTimeout(function () { tk.textContent = ''; }, 4500);
+    }
+  }
+  /* the big status at the top of the tab */
+  var lhLast = '';
+  function lobbyHero(st, active, nextIdx) {
+    var ico = '🔒', kick = 'Turniej na żywo', title = 'Sejf jeszcze zamknięty', cls = 'wait', open = !!(gate && gate.open);
+    if (!FB) { ico = '📡'; title = 'Łączę się z turniejem…'; }
+    else if (st && st.boss && roundLive(st)) { ico = '❄️'; kick = 'Finał z Bossem'; title = 'Trwa Finał z Bossem!'; cls = 'live'; }
+    else if (st && st.boss) { ico = '🏆'; kick = 'Finał z Bossem'; title = 'Finał rozegrany'; cls = ''; }
+    else if (roundLive(st)) { ico = '⏱️'; kick = gameTag(st.idx); title = 'Trwa: ' + GAMES[st.game].name; cls = 'live'; }
+    else if (active && nextIdx < GAME_ORDER.length) { ico = '🎄'; kick = 'Turniej trwa · zaraz ' + gameTag(nextIdx).toLowerCase(); title = 'Za chwilę: ' + GAMES[GAME_ORDER[nextIdx]].name; }
+    else if (active) { ico = '🏁'; kick = 'Turniej trwa'; title = 'Wszystkie gry rozegrane'; }
+    else if (st && st.final) { ico = '🏆'; kick = 'Turniej świąteczny'; title = 'Turniej zakończony'; cls = ''; }
+    else if (isHost) { ico = open ? '🎯' : '🔒'; kick = 'Turniej świąteczny'; title = open ? 'Gotowe do startu' : 'Otwórz sejf turnieju'; }
+    else if (open && joinedNow()) { ico = '✅'; kick = 'Jesteś w turnieju'; title = 'Czekamy na start'; cls = 'ok wait'; }
+    else if (open) { ico = '🗝️'; kick = 'Turniej otwarty'; title = 'Dołącz do turnieju!'; }
+    var el = byId('lobby-hero');
+    el.className = 'card lobby-hero' + (cls ? ' ' + cls : '');
+    byId('lh-kick').textContent = kick;
+    byId('lh-title').textContent = title;
+    var ic = byId('lh-ico');
+    ic.textContent = ico;
+    if (title !== lhLast) {
+      if (lhLast && !still) ic.animate([{ transform: 'scale(.5) rotate(-12deg)', opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 600, easing: SPRING });
+      lhLast = title;
+    }
+    byId('lobby-stack').classList.toggle('in-session', !!(st && st.session));
+  }
   function joinedNow() { return !!(gate && gate.id && myJoin && myJoin.gate === gate.id && !joinPending); }
   function codeFail(code) {
     tries++; store('mikolaj-proby', tries);
@@ -4954,7 +5084,7 @@ function createSafe(opts) {
     if (currentView === 'szukanie') renderSheet();
     D.onValue(R('players'), function (s) { players = s.val() || {}; playersLoaded = true; renderHello(); renderLobby(); renderPanel(); tryRestore(); }, noop);
     D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
-    D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
+    D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); syncInGate(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('game/state'), function (s) { gsLoaded = true; onGameState(s.val()); }, noop);
     D.onValue(D.query(R('game/scores'), D.limitToLast(30)), function (s) { allScores = s.val() || {}; onScores(); }, noop);
     D.onValue(R('game/history'), function (s) { history = s.val() || {}; onScores(); }, noop);
@@ -4977,6 +5107,7 @@ function createSafe(opts) {
     isHost = true;
     setTimeout(moveInd, 30);
     byId('host-actions').hidden = false;
+    byId('host-card').hidden = false;
     byId('i-am-host').hidden = true;
     moveInd();
     FB.D.onValue(R('attempts'), function (s) { attempts = s.val() || {}; renderPanel(); }, noop);
@@ -6330,7 +6461,7 @@ function createSafe(opts) {
     var el = byId('card-game-state'), st = gameState, t = '', k = '';
     if (!el) return;
     if (FB && !roundLive(st)) {
-      if (st && st.session && !st.final) { t = 'Turniej trwa · za nami ' + (st.idx + 1) + ' z ' + GAME_ORDER.length; k = 'go'; }
+      if (st && st.session && !st.final) { t = st.idx + 1 < GAME_ORDER.length ? 'Turniej trwa · zaraz ' + gameTag(st.idx + 1).toLowerCase() : 'Turniej trwa'; k = 'go'; }
       else if (st && st.final) t = 'Turniej zakończony';
       else if (gate && gate.open) { t = joinedNow() ? 'Jesteś w turnieju ✓' : 'Sejf otwarty: dołącz!'; k = joinedNow() ? 'ok' : 'go'; }
       else if (gateLoaded) t = 'Sejf jeszcze zamknięty';
@@ -6341,21 +6472,18 @@ function createSafe(opts) {
     drawIcons();
     renderTraining();
     gameCardState();
-    var ppl = byId('game-people'), status = byId('game-status'), label = byId('people-label');
+    var status = byId('game-status');
     var go = byId('host-go'), fin = byId('host-final'), sc = byId('standings-card');
     if (!FB) {
-      ppl.innerHTML = ''; label.hidden = true; sc.hidden = true;
+      sc.hidden = true; lobbyHero(null, false, 0); byId('roster-card').hidden = true;
       status.innerHTML = FIREBASE_CONFIG
         ? 'Łączę się z serwerem gry… Jeśli to trwa długo, sprawdź internet i odśwież stronę. <b>Trening</b> działa zawsze.'
         : 'Turniej na żywo działa na stronie <b>wrobhu.github.io/swieta</b>. Tutaj możesz zagrać <b>trening</b> każdej gry.';
       return;
     }
-    label.hidden = false;
+    byId('roster-card').hidden = false;
     var on = onlineList();
-    ppl.innerHTML = on.map(function (pp) {
-      var j = gate && allJoins[pp.uid] && allJoins[pp.uid].gate === gate.id;
-      return '<span class="person' + (pp.uid === myUid ? ' me' : '') + (j ? ' in' : '') + '">' + avatarHTML(pp.name) + esc(pp.name) + (pp.uid === myUid ? ' <small>Ty</small>' : '') + (isHost && j ? ' <b class="in-ok" title="Dołączył do turnieju">✓</b>' : '') + '</span>';
-    }).join('') || '<span class="hello-sub">Nikogo jeszcze nie ma.</span>';
+    renderRoster();
     var st = gameState, active = st && st.session && !st.final, nextIdx = active ? st.idx + 1 : 0;
     /* the next game, with how to play it, so everyone is ready before Mikołaj starts it */
     var nc = byId('next-card'), nk = !(st && st.boss) && !roundLive(st) && gate && gate.open ? (active ? GAME_ORDER[nextIdx] : (!st || st.final ? GAME_ORDER[0] : null)) : null;
@@ -6370,30 +6498,24 @@ function createSafe(opts) {
       fillRank(byId('boss-rank'), bl2, GAMES[st.game].fmt, 'boss');
     }
     if (st && st.boss && roundLive(st)) status.innerHTML = '<b>Trwa Finał z Bossem!</b> ' + (st.allowed && st.allowed[myUid] ? 'Grasz w finale.' : 'Kibicuj: wyniki zmieniają się na żywo poniżej.');
-    else if (st && st.boss) status.innerHTML = 'Finał z Bossem rozegrany. ' + (isHost ? 'Możesz rozpocząć nowy turniej albo kolejny finał.' : 'Dziękujemy za grę!');
+    else if (st && st.boss) status.innerHTML = (isHost ? 'Możesz rozpocząć nowy turniej albo kolejny finał.' : 'Dziękujemy za grę!');
     else if (roundLive(st)) status.innerHTML = '<b>Trwa ' + gameTag(st.idx).toLowerCase() + ': ' + GAMES[st.game].name + '.</b> Dołączasz automatycznie.';
-    else if (active && nextIdx < GAME_ORDER.length) status.innerHTML = 'Turniej trwa. Za chwilę ' + gameTag(nextIdx).toLowerCase() + ': <b>' + GAMES[GAME_ORDER[nextIdx]].name + '</b>.' + (isHost ? '' : ' Czekamy na Yetiego.');
-    else if (active) status.innerHTML = 'Wszystkie gry rozegrane. ' + (isHost ? 'Ogłoś Mistrza Świąt!' : 'Yeti zaraz ogłosi Mistrza Świąt.');
-    else if (st && st.final) status.innerHTML = 'Turniej zakończony. ' + (isHost ? 'Możesz rozpocząć kolejny.' : 'Może Yeti zarządzi rewanż?');
-    else status.textContent = isHost ? (gate && gate.open ? 'Sejf zamknięty, znak ustawiony. Gdy wszyscy dołączą, rozpocznij turniej.' : 'Najpierw otwórz sejf swoim kodem i wybierz znak turnieju.') : (gate && gate.open ? 'Turniej otwarty! Dołącz, wybierając znak, który ogłosi gospodarz.' : 'Czekamy, aż gospodarz otworzy sejf z turniejem.');
+    else if (active && nextIdx < GAME_ORDER.length) status.textContent = isHost ? 'Gdy wszyscy będą gotowi, stuknij „Następna gra”. Ranking jest niżej.' : 'Czekamy, aż Yeti uruchomi grę. Ruszy sama na Twoim telefonie.';
+    else if (active) status.innerHTML = (isHost ? 'Ogłoś Mistrza Świąt!' : 'Yeti zaraz ogłosi Mistrza Świąt.');
+    else if (st && st.final) status.innerHTML = (isHost ? 'Możesz rozpocząć kolejny.' : 'Może Yeti zarządzi rewanż?');
+    else status.textContent = isHost ? (gate && gate.open ? 'Znak ustawiony. Gdy wszyscy dołączą, stuknij „Rozpocznij turniej”.' : 'Otwórz sejf swoim kodem i wylosuj znak turnieju. Potem ogłoś go wszystkim.') : (gate && gate.open ? 'Stuknij „Dołącz” i wybierz znak, który ogłosi gospodarz.' : 'Gospodarz otworzy go przed turniejem. Do tego czasu możesz potrenować gry w zakładce Gra.');
+    lobbyHero(st, active, nextIdx);
     var canJoin = !!(gate && gate.open) && !joinedNow();
     var cupT = byId('tab-cup');
     cupT.classList.toggle('call', canJoin && !isHost);
     cupT.querySelector('.cup-l').textContent = canJoin && !isHost ? 'Dołącz' : 'Turniej';
     byId('join-btn').hidden = !canJoin;
-    byId('joined-note').hidden = !joinedNow();
+    if (!isHost && gate && gate.open && joinedNow() && !(st && st.session && !st.final) && !roundLive(st)) status.textContent = 'Każda gra wystartuje sama na Twoim telefonie. Nie zamykaj strony.';
     var inApp = /FBAN|FBAV|FB_IAB|Instagram|Messenger|Line\/|wv\)/i.test(navigator.userAgent || '');
     byId('inapp-note').hidden = !inApp;
-    if (isHost) {
-      var nj = Object.keys(allJoins).filter(function (u) { return gate && allJoins[u] && allJoins[u].gate === gate.id; }).length;
-      if (gate && gate.open && !roundLive(st)) {
-        var notYet = on.filter(function (pp) { return !(allJoins[pp.uid] && allJoins[pp.uid].gate === gate.id); }).map(function (pp) { return esc(pp.name); });
-        status.innerHTML += ' <b>Dołączyło: ' + nj + '.</b>' + (notYet.length ? ' Jeszcze nie: ' + notYet.join(', ') + '.' : ' Wszyscy obecni są w turnieju.');
-      }
-    }
     var hs = byId('host-sign'), sg = isHost && safeSign && gate && gate.open ? signInfo(safeSign) : null;
     hs.hidden = !sg;
-    if (sg) hs.innerHTML = '<span class="hs-ico" aria-hidden="true">' + sg.svg + '</span><span>Znak turnieju: <b>' + esc(sg.name) + '</b>. Podaj go wszystkim, którzy jeszcze nie dołączyli.</span>';
+    if (sg) hs.innerHTML = '<span class="hs-ico" aria-hidden="true">' + sg.svg + '</span><span>Znak turnieju: <b>' + esc(sg.name) + '</b>. Ogłoś go wszystkim, którzy jeszcze nie dołączyli.</span>';
     syncWake();
     if (isHost) {
       go.hidden = roundLive(st);
