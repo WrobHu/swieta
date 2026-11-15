@@ -501,6 +501,29 @@
     display: inline-flex; align-items: center; gap: 6px;
   }
   .shop { background: var(--berry); color: var(--snow); text-decoration: none; transition: transform .2s var(--out), background-color .2s; }
+  .opts { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .opt { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; text-decoration: none; color: var(--ink);
+    background: rgba(13, 42, 34, .06); border: 1px solid rgba(13, 42, 34, .14); transition: transform .15s var(--out), background-color .2s; }
+  .opt:active { transform: scale(.98); background: rgba(13, 42, 34, .12); }
+  .opt-n { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--berry); color: var(--snow); font: 700 13px/1 var(--score); }
+  .opt-t { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .opt-t b { font: 700 15px/1.2 var(--body); }
+  .opt-t small { font-size: 12.5px; line-height: 1.3; color: var(--ink-soft); }
+  .opt svg { flex: none; width: 14px; height: 14px; margin-left: auto; fill: none; stroke: var(--berry); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .promo-tag { display: inline-flex; align-items: center; padding: 4px 9px 3px; border-radius: 99px; font: 700 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase;
+    color: #3a2a00; background: linear-gradient(180deg, #fff27a, #f0c35a); box-shadow: 0 0 0 1.5px #c62a41, 0 2px 8px rgba(198, 42, 65, .35); animation: promo-pulse 1.8s ease-in-out infinite; }
+  @keyframes promo-pulse { 0%, 100% { transform: none; } 50% { transform: scale(1.07) rotate(-2deg); } }
+  .promo-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+  .promo-price s { font-size: 14px; color: var(--ink-soft); text-decoration-color: var(--berry); text-decoration-thickness: 2px; }
+  .promo-price b { font-size: 20px; color: var(--berry); }
+  .promo-price small { flex-basis: 100%; font: 500 12px/1.2 var(--body); letter-spacing: 0; color: var(--ink-soft); }
+  .wrap-promo { position: absolute; left: 10px; top: 10px; z-index: 4; padding: 6px 10px 5px; border-radius: 8px; transform: rotate(-9deg); pointer-events: none;
+    font: 800 13px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: #3a2a00; background: linear-gradient(180deg, #fff27a, #f0c35a);
+    box-shadow: 0 0 0 2px #c62a41, 0 6px 14px rgba(0, 0, 0, .35); animation: wrap-promo 1.8s ease-in-out infinite; }
+  @keyframes wrap-promo { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(-5deg) scale(1.08); } }
+  .wrap.tearing .wrap-promo { opacity: 0; transition: opacity .15s; }
+  @media (prefers-reduced-motion: reduce) { .promo-tag, .wrap-promo { animation: none; } }
+  .opt-count { font: 600 13px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--berry); }
   .shop:active { transform: scale(.95); background: var(--berry-deep); }
   .shop:focus-visible { outline-color: var(--ink); }
   .shop svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -1166,7 +1189,8 @@
   .gain + .pts { margin-left: 0; }
   .res-next-game, .next-card .nc-row { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
   .res-next-game { padding: 12px; border-radius: 14px; background: rgba(2, 10, 8, .35); border: 1px dashed rgba(220, 238, 78, .35); }
-  .ng-ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(220, 238, 78, .12); color: var(--ball); font-size: 22px; }
+  .ng-ico { width: 48px; height: 48px; border-radius: 13px; display: grid; place-items: center; color: var(--ball); font-size: 24px;
+    background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 62%), linear-gradient(160deg, #174d3b, #0a2a21); box-shadow: inset 0 0 0 1px rgba(220, 238, 78, .28); }
   .ng-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .ng-txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .ng-txt small { font: 700 11px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
@@ -1224,7 +1248,7 @@
 
   .game-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .gl {
-    position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; grid-template-areas: "ico head act" "desc desc desc";
+    position: relative; display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; grid-template-areas: "ico head act" "desc desc desc";
     gap: 10px 12px; align-items: center; padding: 12px; border-radius: 16px;
     background: linear-gradient(180deg, rgba(2, 10, 8, .28), rgba(2, 10, 8, .46)); border: 1px solid rgba(242, 247, 243, .07);
   }
@@ -1239,14 +1263,19 @@
   .gl.done .gl-state { background: rgba(91, 227, 143, .14); color: #5be38f; }
   .gl.now { box-shadow: inset 0 0 0 1.5px var(--ball); }
   .gl.done { opacity: .62; }
-  .gl-ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(220, 238, 78, .12); color: var(--ball); }
+  .gl-ico { width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center; color: var(--ball);
+    background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 62%), linear-gradient(160deg, #174d3b, #0a2a21);
+    box-shadow: inset 0 0 0 1px rgba(220, 238, 78, .28), inset 0 -6px 12px rgba(0, 0, 0, .25), 0 8px 16px rgba(0, 0, 0, .3); }
+  .gl-ico svg.gi, .ng-ico svg.gi { width: 42px; height: 42px; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .35)); }
+  .ng-ico svg.gi { width: 36px; height: 36px; }
   .gl-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .gl b { display: block; font: 700 18px/1.15 var(--display); margin-top: 3px; }
   .gl .d { grid-area: desc; display: block; font-size: 14px; line-height: 1.45; color: var(--mist); padding-top: 10px; border-top: 1px solid rgba(242, 247, 243, .07); }
   .gl small { font: 700 11px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
   .gl .tool { min-height: 34px; padding: 0 12px; font-size: 13px; }
   .gl.bonus { background: linear-gradient(120deg, rgba(240, 195, 90, .14), rgba(2, 10, 8, .38) 60%); box-shadow: inset 0 0 0 1px rgba(240, 195, 90, .32); }
-  .gl.bonus .gl-ico { background: rgba(240, 195, 90, .16); color: var(--gold); }
+  .gl.bonus .gl-ico { color: var(--gold); background: radial-gradient(circle at 30% 22%, rgba(255, 240, 190, .22), rgba(255, 255, 255, 0) 62%), linear-gradient(160deg, #3a2d10, #1a1406);
+    box-shadow: inset 0 0 0 1px rgba(240, 195, 90, .55), inset 0 -6px 12px rgba(0, 0, 0, .25), 0 8px 16px rgba(0, 0, 0, .3); }
   .tr-chips { display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
   .tr-chips::-webkit-scrollbar { display: none; }
   .tr-chips button { flex: none; min-height: 34px; padding: 0 13px; border-radius: 99px; border: 1px solid var(--line); background: rgba(2, 10, 8, .35); color: var(--mist); font: 600 14px/1 var(--body); cursor: pointer; transition: background .25s, color .25s, border-color .25s; }
@@ -2113,7 +2142,7 @@
 
   <nav class="navcards layer gutter" aria-label="Co dalej">
     <a class="navcard" href="#list" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>
-      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">15 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">13 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
       <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard" href="#turniej" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
@@ -2728,38 +2757,35 @@
       desc: 'Wszystko niżej to podpowiedzi. Ten prezent jest dla Mikołajów z własnym pomysłem: coś, na co sam bym nie wpadł, a od razu by mi się spodobało. Jeśli macie taki pomysł, to jest jego miejsce.',
       price: 'dowolna', url: '' },
     { cat: 'gra', icon: 'mouse', tier: 'top', tease: 'Coś dla gracza LoL-a', name: 'Myszka Logitech G PRO X2 SUPERSTRIKE',
-      desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. Pssssst: nie mówcie Domi, nowa myszka to trochę mniej czasu dla niej. PPS To drogi prezent, więc warto podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
-      price: 'ok. 769 zł', url: 'https://www.logitechg.com/pl-pl/shop/p/pro-x2-superstrike-mouse.910-007776' },
+      desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. Pssssst: nie mówcie Domi, nowa myszka to trochę mniej czasu dla niej. Pssssst - drogi prezent, w razie potrzeby można podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
+      price: '649 zł', promo: { was: '769 zł', off: '−120 zł', when: 'cena w x-kom z 15 listopada' }, url: 'https://www.x-kom.pl/p/1480104-myszka-bezprzewodowa-logitech-g-pro-x2-superstrike.html' },
     { cat: 'kort', icon: 'balls', tier: 'drob', tease: 'Coś okrągłego na mączkę', name: 'Piłki Wilson Roland Garros Clay, 4 sztuki',
       desc: 'Piłki na mączkę, takie jak na Roland Garros. Po moim serwisie część i tak ląduje u sąsiadów, więc zapas zawsze się przyda.',
       price: 'ok. 40–50 zł', url: 'https://www.decathlon.pl/p/pilka-tenisowa-wilson-roland-garros-clay-4-sztuki-control/X8585816/m8585816' },
-    { cat: 'kort', icon: 'grip', tier: 'drob', tease: 'Kolor pod rakietę', name: 'Owijki Artengo Comfort, 3 sztuki',
-      desc: 'Do przetestowania, a do tego mają idealny kolor pod moją rakietę. Jak gra się nie klei, to chociaż wygląda się dobrze.',
-      price: 'ok. 25–35 zł', url: 'https://www.decathlon.pl/p/owijka-wierzchnia-do-rakiety-tenisowej-artengo-comfort-x3/138905/c132m8340514' },
-    { cat: 'kort', icon: 'grip', tier: 'mocny', tease: 'Pewniak na mecze ligowe', name: 'Owijki Babolat Pro Tour 2.0, 12 sztuk',
-      desc: 'Pewniaki na mecze ligowe. Sprawdzone, nie zawodzą, a przy dwunastu sztukach nie zabraknie ich do końca sezonu.',
-      price: 'ok. 90–120 zł', url: 'https://www.decathlon.pl/p/owijka-wierzchnia-do-tenisa-babolat-pro-tour-2-0-x12/X8837552/m8837552' },
+    { cat: 'kort', icon: 'grip', tier: 'mocny', tease: 'Owijki: test i pewniak', name: 'Owijki do rakiety, dwie opcje',
+      desc: 'Artengo chcę przetestować, a do tego mają idealny kolor pod moją rakietę: jak gra się nie klei, to chociaż wygląda się dobrze. Babolat to pewniaki na mecze ligowe, sprawdzone i przy dwunastu sztukach starczą do końca sezonu.',
+      price: 'ok. 25–120 zł', opts: [
+        { label: 'Artengo Comfort, 3 szt.', note: 'do testu, kolor pod rakietę · ok. 25–35 zł', url: 'https://www.decathlon.pl/p/owijka-wierzchnia-do-rakiety-tenisowej-artengo-comfort-x3/138905/c132m8340514' },
+        { label: 'Babolat Pro Tour 2.0, 12 szt.', note: 'pewniak na ligę · ok. 90–120 zł', url: 'https://www.decathlon.pl/p/owijka-wierzchnia-do-tenisa-babolat-pro-tour-2-0-x12/X8837552/m8837552' }] },
     { cat: 'kort', icon: 'spool', tier: 'mocny', tease: 'Coś, co podkręci piłkę', name: 'Naciąg Babolat RPM Blast 1,25 mm, czarny',
       desc: 'Naciąg, na którym grają zawodowcy. Piłka będzie kręcić się jak u Nadala, a ja stracę jedną wymówkę po przegranym secie.',
       price: 'ok. 70–90 zł', url: 'https://www.decathlon.pl/p/naciag-tenisowy-jednowloknisty-babolat-rpm-blast-1-25-mm-czarny/X8157212/c1m8157212' },
     { cat: 'kort', icon: 'bag', tier: 'fajny', tease: 'Dom dla drobiazgów', name: 'Składana torba sportowa Club 100, 55 l',
       desc: 'Torba na wszystko poza rakietą i butami: ręcznik, bidon, banan i zapasowa koszulka. Wreszcie każda rzecz będzie miała swój dom, tak jak ja w tym roku.',
       price: 'ok. 40–60 zł', url: 'https://www.decathlon.pl/p/torba-sportowa-na-ramie-skladana-55-l-club-100/309659/c383c382m8558317' },
-    { cat: 'kort', icon: 'gel', tier: 'fajny', tease: 'Paliwo na sparingi', name: 'Żele energetyczne na sparingi, 20 sztuk',
-      desc: 'Słabsze, na sparingi, w których stawką jest honor i to, kto stawia kawę. Dwadzieścia sztuk, żeby starczyło na cały sezon treningów.',
-      price: 'ok. 60–80 zł', url: 'https://www.decathlon.pl/p/zel-energetyczny-energy-gel-czerwone-owoce-x20/341349/g215m8758862' },
-    { cat: 'kort', icon: 'gel', tier: 'drob', tease: 'Ciężka artyleria', name: 'Żele energetyczne na MECZE, 6 sztuk',
-      desc: 'Mocniejsze, na mecze ligowe, kiedy trzeci set zaczyna się o 22:00. Ciężka artyleria, tylko na specjalne okazje.',
-      price: 'ok. 20–30 zł', url: 'https://www.decathlon.pl/p/zel-energetyczny-energy-gel-czerwone-owoce-x6/341480/g51m8758870' },
+    { cat: 'kort', icon: 'gel', tier: 'fajny', tease: 'Paliwo na sparingi i MECZE', name: 'Żele energetyczne, dwie opcje',
+      desc: 'Słabsze na sparingi, w których stawką jest honor i to, kto stawia kawę. Mocniejsze na mecze ligowe, kiedy trzeci set zaczyna się o 22:00: ciężka artyleria, tylko na specjalne okazje.',
+      price: 'ok. 20–80 zł', opts: [
+        { label: 'Na sparingi, 20 szt.', note: 'słabsze · ok. 60–80 zł', url: 'https://www.decathlon.pl/p/zel-energetyczny-energy-gel-czerwone-owoce-x20/341349/g215m8758862' },
+        { label: 'Na MECZE, 6 szt.', note: 'mocniejsze · ok. 20–30 zł', url: 'https://www.decathlon.pl/p/zel-energetyczny-energy-gel-czerwone-owoce-x6/341480/g51m8758870' }] },
     { cat: 'stroj', icon: 'shirt', tier: 'fajny', tease: 'Nowa robota dla pralki', name: 'Koszulki sportowe H&M',
       desc: 'Bo brudzę je szybciej, niż pralka nadąża, a Domi będzie mogła marudzić na jeszcze więcej prania. Rozmiar M albo L, nie pamiętam. Dopytajcie Domi, ona wie wszystko.',
       price: 'cena w sklepie H&M', url: 'https://www2.hm.com/pl_pl/productpage.0624684003.html' },
-    { cat: 'kort', icon: 'damp', tier: 'fajny', tease: 'Cisza w rakiecie', name: 'Tłumiki drgań Babolat Sonic Damp, 2 sztuki',
-      desc: 'Rakieta przestaje dzwonić jak dzwonek u sań, a łokieć mówi „dziękuję”. Dwie sztuki, bo jeden zawsze gdzieś znika.',
-      price: 'ok. 25–35 zł', url: 'https://www.decathlon.pl/p/mp/tlumiki-drgan-babolat-sonic-damp-2-szt-s25/9b1662d0-4727-43e4-8d09-5caa2e207fc8/c255' },
-    { cat: 'kort', icon: 'damp', tier: 'fajny', tease: 'Turbo do serwisu', name: 'Tłumik Babolat Aero Damp, 2 sztuki',
-      desc: 'Aerodynamiczny tłumik. Czy przyspieszy mój serwis? Nauka milczy, ale ja wierzę.',
-      price: 'ok. 30–45 zł', url: 'https://www.decathlon.pl/p/mp/amortyzator-aerodynamiczny-babolat-aero-damp-x2/cbc1154a-b22e-4391-a898-c57b8eb4b52c/c255' },
+    { cat: 'kort', icon: 'damp', tier: 'fajny', tease: 'Cisza albo turbo w rakiecie', name: 'Tłumiki drgań Babolat, dwie opcje',
+      desc: 'Sonic Damp sprawia, że rakieta przestaje dzwonić jak dzwonek u sań, a łokieć mówi „dziękuję”. Aero Damp jest aerodynamiczny: czy przyspieszy mój serwis? Nauka milczy, ale ja wierzę.',
+      price: 'ok. 25–45 zł', opts: [
+        { label: 'Sonic Damp, 2 szt.', note: 'cisza w rakiecie · ok. 25–35 zł', url: 'https://www.decathlon.pl/p/mp/tlumiki-drgan-babolat-sonic-damp-2-szt-s25/9b1662d0-4727-43e4-8d09-5caa2e207fc8/c255' },
+        { label: 'Aero Damp, 2 szt.', note: 'turbo do serwisu · ok. 30–45 zł', url: 'https://www.decathlon.pl/p/mp/amortyzator-aerodynamiczny-babolat-aero-damp-x2/cbc1154a-b22e-4391-a898-c57b8eb4b52c/c255' }] },
     { cat: 'stroj', icon: 'sock', tier: 'drob', tease: 'Coś na mączkę, ale na stopy', name: 'Skarpety tenisowe Artengo RS160 High, 3 pary',
       desc: 'Po każdym meczu na mączce wyglądają, jakbym grał w błocie, a nie w tenisa. Nowe pary dadzą pralce i Domi chwilę oddechu.',
       price: 'ok. 25–35 zł', url: 'https://www.decathlon.pl/p/skarpety-sportowe-tenis-artengo-rs160-high-3-pary/300234/c382m8395032' },
@@ -2768,7 +2794,12 @@
       price: 'ok. 10–20 zł', url: 'https://www.decathlon.pl/p/opaska-na-reke-tenis-kuikma-tw-100/2446/c382c227c344m8022237' },
     { cat: 'poza', icon: 'perfume', tier: 'top', tease: 'Wieczór w stylu dżentelmena', name: 'Givenchy Gentleman Réserve Privée, woda perfumowana',
       desc: 'Ten zapach naprawdę mi się podoba. Wieczorem chcę być jak Eddie z „Dżentelmenów” na Netfliksie: spokojny, elegancki i zawsze o krok przed wszystkimi. Domi też na tym skorzysta.',
-      price: 'cena w sklepie Notino', url: 'https://www.notino.pl/givenchy/gentleman-givenchy-reserve-privee-woda-perfumowana-dla-mezczyzn/p-16111491' }
+      price: 'cena w sklepie Notino', url: 'https://www.notino.pl/givenchy/gentleman-givenchy-reserve-privee-woda-perfumowana-dla-mezczyzn/p-16111491' },
+    { cat: 'poza', icon: 'foam', tier: 'fajny', tease: 'Coś na po meczu', name: 'Pianka pod prysznic Rituals, dwie opcje',
+      desc: 'Po meczu na mączce prysznic to podstawa, a z pianką Rituals nawet Domi nie będzie marudzić, że pachnę kortem. Sport na po treningu, Homme na wieczór, kiedy zamieniam się w dżentelmena.',
+      price: 'cena w sklepie Rituals', opts: [
+        { label: 'Rituals Sport', note: 'na po treningu', url: 'https://www.rituals.com/pl-pl/rituals-sport-shower-foam-1115569.html' },
+        { label: 'Rituals Homme', note: 'na wieczór', url: 'https://www.rituals.com/pl-pl/rituals-homme-shower-foam-1119073.html' }] }
   ];
 
   GIFTS.sort(function (a, b) { return TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier); });
@@ -2792,7 +2823,8 @@
     ticket: '<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14.5 6v12" stroke-dasharray="2 2.2"/>',
     whistle: '<circle cx="9" cy="14.5" r="5.5"/><path d="M12.5 10.2H21v3.6h-6.5M9 3.5V6M5.5 4.5l1 2M12.5 4.5l-1 2"/>',
     roller: '<rect x="3" y="8" width="18" height="8" rx="4"/><path d="M7.5 8v8M12 8v8M16.5 8v8"/>',
-    book: '<path d="M5 4.5h11a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8.5h6"/>'
+    book: '<path d="M5 4.5h11a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8.5h6"/>',
+    foam: '<rect x="7" y="9.5" width="10" height="12" rx="2.5"/><path d="M9.5 9.5V7h5v2.5M12 7V4.5h4.5M16.5 3v3"/><circle cx="19" cy="8" r="1.3"/><circle cx="20.5" cy="12" r=".9"/><path d="M9.5 15h5" opacity=".6"/>'
   };
   var ARROW = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg>';
   var BALL = '<svg viewBox="0 0 40 40" aria-hidden="true"><use href="#ball"/></svg>';
@@ -2997,11 +3029,12 @@
       '<span class="half l"></span><span class="half r"></span>' + (g.tier === 'top' || g.tier === 'toptop' ? '<span class="wsheen"></span>' : '') + '<span class="ribbon"></span>' + BOW +
       '<span class="wrap-label"><span class="wrap-no">Prezent ' + pad(i + 1) + (g.tier ? '<b class="wtier">' + (g.tier === 'toptop' ? '★★ TOP TOP' : g.tier === 'top' ? '★ TOP' : GIFT_TIERS[g.tier]) + '</b>' : '') + '</span>' +
       '<span class="wrap-cat">' + esc(g.tease || CATS[g.cat]) + '</span></span>' +
+      (g.promo ? '<span class="wrap-promo">Promka!</span>' : '') +
       '<span class="wrap-ball">' + BALL + '</span></button>';
   }
 
   list.innerHTML = GIFTS.map(function (g, i) {
-    var link = g.url
+    var link = g.opts ? '<span class="opt-count">' + g.opts.length + ' opcje do wyboru</span>' : g.url
       ? '<a class="shop" href="' + esc(g.url) + '" target="_blank" rel="noopener">Zobacz w sklepie ' + ARROW + '</a>'
       : g.nolink ? '' : '<span class="soon">Link wkrótce</span>';
     var isOpen = openedBefore.indexOf(g.name) !== -1;
@@ -3011,12 +3044,16 @@
         '<p class="tag-meta"><span class="tag-cat">' + CATS[g.cat] + '</span>' +
           (g.tier ? '<span class="gtier ' + g.tier + '">' + (g.tier === 'toptop' ? '★★ ' : g.tier === 'top' ? '★ ' : '') + GIFT_TIERS[g.tier] + '</span>' : '') +
           (g.ace ? '<span class="ace">Wymarzony</span>' : '') +
+          (g.promo ? '<span class="promo-tag">Promka ' + esc(g.promo.off) + '</span>' : '') +
           (hunts('gift') && i === HUNT.gift % GIFTS.length ? '<button type="button" class="gold-btn gold-sticker" data-g="gift" aria-label="Złota piłka schowana w prezencie"' + (found.indexOf('gift') !== -1 ? ' hidden' : '') + '>' + GBALL + '</button>' : '') + '</p>' +
         '<h3>' + esc(g.name) + '</h3>' +
         '<p class="tag-desc">' + esc(g.desc) + '</p>' +
+        (g.opts ? '<div class="opts">' + g.opts.map(function (o, k) {
+          return '<a class="opt" href="' + esc(o.url) + '" target="_blank" rel="noopener"><span class="opt-n">' + (k + 1) + '</span><span class="opt-t"><b>' + esc(o.label) + '</b>' + (o.note ? '<small>' + esc(o.note) + '</small>' : '') + '</span>' + ARROW + '</a>';
+        }).join('') + '</div>' : '') +
       '</div>' +
       '<div class="tag-icon" aria-hidden="true"><svg viewBox="0 0 24 24">' + (ICONS[g.icon] || ICONS.balls) + '</svg></div>' +
-      '<div class="tag-foot"><span class="price">' + esc(g.price) + '</span>' + link + '</div>' +
+      '<div class="tag-foot">' + (g.promo ? '<span class="price promo-price"><s>' + esc(g.promo.was) + '</s> <b>' + esc(g.price) + '</b><small>' + esc(g.promo.when) + '</small></span>' : '<span class="price">' + esc(g.price) + '</span>') + link + '</div>' +
     '</article></div>' + (isOpen ? '' : wrapHTML(i, g)) + '</li>';
   }).join('');
 
@@ -4980,35 +5017,35 @@ function createSafe(opts) {
   var GAMES = {
     catch: { name: 'Złap prezenty', time: '30 s', dur: 30000, better: 'high', label: 'PUNKTY', hint: 'Przesuwaj palcem rakietę',
       desc: 'Łap rakietą prezenty (+1), piłki (+2) i złote piłki (+5). Węgielek zabiera 3 punkty.',
-      icon: '<svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13"/><path d="M12 7C10 3 6 4 7.5 7M12 7c2-4 6-3 4.5 0"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><path d="M16.6 34.1 7.4 41.8" stroke="#6b4a1a" stroke-width="4.2"/><path d="M12 37.9 7.4 41.8" stroke="#f0c35a" stroke-width="4.6"/><ellipse cx="25" cy="27" rx="10" ry="8" transform="rotate(-40 25 27)" fill="rgba(220,238,78,.16)" stroke="#dcee4e" stroke-width="2.6"/><path d="M20.5 21.6 29.5 32.4M25 19.2 32.7 28.4M17.3 25.6 25 34.8M18.1 32.8 31.9 21.2M21.8 34.9 33.3 25.2M16.7 28.8 28.2 19.1" stroke="#dcee4e" stroke-width=".9" opacity=".65"/><g transform="rotate(12 37 12)"><rect x="29" y="7" width="15" height="12" rx="2" fill="#e0465c"/><rect x="27.5" y="4.5" width="18" height="4.5" rx="1.5" fill="#c62a41"/><rect x="35" y="4.5" width="3" height="14.5" fill="#f6d27a"/><path d="M36.5 4.5c-2.5-3.6-6.2-2.6-4.6 0zM36.5 4.5c2.5-3.6 6.2-2.6 4.6 0z" fill="#f6d27a"/></g><circle cx="40" cy="31" r="3.4" fill="#dcee4e"/><path d="M37.6 29.6c1.2.8 1.2 2 0 2.8M42.4 29.6c-1.2.8-1.2 2 0 2.8" stroke="#fff" stroke-width=".8" fill="none"/><path d="M8 9.5l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z" fill="#fff4c7"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     quiz: { name: 'Świąteczny quiz', time: '1,5 min', dur: 7 * 12000, better: 'high', label: 'PUNKTY', hint: 'Stukaj w dobrą odpowiedź',
       desc: '7 pytań o Święta i tenis (w treningu 3 inne). Za dobrą odpowiedź do 100 punktów, a z każdą sekundą mniej.',
-      icon: '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 9a2 2 0 1 1 2.5 1.9c-.4.1-.5.4-.5.8V12M12 14.2v.1"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><path d="M10 7h24a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H19l-7 6v-6h-2a4 4 0 0 1-4-4V11a4 4 0 0 1 4-4z" fill="#f0c35a"/><path d="M10 7h24a4 4 0 0 1 4 4v3C30 10 18 10 6 13v-2a4 4 0 0 1 4-4z" fill="#fff" opacity=".22"/><path d="M18 14.5a4 4 0 1 1 5.6 3.7c-1 .4-1.6 1.1-1.6 2.1v.9" fill="none" stroke="#0d2a22" stroke-width="3"/><circle cx="22" cy="25" r="1.8" fill="#0d2a22"/><path d="M31 25h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1v4.5L35 37h-4a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3z" fill="#2fae6b" stroke="#0d2a22" stroke-width="1.5"/><path d="M32.4 31.2l2.6 2.6 4.6-5" fill="none" stroke="#fff" stroke-width="2.3"/><path d="M42 5l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="#fff4c7"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     reflex: { name: 'Refleks Mikołaja', time: '30 s', dur: 6 * 5000, better: 'low', label: 'ŚREDNIO', hint: 'Stuknij, gdy zrobi się zielono',
       desc: 'Stuknij, gdy ekran zrobi się zielony. Złoty błysk to podpucha. Sześć prób.',
-      icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M18.5 6.5l1.5-1.5"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><rect x="20.5" y="3" width="7" height="4" rx="1.2" fill="#c9d4d8"/><rect x="22.5" y="6" width="3" height="4" fill="#9aa9ae"/><rect x="34" y="8.5" width="4" height="5" rx="1" transform="rotate(40 36 11)" fill="#9aa9ae"/><circle cx="24" cy="27" r="17" fill="#c62a41"/><circle cx="24" cy="27" r="13.5" fill="#f6fbf8"/><path d="M24 15.5A11.5 11.5 0 0 1 33.96 32.75" fill="none" stroke="#2fae6b" stroke-width="3"/><path d="M24 16.2v2.3M24 35.5v2.3M13.2 27h2.3M32.5 27h2.3" stroke="#0d2a22" stroke-width="1.6"/><path d="M26.5 16.5 19 28h5.2l-2.2 9.5 8.6-12.6h-5.3l2.2-8.4z" fill="#f0c35a" stroke="#0d2a22" stroke-width="1.2" stroke-linejoin="round"/><path d="M10 14a17 17 0 0 1 5-5" fill="none" stroke="#fff" stroke-width="1.6" opacity=".5"/></g></svg>',
       fmt: function (n) { return Math.round(n / 6) + ' ms średnio'; } },
     snow: { name: 'Ulep bałwana', time: '20 s', dur: 20000, better: 'high', label: 'PUNKTY', hint: 'Stukaj w śnieżki, omijaj węgiel',
       desc: 'Stukaj w śnieżki, które wyskakują w różnych miejscach. Gwiazdka +3, węgielek −2.',
-      icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="16" r="5"/><circle cx="12" cy="7.5" r="3.5"/><path d="M7.5 12 4 10M16.5 12l3.5-2"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><path d="M14.5 30 7 25M33.5 30 41 25M9.2 26.4 6.6 26M38.8 26.4 41.4 26" stroke="#8a5d12" stroke-width="1.8"/><circle cx="24" cy="34.5" r="10.5" fill="#f6fbff"/><ellipse cx="27.5" cy="37.5" rx="6.5" ry="5.5" fill="#d3e6f1" opacity=".75"/><circle cx="24" cy="18.5" r="7.6" fill="#fff"/><ellipse cx="26.5" cy="20.5" rx="4" ry="3.6" fill="#e3eef5" opacity=".8"/><rect x="19.5" y="3" width="9" height="8.5" rx="1.2" fill="#0d2a22"/><rect x="17.2" y="10.4" width="13.6" height="2.6" rx="1.2" fill="#0d2a22"/><rect x="19.5" y="8" width="9" height="2" fill="#c62a41"/><circle cx="21.4" cy="17.4" r="1.15" fill="#0d2a22"/><circle cx="26.6" cy="17.4" r="1.15" fill="#0d2a22"/><path d="M24 19.4l6.4 1.7-6.4 1.4z" fill="#f28c28"/><path d="M16.4 24.4q7.6 3.6 15.2 0l-.5 3q-7.1 2.9-14.2 0z" fill="#c62a41"/><path d="M27.8 26.2l2.6 7.2-3.1.7-1.7-7z" fill="#e0465c"/><circle cx="24" cy="32" r="1.25" fill="#0d2a22"/><circle cx="24" cy="36.6" r="1.25" fill="#0d2a22"/><circle cx="8" cy="9" r="1.3" fill="#fff" opacity=".8"/><circle cx="40" cy="13" r="1" fill="#fff" opacity=".7"/><circle cx="42" cy="40" r="1.2" fill="#fff" opacity=".6"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     juggle: { name: 'Odbijanka', time: '40 s', dur: 40000, better: 'high', label: 'ODBICIA', hint: 'Stukaj w spadającą piłkę pod linią',
       desc: 'Odbijaj spadającą piłkę pod linią. Każde odbicie leci inaczej, a wiatr się zmienia.',
-      icon: '<svg viewBox="0 0 24 24"><circle cx="15" cy="6" r="3.2"/><ellipse cx="9" cy="15" rx="4.5" ry="5.5" transform="rotate(-30 9 15)"/><path d="M12 19.5 15 22"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><path d="M30 35.6 41.5 40.4" stroke="#6b4a1a" stroke-width="4.2"/><path d="M36.5 38.3 41.5 40.4" stroke="#f0c35a" stroke-width="4.6"/><ellipse cx="19" cy="34" rx="11" ry="5.2" fill="rgba(220,238,78,.16)" stroke="#dcee4e" stroke-width="2.4"/><path d="M9.5 34h19M11 31.7h16M11 36.3h16M14 29.5v9M19 29v10M24 29.5v9" stroke="#dcee4e" stroke-width=".85" opacity=".6"/><circle cx="20" cy="22.5" r="1.1" fill="#fff4c7" opacity=".8"/><circle cx="20" cy="26.3" r=".9" fill="#fff4c7" opacity=".55"/><circle cx="20" cy="12" r="6.6" fill="#dcee4e"/><path d="M14.6 9.6c3 1.5 3 3.7 0 5.2M25.4 9.6c-3 1.5-3 3.7 0 5.2" stroke="#fff" stroke-width="1.3" fill="none"/><circle cx="17.8" cy="9.3" r="1.6" fill="#fff" opacity=".55"/><path d="M9.5 6.5c-2 2.2-2 5.3 0 7.5M30.5 6.5c2 2.2 2 5.3 0 7.5" stroke="#fff4c7" stroke-width="1.4" fill="none" opacity=".75"/></g></svg>',
       fmt: function (n) { return n + ' ' + plural(n, ['odbicie', 'odbicia', 'odbić']); } },
     tower: { name: 'Wieża z prezentów', time: '45 s', dur: 45000, better: 'high', label: 'PUNKTY', hint: 'Stuknij, żeby upuścić prezent',
       desc: 'Prezent jeździ nad stosem. Stuknij, żeby go upuścić: to, co wystaje, spada. Za każdy prezent +1, za idealne trafienie +2.',
-      icon: '<svg viewBox="0 0 24 24"><rect x="5.5" y="15.5" width="13" height="5.5" rx="1"/><rect x="7" y="10" width="10" height="5.5" rx="1"/><rect x="8.5" y="4.5" width="7" height="5.5" rx="1"/><path d="M12 4.5V21"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><rect x="8" y="33" width="32" height="11" rx="1.8" fill="#c62a41"/><rect x="22.5" y="33" width="3" height="11" fill="#f6d27a"/><rect x="12" y="23.5" width="24" height="9.5" rx="1.6" fill="#2fae6b"/><rect x="22.5" y="23.5" width="3" height="9.5" fill="#fff"/><rect x="16" y="14.5" width="16" height="9" rx="1.4" fill="#f0c35a"/><rect x="22.5" y="14.5" width="3" height="9" fill="#c62a41"/><path d="M24 14.5c-2.2-3.2-5.4-2.6-4.3 0zM24 14.5c2.2-3.2 5.4-2.6 4.3 0z" fill="#c62a41"/><rect x="8" y="33" width="32" height="1.6" fill="#fff" opacity=".22"/><rect x="12" y="23.5" width="24" height="1.4" fill="#fff" opacity=".22"/><rect x="16" y="14.5" width="16" height="1.3" fill="#fff" opacity=".3"/><g transform="rotate(14 37 7)"><rect x="31" y="2.5" width="12" height="9" rx="1.4" fill="#5ab4e6"/><rect x="35.6" y="2.5" width="2.8" height="9" fill="#fff"/></g><path d="M35.5 14v5" stroke="#fff4c7" stroke-width="1.2" stroke-dasharray="1.5 2" opacity=".8"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     memory: { name: 'Świąteczne memory', time: '1 min', dur: 60000, better: 'high', label: 'PUNKTY', hint: 'Odkrywaj po dwie karty i szukaj par',
       desc: 'Odkrywaj po dwie karty i szukaj par. Za parę +1, za całą planszę +3, a potem przychodzi nowa. Wszyscy mają te same plansze.',
-      icon: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="11" rx="1.6"/><rect x="13" y="8" width="8" height="11" rx="1.6"/><path d="M7 8.6v3.8M5.1 10.5h3.8M17 11.2l1.4 2.3-1.4 2.3-1.4-2.3z"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><g transform="rotate(-10 15.5 23)"><rect x="6" y="9.5" width="19" height="27" rx="3" fill="#c62a41"/><rect x="8.5" y="12" width="14" height="22" rx="2" fill="none" stroke="#f6d27a" stroke-width="1.2"/><path d="M15.5 18.5l2.2 4.5-2.2 4.5-2.2-4.5z" fill="#f6d27a"/></g><g transform="rotate(8 32 26)"><rect x="22" y="12" width="20" height="28" rx="3" fill="#f6fbf8" stroke="#0d2a22" stroke-width="1.2"/><rect x="30.5" y="19.6" width="3" height="2.6" rx=".6" fill="#f0c35a"/><circle cx="32" cy="27.6" r="6" fill="#2fae6b"/><path d="M26.3 28.6q5.7 2 11.4 0" fill="none" stroke="#f6d27a" stroke-width="1.4"/><circle cx="30" cy="25.6" r="1.5" fill="#fff" opacity=".6"/></g><path d="M42 4.5l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z" fill="#fff4c7"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } },
     chimney: { name: 'Serwis do komina', time: '40 s', dur: 6 * 6500, better: 'high', label: 'PUNKTY', hint: 'Traf do komina. Uważaj na wiatr!', bonus: true, mult: 2,
       desc: 'Niespodzianka na koniec. Bez treningu, a punkty za miejsce liczą się podwójnie.',
-      icon: '<svg viewBox="0 0 24 24"><path d="M3 12.5 12 5.5l9 7M5.5 10.6V20h13v-9.4"/><path d="M15.2 7.6V3.8h2.6v5.8"/><circle cx="9" cy="3.6" r="1.7"/></svg>',
+      icon: '<svg class="gi" viewBox="0 0 48 48"><g stroke="none"><rect x="31" y="14" width="8" height="16" fill="#b4472f"/><path d="M31 19h8M31 23.5h8M35 14.9V19M33 19v4.5M37 19v4.5" stroke="#8a3220" stroke-width=".9"/><rect x="29.8" y="11.5" width="10.4" height="3.4" rx="1" fill="#8a3220"/><path d="M29.8 12.2c1.5-1.7 3-1.3 4.2-.5 1.4-1 3.2-1 4.6.2.6.4.9.6 1.6.2v.8H29.8z" fill="#fff"/><path d="M1 34 24 18l23 16v10H1z" fill="#6b1a24"/><path d="M1 34 24 18l23 16-2.8 1.8L24 22 3.8 35.8z" fill="#fff"/><path d="M8 40h6M20 38h6M33 41h6" stroke="#4a0f18" stroke-width="1.2" opacity=".7"/><path d="M16 9.5Q26.5 1 34.5 9" fill="none" stroke="#fff4c7" stroke-width="1.4" stroke-dasharray="1.6 2.4"/><circle cx="12" cy="12" r="5" fill="#dcee4e"/><path d="M8 10.2c2.2 1.2 2.2 2.6 0 3.8M16 10.2c-2.2 1.2-2.2 2.6 0 3.8" stroke="#fff" stroke-width="1.1" fill="none"/><path d="M43 4l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="#fff4c7"/></g></svg>',
       fmt: function (n) { return n + ' pkt'; } }
   };
   var QUIZ = [
