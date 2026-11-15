@@ -871,6 +871,12 @@
   .reward h3 { font: 900 28px/1.1 var(--display); letter-spacing: -.015em; text-wrap: balance; }
   .reward p { font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
   .unlock-close { margin-top: 10px; }
+  .scan-go { max-width: 320px; min-height: 58px; font-size: 17px; }
+  .scan-ok { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; background: rgba(91, 227, 143, .16); border: 1px solid rgba(91, 227, 143, .5);
+    font: 700 16px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: #8ff0b6; }
+  .scan-wait { width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(240, 195, 90, .25); border-top-color: var(--gold); animation: scan-spin .9s linear infinite; }
+  @keyframes scan-spin { to { transform: rotate(360deg); } }
+  .rw-ready { width: 100%; }
 
 
   /* ---------- app shell: boot splash, views, tab bar ---------- */
@@ -1059,6 +1065,31 @@
   .live-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--berry-lit); animation: bulb .8s infinite alternate; }
 
   /* ---------- hunt page ---------- */
+  .hunt-due { display: flex; align-items: center; gap: 10px; margin-top: 4px; padding: 10px 12px; border-radius: 14px; background: linear-gradient(160deg, rgba(207, 46, 69, .24), rgba(207, 46, 69, .08));
+    border: 1px solid rgba(255, 107, 111, .45); color: var(--snow); font-size: 14px; line-height: 1.35; text-decoration: none; }
+  .hunt-due b { color: var(--gold); font-weight: 700; }
+  .hunt-due .hd-ball { flex: none; width: 30px; height: 30px; animation: hd-bob 1.6s ease-in-out infinite alternate; }
+  .hunt-due .hd-ball svg { display: block; width: 100%; height: 100%; }
+  .hunt-due .chev { flex: none; width: 18px; height: 18px; margin-left: auto; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .hunt-due.over { background: rgba(4, 18, 16, .45); border-color: var(--line); }
+  .hunt-due.over .hd-ball { animation: none; opacity: .6; }
+  @keyframes hd-bob { from { transform: translateY(0) rotate(-8deg); } to { transform: translateY(-4px) rotate(8deg); } }
+  .hunt-deadline { display: flex; flex-direction: column; gap: 9px; padding: 12px 12px 13px; border-radius: 14px; text-align: center;
+    background: linear-gradient(160deg, rgba(207, 46, 69, .26), rgba(207, 46, 69, .08)); border: 1px solid rgba(255, 107, 111, .45); }
+  .hdl-label { font: 700 12px/1.25 var(--score); letter-spacing: .16em; text-transform: uppercase; color: #ffb3bd; }
+  .hdl-cells { display: flex; justify-content: center; gap: 8px; }
+  .hdl-cells span { display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 7px 4px 6px; border-radius: 11px; background: rgba(4, 18, 16, .55);
+    font: 600 11px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
+  .hdl-cells b { margin-bottom: 3px; font: 700 26px/1.05 var(--score); letter-spacing: 0; color: var(--snow); font-variant-numeric: tabular-nums; }
+  .hdl-cells em { font-style: normal; }
+  .hdl-note { font-size: 14px; line-height: 1.38; color: var(--snow); text-wrap: balance; }
+  .hdl-note b { color: var(--gold); }
+  .hunt-deadline.soon { animation: hdl-pulse 1.6s ease-in-out infinite; }
+  @keyframes hdl-pulse { 50% { box-shadow: 0 0 24px rgba(255, 77, 94, .5); } }
+  .hunt-deadline.over { background: rgba(4, 18, 16, .45); border-color: var(--line); }
+  .hunt-deadline.over .hdl-cells { display: none; }
+  .hunt-deadline.over .hdl-label { color: var(--mist); }
+  @media (prefers-reduced-motion: reduce) { .hunt-due .hd-ball, .hunt-deadline.soon { animation: none; } }
   .hunt-card { display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(180deg, #11402f, #0a2a21 60%); box-shadow: 0 18px 40px rgba(2, 10, 8, .4); }
   .hunt-rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .hunt-rule { border-top: 3px solid var(--tc, var(--gold)); }
@@ -2040,6 +2071,7 @@
       </div>
       <p class="sr" role="timer" id="cd-sr"></p>
       <p class="board-note" id="cd-note"><b>Czas do Świąt leci szybko jak mój serwis.</b> Tyle że Mikołaj zawsze trafia idealnie, a mój serwis… różnie bywa.</p>
+      <a class="hunt-due" id="hunt-due" href="#szukanie"><span class="hd-ball" aria-hidden="true"><svg viewBox="0 0 40 40"><use href="#gball"/></svg></span><span id="hunt-due-txt"></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     </section>
   </div>
 
@@ -2203,10 +2235,15 @@
     <header class="vhead gutter">
       <p class="eyebrow">Szukanie</p>
       <h1>Złote piłki <em>Mikołaja</em></h1>
-      <p class="vlead">Mikołaj zgubił 7 złotych piłek. Każdy ma je schowane w innych miejscach, więc nie da się ich podejrzeć ani podpowiedzieć innym.</p>
+      <p class="vlead">Mikołaj zgubił 7 złotych piłek. Każdy ma je schowane w innych miejscach, więc nie da się ich podejrzeć ani podpowiedzieć innym. Szukać można tylko do 20 grudnia.</p>
     </header>
     <div class="layer gutter">
       <div class="hunt-card">
+        <div class="hunt-deadline" id="hunt-deadline">
+          <p class="hdl-label" id="hdl-label">Szukanie kończy się 20 grudnia o północy</p>
+          <div class="hdl-cells" aria-hidden="true"><span><b id="hdl-d">0</b><em id="hdl-du">dni</em></span><span><b id="hdl-h">0</b>godz.</span><span><b id="hdl-m">0</b>min</span><span><b id="hdl-s">0</b>sek.</span></div>
+          <p class="hdl-note" id="hdl-note"></p>
+        </div>
         <div class="hunt-rules">
           <p class="hunt-rule b"><b>3 piłki</b>brązowy kupon</p>
           <p class="hunt-rule s"><b>5 piłek</b>srebrny kupon</p>
@@ -2745,6 +2782,9 @@
   /* the QR code on a coupon opens this address; change it if the page moves (e.g. to GitHub Pages) */
   var BASE_URL = 'https://wrobhu.github.io/swieta/';
   var SALT = 'mikolaj-tenis-2026';
+  /* the golden balls can be found until the end of 20 December (Polish time); coupons stay valid after that */
+  var HUNT_END = Date.UTC(2026, 11, 20, 23, 0, 0);
+  function huntOpen() { return Date.now() < HUNT_END; }
   var REWARDS = {
     b: [{ name: 'Czekoladowa złota piłka i cukierkowa laska', desc: 'Złota piłka do zjedzenia, bo tamte Mikołaj chciał z powrotem. Do tego słodka laska na drogę.' }],
     s: [{ name: 'Słoik gorącej czekolady z piankami', desc: 'Kakao, czekolada i pianki zamknięte w słoiku z kokardką. Zalej gorącym mlekiem i ogrzej się po polowaniu.' }],
@@ -3188,6 +3228,36 @@
   tick(false);
   setInterval(function () { if (currentView === 'start' && !document.hidden) tick(true); }, 1000);
 
+  /* ---------- the hunt deadline: 20 December, four days before Christmas Eve ---------- */
+  function plDays(d) { return d === 1 ? 'dzień' : 'dni'; }
+  function renderHuntDue() {
+    var left = Math.max(0, HUNT_END - Date.now()), sec = Math.floor(left / 1000), n = found.length;
+    var d = Math.floor(sec / 86400), h = Math.floor(sec % 86400 / 3600), m = Math.floor(sec % 3600 / 60), open = left > 0;
+    var due = byId('hunt-due'), txt = byId('hunt-due-txt'), box = byId('hunt-deadline'), note = byId('hdl-note');
+    due.classList.toggle('over', !open);
+    box.classList.toggle('over', !open);
+    box.classList.toggle('soon', open && sec < 2 * 86400);
+    if (!open) {
+      txt.innerHTML = '<b>Szukanie złotych piłek zakończone.</b> ' + (n >= BRONZE_AT ? 'Twój kupon jest ważny, pokaż go w Święta.' : 'Kupony zdobyte wcześniej są ważne w Święta.');
+      byId('hdl-label').textContent = 'Szukanie zakończyło się 20 grudnia';
+      note.innerHTML = n >= BRONZE_AT ? 'Masz <b>' + n + ' z ' + HUNT_TOTAL + '</b>. Twój kupon jest ważny, pokaż go w Święta.' : 'Złotych piłek nie da się już zbierać. Do zobaczenia w Święta!';
+      return;
+    }
+    if (n >= HUNT_TOTAL) txt.innerHTML = '<b>Masz wszystkie 7 złotych piłek!</b> Szukanie trwa do 20 grudnia, a Ty już masz złoty kupon.';
+    else if (d === 0) txt.innerHTML = '<b>Ostatni dzień szukania złotych piłek!</b> Zostało ' + h + ' godz. ' + m + ' min.';
+    else txt.innerHTML = '<b>Złote piłki tylko do 20 grudnia!</b> Zostało ' + d + ' ' + plDays(d) + ' i ' + h + ' godz., o 4 dni mniej niż do Wigilii.';
+    byId('hdl-d').textContent = d;
+    byId('hdl-du').textContent = plDays(d);
+    byId('hdl-h').textContent = pad(h);
+    byId('hdl-m').textContent = pad(m);
+    byId('hdl-s').textContent = pad(sec % 60);
+    note.innerHTML = n >= HUNT_TOTAL ? 'Wszystkie znalezione. Gratulacje!'
+      : d === 0 ? '<b>To ostatnie godziny.</b> Po północy złotych piłek nie da się już zbierać.'
+      : 'To <b>4 dni przed Wigilią</b>, więc czasu jest mniej, niż pokazuje licznik do Świąt. Nie zwlekaj!';
+  }
+  renderHuntDue();
+  setInterval(function () { if ((currentView === 'start' || currentView === 'szukanie') && !document.hidden) renderHuntDue(); }, 1000);
+
   /* ---------- Hero parallax: the moon lags, the sleigh flies on as the page scrolls ---------- */
   var scene = byId('scene');
   if (!still) {
@@ -3407,6 +3477,7 @@
 
   function collect(id, x, y) {
     if (found.indexOf(id) !== -1) return;
+    if (!huntOpen()) { toast('Za późno! Szukanie złotych piłek skończyło się 20 grudnia.'); return; }
     found.push(id);
     store('mikolaj-zlote', found);
     markTaken(id);
@@ -3452,7 +3523,7 @@
   });
 
   /* golden ball 3 falls from the sky now and then; with reduced motion it rests in the sky instead */
-  function scheduleDrop(ms) { if (hunts('sky') && found.indexOf('sky') === -1) setTimeout(dropGold, ms); }
+  function scheduleDrop(ms) { if (hunts('sky') && found.indexOf('sky') === -1 && huntOpen()) setTimeout(dropGold, ms); }
   function dropGold() {
     if (!hunts('sky') || found.indexOf('sky') !== -1 || fx.querySelector('.fall-gold')) return;
     if (document.hidden || gameActive || !byId('unlock').hidden || !byId('splash').hidden) { scheduleDrop(5000); return; }
@@ -3495,7 +3566,7 @@
   function couponCode(tier, hex) { return fnv(SALT + '|' + tier + '|' + hex).slice(0, 6); }
   function couponFor(name, tier) {
     var hex = toHex(name), code = couponCode(tier, hex);
-    return { url: BASE_URL + '#kupon-' + tier + '-' + hex + '-' + code, code: code.toUpperCase() };
+    return { url: BASE_URL + '#kupon-' + tier + '-' + hex + '-' + code + (myUid ? '-' + myUid : ''), code: code.toUpperCase() };
   }
   var COUPON_BOW = '<svg class="c-bow" viewBox="0 0 68 46" aria-hidden="true">' +
     '<path class="b2" d="M31 27 22 44l8-3 4-12zM37 27l9 17-8-3-4-12z"/>' +
@@ -3630,13 +3701,17 @@
         '<p class="coupon-for">dla</p><p class="coupon-name" id="coupon-name"></p>' +
         '<p class="coupon-lvl" aria-label="Znalezione złote piłki: ' + n + ' z ' + HUNT_TOTAL + '">' + dots + '<span>' + n + ' z ' + HUNT_TOTAL + ' piłek</span></p>' +
         '<div class="coupon-qr" id="coupon-qr"></div>' +
-        '<p class="coupon-text">Pokaż ten kod Mikołajowi w Święta. Co dostaniesz, okaże się dopiero po zeskanowaniu.</p>' +
+        '<p class="coupon-text">Pokaż ten kod Hubertowi w Święta. Gdy go zeskanuje i zatwierdzi, na Twoim telefonie pojawi się prezent do otwarcia.</p>' +
         '<div class="coupon-foot"><div class="coupon-meta"><span class="coupon-no">Nr ' + cp.code + '</span>' +
         '<span class="coupon-date">Wydany ' + (isNaN(when) ? '' : when.toLocaleDateString('pl-PL', DATE_FMT)) + '</span></div>' + COUPON_STAMP + '</div>' +
       '</div>';
     byId('coupon-name').textContent = holder.name;
     drawQR(byId('coupon-qr'), cp.url, tier);
     if (nt) area.insertAdjacentHTML('beforeend', '<p class="coupon-next">Znajdź jeszcze ' + (TIER_AT[nt] - n) + ', a kupon zmieni się na ' + TIER_ADJ[nt] + '.</p>');
+    if (myReward && myReward.tier && typeof myReward.code === 'string') {
+      area.insertAdjacentHTML('afterbegin', '<button type="button" class="cta wide rw-ready" id="rw-open">Kupon zatwierdzony! Otwórz prezent</button>');
+      byId('rw-open').addEventListener('click', function () { showReward(true); });
+    }
   }
 
   function openSheet() { go('szukanie'); }
@@ -3664,10 +3739,10 @@
   /* ---------- a scanned coupon: #kupon-<tier>-<name in hex>-<code> ---------- */
   var unlock = byId('unlock'), ubody = byId('unlock-body'), current = null;
   function parseCoupon(h) {
-    var m = /^#kupon-([bsz])-((?:[0-9a-f]{2}){1,96})-([0-9a-f]{6})$/.exec(h);
+    var m = /^#kupon-([bsz])-((?:[0-9a-f]{2}){1,96})-([0-9a-f]{6})(?:-([A-Za-z0-9_-]{6,64}))?$/.exec(h);
     if (!m) return { ok: false };
     var name = fromHex(m[2]);
-    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3] };
+    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3], uid: m[4] || '', scan: !!m[4] };
   }
   function rewardFor(c) { var pool = REWARDS[c.tier]; return pool[parseInt(c.code.slice(0, 4), 16) % pool.length]; }
   function showUnlock(c) {
@@ -3686,8 +3761,77 @@
     }
     eb.textContent = { b: 'Brązowy kupon · 3 z 7 piłek', s: 'Srebrny kupon · 5 z 7 piłek', z: 'Złoty kupon · 7 z 7 piłek' }[c.tier];
     title.textContent = c.name;
-    sub.textContent = 'Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.';
+    if (c.scan) { renderScan(); return; }
+    sub.textContent = c.received ? 'Hubert zatwierdził Twój kupon! Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.' : 'Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.';
     showGift();
+  }
+  /* Hubert scans a guest's QR: the page checks he is the host, then one tap approves it and the gift appears on the guest's phone */
+  var scanTimer = 0, hostChecked = false;
+  function renderScan() {
+    var c = current, sub = byId('unlock-sub');
+    if (!c || !c.scan || unlock.hidden) return;
+    clearTimeout(scanTimer);
+    if (!FB || !hostChecked) {
+      sub.textContent = 'Łączę się z serwerem…';
+      ubody.innerHTML = '<span class="scan-wait" aria-hidden="true"></span>';
+      scanTimer = setTimeout(function () {
+        if (current !== c || (FB && hostChecked)) return;
+        sub.textContent = 'Nie ma połączenia z serwerem. Sprawdź internet i zeskanuj kod jeszcze raz albo otwórz prezent na tym telefonie.';
+        ubody.innerHTML = '<button type="button" class="tool" id="scan-here">Otwórz prezent tutaj</button>';
+        byId('scan-here').addEventListener('click', showGift);
+      }, 9000);
+      return;
+    }
+    if (c.uid === myUid) {
+      sub.textContent = 'To Twój kupon. Pokaż ten kod Hubertowi: gdy go zatwierdzi, prezent pojawi się na Twoim telefonie.';
+      ubody.innerHTML = '';
+      return;
+    }
+    if (!isHost) {
+      sub.textContent = 'Ten kupon zatwierdza Hubert. Potem ' + c.name + ' zobaczy na swoim telefonie prezent do otwarcia.';
+      ubody.innerHTML = '<button type="button" class="tool quiet" id="scan-host">Jestem Hubertem, mam kod</button>';
+      byId('scan-host').addEventListener('click', openHost);
+      return;
+    }
+    sub.textContent = 'Sprawdzam kupon…';
+    ubody.innerHTML = '<span class="scan-wait" aria-hidden="true"></span>';
+    FB.D.get(R('rewards/' + c.uid)).then(function (snap) {
+      if (current !== c) return;
+      var r = snap.val(), same = !!(r && r.tier === c.tier);
+      sub.textContent = same ? 'Ten kupon jest już zatwierdzony. ' + c.name + ' ma prezent na swoim telefonie.' : 'Zatwierdź kupon, a ' + c.name + ' zobaczy na swoim telefonie prezent do otwarcia.';
+      ubody.innerHTML = same ? '<p class="scan-ok">✓ Zatwierdzony</p>' : '<button type="button" class="cta wide scan-go" id="scan-go">Zatwierdzam prezent</button>';
+      if (!same) byId('scan-go').addEventListener('click', approveScan);
+    }, function () {
+      if (current === c) { sub.textContent = 'Nie udało się sprawdzić kuponu. Sprawdź internet i zeskanuj kod jeszcze raz.'; ubody.innerHTML = ''; }
+    });
+  }
+  function approveScan() {
+    var c = current, b = byId('scan-go');
+    if (!c || !b || b.disabled) return;
+    b.disabled = true; b.textContent = 'Zatwierdzam…';
+    FB.D.set(R('rewards/' + c.uid), { tier: c.tier, code: c.code, name: c.name.slice(0, 40), at: FB.D.serverTimestamp() }).then(function () {
+      if (current !== c) return;
+      byId('unlock-sub').textContent = 'Gotowe! ' + c.name + ' widzi już na swoim telefonie prezent do otwarcia.';
+      ubody.innerHTML = '<p class="scan-ok">✓ Zatwierdzony</p>';
+      try { if (navigator.vibrate) navigator.vibrate([30, 40, 60]); } catch (e) {}
+      if (!still) { var r = ubody.getBoundingClientRect(); shards(r.left + r.width / 2, r.top + 20, ['#f0c35a', '#fff4c7', '#dcee4e', '#ffffff']); }
+    }, function () {
+      if (current !== c) return;
+      b.disabled = false; b.textContent = 'Zatwierdzam prezent';
+      byId('unlock-sub').textContent = 'Nie udało się zapisać. Sprawdź internet i spróbuj jeszcze raz.';
+    });
+  }
+  /* the guest's side: an approved coupon pops up as a gift to open, once per approval */
+  var myReward = null, rewardTimer = 0;
+  function showReward(force) {
+    var r = myReward;
+    clearTimeout(rewardTimer);
+    if (!r || !/^[bsz]$/.test(r.tier) || !/^[0-9a-f]{6}$/.test(r.code || '')) return;
+    if (!force && restore('mikolaj-nagroda', '') === r.tier + r.code) return;
+    var sf = byId('safe');
+    if (!force && (!byId('splash').hidden || gameActive || !unlock.hidden || (sf && !sf.hidden))) { rewardTimer = setTimeout(showReward, 2500); return; }
+    showUnlock({ ok: true, received: true, tier: r.tier, code: r.code, name: r.name || visitorName() || 'Gość' });
+    try { if (navigator.vibrate) navigator.vibrate([60, 50, 60, 50, 160]); } catch (e) {}
   }
   function showGift() {
     var c = current, theme = { b: 'w2', s: 'w1', z: 'w0' }[c.tier];
@@ -3706,6 +3850,7 @@
       byId('reward-name').textContent = rw.name;
       byId('reward-desc').textContent = rw.desc;
       byId('unlock-sub').textContent = 'Wesołych Świąt!';
+      if (c.received) store('mikolaj-nagroda', c.tier + c.code);
       if (!still) {
         ubody.firstChild.animate([{ opacity: 0, transform: 'scale(.7) rotate(-3deg)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: SPRING });
         var cols = ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e', '#ffffff'];
@@ -4657,7 +4802,9 @@ function createSafe(opts) {
       if (added) { store('mikolaj-zlote', found); updateBadge(false); if (currentView === 'szukanie') renderSheet(); }
       syncFound();
     }).catch(noop);
-    D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
+    D.get(R('hosts/' + myUid)).then(function (s) { hostChecked = true; if (s.exists()) becomeHost(true); else renderScan(); }).catch(function () { hostChecked = true; renderScan(); });
+    D.onValue(R('rewards/' + myUid), function (s) { myReward = s.val(); showReward(false); if (currentView === 'szukanie') renderSheet(); }, noop);
+    if (currentView === 'szukanie') renderSheet();
     D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); }, noop);
     D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
@@ -4690,6 +4837,7 @@ function createSafe(opts) {
     FB.D.onValue(R('safe'), function (s) { var v = s.val(); safeSign = v && v.sign || null; hostAutoJoin(); renderLobby(); }, noop);
     renderLobby();
     if (!silent) toast('Witaj, Yeti! Możesz rozpocząć rundę.');
+    renderScan();
   }
   function openHost() {
     var m = byId('host-modal');
