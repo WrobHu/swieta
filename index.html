@@ -1319,6 +1319,14 @@
   .modal-back { position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); background: rgba(2, 9, 7, .84); }
   .modal { width: min(100%, 360px); display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(180deg, #11402f, #0a2a21); box-shadow: 0 30px 60px rgba(0, 0, 0, .5); }
   .modal h2 { font: 800 26px/1.1 var(--display); }
+  .nc-modal { align-items: center; text-align: center; gap: 12px; padding: 22px 20px; }
+  .nc-kicker { font: 700 12px/1 var(--score) !important; letter-spacing: .2em; text-transform: uppercase; color: var(--gold) !important; }
+  .nc-name { max-width: 100%; padding: 10px 18px; border-radius: 14px; border: 2px dashed rgba(240, 195, 90, .6); background: rgba(240, 195, 90, .1);
+    font: 900 clamp(28px, 9vw, 36px)/1.1 var(--display) !important; color: var(--snow) !important; overflow-wrap: anywhere; }
+  .nc-text { color: var(--snow) !important; line-height: 1.45; text-wrap: pretty; }
+  .nc-shot { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: rgba(220, 238, 78, .1); border: 1px solid rgba(220, 238, 78, .35);
+    color: var(--ball) !important; font-weight: 600; text-align: left; }
+  .nc-shot svg { flex: none; width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
   .modal p { font-size: 15px; color: var(--mist); }
   .modal .field { letter-spacing: .2em; font: 700 22px/1 var(--score); text-align: center; }
   .elf-back { position: fixed; inset: 0; z-index: 12; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); background: radial-gradient(circle at 50% 40%, rgba(31, 122, 82, .45), rgba(2, 9, 7, .92) 72%); }
@@ -1675,12 +1683,22 @@
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
     <form class="splash-form" id="splash-form" novalidate hidden>
       <label for="visitor-name">Jak masz na imię?</label>
-      <p class="splash-help">Dzięki temu Mikołaj będzie wiedział, kto zbiera złote piłki i kto wygrywa w grze.</p>
+      <p class="splash-help">To Twoje konto: tym samym imieniem wrócisz do swoich złotych piłek, nawet na innym telefonie. Dwie Anie w rodzinie? Dopisz coś, np. „Ania K.”.</p>
       <div class="field-row"><input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" enterkeyhint="go" placeholder="Tu wpisz imię/pseudonim" aria-describedby="splash-err"><button class="cta" type="submit">Wchodzę</button></div>
       <p class="splash-err" id="splash-err" role="alert" hidden>Wpisz imię albo pseudonim, żeby wejść.</p>
     </form>
     <p class="splash-hello" id="splash-hello" hidden></p>
     <button type="button" class="cta sp-go" id="splash-skip" hidden>Wchodzę</button>
+  </div>
+</div>
+<div class="modal-back" id="name-card" hidden>
+  <div class="modal nc-modal" role="dialog" aria-modal="true" aria-labelledby="nc-title">
+    <p class="nc-kicker">Twoje konto</p>
+    <h2 id="nc-title">Zapamiętaj swoje imię</h2>
+    <p class="nc-name" id="nc-name"></p>
+    <p class="nc-text" id="nc-text"></p>
+    <p class="nc-shot" id="nc-shot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>Najlepiej zrób teraz zrzut ekranu, żeby nie zapomnieć.</p>
+    <button type="button" class="cta wide" id="nc-ok">Zrobione, wchodzę</button>
   </div>
 </div>
 <div class="modal-back" id="host-modal" hidden>
@@ -3566,7 +3584,7 @@
   function couponCode(tier, hex) { return fnv(SALT + '|' + tier + '|' + hex).slice(0, 6); }
   function couponFor(name, tier) {
     var hex = toHex(name), code = couponCode(tier, hex);
-    return { url: BASE_URL + '#kupon-' + tier + '-' + hex + '-' + code + (myUid ? '-' + myUid : ''), code: code.toUpperCase() };
+    return { url: BASE_URL + '#kupon-' + tier + '-' + hex + '-' + code, code: code.toUpperCase() };
   }
   var COUPON_BOW = '<svg class="c-bow" viewBox="0 0 68 46" aria-hidden="true">' +
     '<path class="b2" d="M31 27 22 44l8-3 4-12zM37 27l9 17-8-3-4-12z"/>' +
@@ -3730,7 +3748,7 @@
     if (!resetArmed) { resetArmed = true; btn.textContent = 'Na pewno? Stuknij jeszcze raz'; setTimeout(function () { resetArmed = false; btn.textContent = 'Zacznij zabawę od nowa'; }, 4000); return; }
     resetArmed = false; btn.textContent = 'Zacznij zabawę od nowa';
     found = []; holder = null;
-    store('mikolaj-zlote', found); store('mikolaj-kupon', null);
+    store('mikolaj-zlote', found); store('mikolaj-kupon', null); store('mikolaj-reset-at', Date.now());
     unmarkAll(); updateBadge(false); renderSheet(); syncFound();
     if (!still) scheduleDrop(6000);
     toast('Złote piłki wróciły na swoje miejsca.');
@@ -3742,7 +3760,7 @@
     var m = /^#kupon-([bsz])-((?:[0-9a-f]{2}){1,96})-([0-9a-f]{6})(?:-([A-Za-z0-9_-]{6,64}))?$/.exec(h);
     if (!m) return { ok: false };
     var name = fromHex(m[2]);
-    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3], uid: m[4] || '', scan: !!m[4] };
+    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3], key: toHex(normName(name)), scan: true };
   }
   function rewardFor(c) { var pool = REWARDS[c.tier]; return pool[parseInt(c.code.slice(0, 4), 16) % pool.length]; }
   function showUnlock(c) {
@@ -3782,7 +3800,7 @@
       }, 9000);
       return;
     }
-    if (c.uid === myUid) {
+    if (visitor && toHex(normName(visitor.name)) === c.key && !isHost) {
       sub.textContent = 'To Twój kupon. Pokaż ten kod Hubertowi: gdy go zatwierdzi, prezent pojawi się na Twoim telefonie.';
       ubody.innerHTML = '';
       return;
@@ -3795,7 +3813,7 @@
     }
     sub.textContent = 'Sprawdzam kupon…';
     ubody.innerHTML = '<span class="scan-wait" aria-hidden="true"></span>';
-    FB.D.get(R('rewards/' + c.uid)).then(function (snap) {
+    FB.D.get(R('rewards/' + c.key)).then(function (snap) {
       if (current !== c) return;
       var r = snap.val(), same = !!(r && r.tier === c.tier);
       sub.textContent = same ? 'Ten kupon jest już zatwierdzony. ' + c.name + ' ma prezent na swoim telefonie.' : 'Zatwierdź kupon, a ' + c.name + ' zobaczy na swoim telefonie prezent do otwarcia.';
@@ -3809,7 +3827,7 @@
     var c = current, b = byId('scan-go');
     if (!c || !b || b.disabled) return;
     b.disabled = true; b.textContent = 'Zatwierdzam…';
-    FB.D.set(R('rewards/' + c.uid), { tier: c.tier, code: c.code, name: c.name.slice(0, 40), at: FB.D.serverTimestamp() }).then(function () {
+    FB.D.set(R('rewards/' + c.key), { tier: c.tier, code: c.code, name: c.name.slice(0, 40), at: FB.D.serverTimestamp() }).then(function () {
       if (current !== c) return;
       byId('unlock-sub').textContent = 'Gotowe! ' + c.name + ' widzi już na swoim telefonie prezent do otwarcia.';
       ubody.innerHTML = '<p class="scan-ok">✓ Zatwierdzony</p>';
@@ -3822,7 +3840,15 @@
     });
   }
   /* the guest's side: an approved coupon pops up as a gift to open, once per approval */
-  var myReward = null, rewardTimer = 0;
+  var myReward = null, rewardTimer = 0, rewardOff = null, rewardKey = '';
+  function watchReward() {
+    if (!FB || !visitor) return;
+    var k = toHex(normName(visitor.name));
+    if (!k || k === rewardKey) return;
+    if (rewardOff) try { rewardOff(); } catch (e) {}
+    rewardKey = k; myReward = null;
+    rewardOff = FB.D.onValue(R('rewards/' + k), function (s) { myReward = s.val(); showReward(false); if (currentView === 'szukanie') renderSheet(); }, noop);
+  }
   function showReward(force) {
     var r = myReward;
     clearTimeout(rewardTimer);
@@ -3900,7 +3926,7 @@
   }
 
   byId('splash-skip').addEventListener('click', function () { closeSplash(); });
-  function flushPending() { if (pendingRound && visitor && splash.hidden && unlock.hidden) { var st = pendingRound; pendingRound = null; onGameState(st); } }
+  function flushPending() { if (pendingRound && visitor && splash.hidden && unlock.hidden && byId('name-card').hidden) { var st = pendingRound; pendingRound = null; onGameState(st); } }
   function closeSplash() {
     if (splashDone) return;
     splashDone = true;
@@ -3984,7 +4010,62 @@
     renderHello(); syncPlayer(); renderLobby();
     if (currentView === 'szukanie') renderSheet();
     closeSplash();
+    restoreDone = false;
+    setTimeout(function () { if (byId('name-card').hidden) showNameCard(restoreCandidate()); }, still ? 0 : 700);
+    watchReward();
     if (pendingRound) { var st = pendingRound; pendingRound = null; onGameState(st); }
+  });
+
+  /* ---------- the name is the account: the same name on another phone (or after clearing the browser) brings the balls back ---------- */
+  function normName(n) { return String(n || '').replace(/\s+/g, ' ').trim().toLowerCase(); }
+  var restoreDone = false, ncRestore = null;
+  function restoreCandidate() {
+    if (!visitor || !myUid) return null;
+    var me = normName(visitor.name), since = +restore('mikolaj-reset-at', 0) || 0, best = null;
+    Object.keys(players).forEach(function (u) {
+      var pp = players[u];
+      if (u === myUid || !pp || normName(pp.name) !== me || typeof pp.seed !== 'number' || pp.seed < 1 || !pp.found) return;
+      if (since && (pp.lastSeen || 0) < since) return;
+      var ids = huntLayout(pp.seed).ids, f = Object.keys(pp.found).filter(function (id) { return ids.indexOf(id) !== -1; });
+      if (f.length <= found.length) return;
+      if (!best || f.length > best.found.length || (f.length === best.found.length && (pp.lastSeen || 0) > best.at)) best = { seed: pp.seed, found: f, at: pp.lastSeen || 0, name: pp.name };
+    });
+    return best;
+  }
+  function applyRestore(b) {
+    if (visitor && b.name) { visitor.name = String(b.name).slice(0, 20); store('mikolaj-gosc', visitor); }
+    store('mikolaj-uklad', { seed: b.seed });
+    store('mikolaj-zlote', b.found);
+    try { sessionStorage.setItem('mikolaj-wroc', String(b.found.length)); } catch (e) {}
+    location.reload();
+  }
+  function tryRestore() {
+    if (restoreDone || !visitor || gameActive) return;
+    var b = restoreCandidate();
+    if (!b) return;
+    restoreDone = true;
+    if (!byId('name-card').hidden) { showNameCard(b); return; }
+    toast('Znalazłem Twoje złote piłki (' + b.found.length + ' z ' + HUNT_TOTAL + '). Wczytuję…');
+    setTimeout(function () { applyRestore(b); }, 1500);
+  }
+  function showNameCard(b) {
+    var card = byId('name-card'), wasHidden = card.hidden;
+    ncRestore = b || null;
+    if (b) restoreDone = true;
+    byId('nc-name').textContent = visitorName();
+    byId('nc-title').textContent = b ? 'Witaj ponownie!' : 'Zapamiętaj swoje imię';
+    byId('nc-text').textContent = b
+      ? 'Znalazłem Twoje konto: ' + b.found.length + ' z ' + HUNT_TOTAL + ' złotych piłek. Stuknij, a wczytam je na tym telefonie.'
+      : 'To Twoje konto na tej stronie. Gdy wyczyścisz przeglądarkę, zmienisz telefon albo otworzysz stronę w innej aplikacji, wpisz dokładnie to samo imię. Wrócą Twoje złote piłki i kupon.';
+    byId('nc-shot').hidden = !!b;
+    byId('nc-ok').textContent = b ? 'Wczytaj moje piłki' : 'Zrobione, wchodzę';
+    card.hidden = false;
+    if (wasHidden && !still) card.querySelector('.modal').animate([{ opacity: 0, transform: 'translateY(24px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: SPRING });
+  }
+  byId('nc-ok').addEventListener('click', function () {
+    if (ncRestore) { applyRestore(ncRestore); return; }
+    byId('name-card').hidden = true;
+    flushPending();
   });
   byId('change-name').addEventListener('click', function () { startSplash(true); });
 
@@ -4803,9 +4884,9 @@ function createSafe(opts) {
       syncFound();
     }).catch(noop);
     D.get(R('hosts/' + myUid)).then(function (s) { hostChecked = true; if (s.exists()) becomeHost(true); else renderScan(); }).catch(function () { hostChecked = true; renderScan(); });
-    D.onValue(R('rewards/' + myUid), function (s) { myReward = s.val(); showReward(false); if (currentView === 'szukanie') renderSheet(); }, noop);
+    watchReward();
     if (currentView === 'szukanie') renderSheet();
-    D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); }, noop);
+    D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); tryRestore(); }, noop);
     D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('game/state'), function (s) { gsLoaded = true; onGameState(s.val()); }, noop);
@@ -6282,6 +6363,8 @@ function createSafe(opts) {
     }).join('') : '<li><span></span><span class="nm">Nikt jeszcze nie próbował. Na razie.</span><span></span></li>';
     var all = Object.keys(players).filter(function (u) { return players[u] && players[u].name; }).map(function (u) { var o = players[u]; o.uid = u; return o; })
       .sort(function (a, b) { return (b.online ? 1 : 0) - (a.online ? 1 : 0) || (b.foundCount || 0) - (a.foundCount || 0); });
+    var seenNames = {};
+    all = all.filter(function (pp) { var k = normName(pp.name); if (seenNames[k]) return false; seenNames[k] = true; return true; });
     byId('panel-players').innerHTML = all.map(function (pp) {
       var L = pp.seed ? huntLayout(pp.seed) : null, f = pp.found || {}, open = panelOpen[pp.uid];
       var det = L ? '<div class="pl-spots"' + (open ? '' : ' hidden') + '>' + L.ids.slice().sort(function (a, b) { return SPOT_INFO[a].rank - SPOT_INFO[b].rank; }).map(function (id) {
@@ -6296,7 +6379,12 @@ function createSafe(opts) {
   updateBadge(false);
   window.addEventListener('hashchange', route);
   route();
-  if (location.hash.indexOf('#kupon-') === 0) { splash.hidden = true; html.classList.remove('booting'); }
+  var backN = '';
+  try { backN = sessionStorage.getItem('mikolaj-wroc') || ''; sessionStorage.removeItem('mikolaj-wroc'); } catch (e) {}
+  if (location.hash.indexOf('#kupon-') === 0 || (backN && visitor)) {
+    splash.hidden = true; html.classList.remove('booting');
+    if (backN && visitor) { restoreDone = true; setTimeout(function () { toast('Witaj ponownie, ' + visitorName() + '! Twoje złote piłki wróciły: ' + backN + ' z ' + HUNT_TOTAL + '.'); }, 700); }
+  }
   else { splashScene(); startSplash(false); }
   fbInit();
 })();

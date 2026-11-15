@@ -33,9 +33,8 @@
       }
     },
     "rewards": {
-      ".read": "auth != null && root.child('hosts').child(auth.uid).exists()",
-      "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
+      ".read": "auth != null",
+      "$name": {
         ".write": "auth != null && root.child('hosts').child(auth.uid).exists()",
         ".validate": "newData.hasChildren(['tier', 'code']) && newData.child('tier').isString() && newData.child('tier').val().matches(/^[bsz]$/) && newData.child('code').isString() && newData.child('code').val().matches(/^[0-9a-f]{6}$/) && (!newData.child('name').exists() || (newData.child('name').isString() && newData.child('name').val().length <= 40))"
       }
