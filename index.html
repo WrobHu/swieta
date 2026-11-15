@@ -1800,7 +1800,7 @@
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
     <form class="splash-form" id="splash-form" novalidate hidden>
       <label for="visitor-name">Jak masz na imię?</label>
-      <p class="splash-help">Imię i symbol to Twoje konto. Zapamiętaj oba: tylko z nimi wrócisz do swoich złotych piłek, np. na innym telefonie.</p>
+      <p class="splash-help" id="splash-help">Imię i symbol to Twoje konto. Zapamiętaj oba: tylko z nimi wrócisz do swoich złotych piłek, np. na innym telefonie.</p>
       <input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" enterkeyhint="done" placeholder="Tu wpisz imię/pseudonim" aria-describedby="splash-err">
       <p class="sym-label" id="sym-label">Wybierz swój symbol</p>
       <div class="sym-grid" id="sym-grid" role="group" aria-labelledby="sym-label"></div>
@@ -4020,6 +4020,7 @@
       if (!still) splash.animate([{ opacity: 0, transform: 'scale(1.05)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)' });
       byId('visitor-name').value = visitorName();
       pickedSym = visitor && visitor.sym || ''; markSym();
+      if (visitor && visitor.sym) byId('splash-help').textContent = 'Inna osoba na tym telefonie? Wpisz jej imię i symbol, a dostanie osobne konto. Konto „' + visitorName() + '” razem ze złotymi piłkami zostanie nietknięte.';
       appear(form);
       setTimeout(function () { byId('visitor-name').focus(); }, 300);
       return;
@@ -4132,9 +4133,22 @@
         nameError(nameTries % 3 === 0 ? 'To imię ma już ktoś inny. Za dużo prób, poczekaj 30 s.' : 'To imię ma już ktoś inny albo to nie Twój symbol. Jeśli jesteś nową osobą, dopisz coś do imienia, np. „' + v + ' K.”.', true);
         return;
       }
+      if (visitor && visitor.sym && acctKey(visitor.name, visitor.sym) !== key) { switchAccount(v, pickedSym); return; }
       acceptName(v, pickedSym);
     });
   });
+  /* another person on the same phone: leave the old account untouched on the server and start a fresh one */
+  function switchAccount(v, sym) {
+    if (!FB || !FB.A || !fbConnected) { nameError('Brak internetu. Połącz się i spróbuj jeszcze raz.', false); return; }
+    var go = byId('splash-go'); go.disabled = true; go.textContent = 'Zakładam konto…';
+    ['mikolaj-zlote', 'mikolaj-uklad', 'mikolaj-kupon', KEY].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+    try { for (var i = localStorage.length - 1; i >= 0; i--) { var k = localStorage.key(i); if (k && k.indexOf('mikolaj-trening-') === 0) localStorage.removeItem(k); } } catch (e) {}
+    store('mikolaj-gosc', { name: v, sym: sym, since: new Date().toISOString() });
+    try { sessionStorage.setItem('mikolaj-nowe', '1'); } catch (e) {}
+    var bye = function () { location.reload(); };
+    FB.D.set(R('players/' + myUid + '/online'), false).catch(noop)
+      .then(function () { return FB.A.signOut(FB.auth); }).then(bye, bye);
+  }
   function acceptName(v, sym) {
     visitor = { name: v, sym: sym, since: (visitor && visitor.since) || new Date().toISOString() };
     store('mikolaj-gosc', visitor);
@@ -5058,8 +5072,9 @@ function createSafe(opts) {
     var base = 'https://www.gstatic.com/firebasejs/10.12.2/';
     Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-database.js')]).then(function (m) {
       var app = m[0].initializeApp(FIREBASE_CONFIG);
-      return m[1].signInAnonymously(m[1].getAuth(app)).then(function (cred) {
-        FB = { D: m[2], db: m[2].getDatabase(app) };
+      var auth = m[1].getAuth(app);
+      return m[1].signInAnonymously(auth).then(function (cred) {
+        FB = { D: m[2], db: m[2].getDatabase(app), A: m[1], auth: auth };
         myUid = cred.user.uid;
         fbStart();
       });
@@ -6604,9 +6619,10 @@ function createSafe(opts) {
   updateBadge(false);
   window.addEventListener('hashchange', route);
   route();
-  var backN = '';
-  try { backN = sessionStorage.getItem('mikolaj-wroc') || ''; sessionStorage.removeItem('mikolaj-wroc'); } catch (e) {}
-  if (location.hash.indexOf('#kupon-') === 0 || (backN && visitor)) {
+  var backN = '', isNew = '';
+  try { backN = sessionStorage.getItem('mikolaj-wroc') || ''; sessionStorage.removeItem('mikolaj-wroc'); isNew = sessionStorage.getItem('mikolaj-nowe') || ''; sessionStorage.removeItem('mikolaj-nowe'); } catch (e) {}
+  if (isNew && visitor) { backN = ''; whenPlayers(6000).then(function () { if (byId('name-card').hidden) showNameCard(restoreCandidate()); }); }
+  if (location.hash.indexOf('#kupon-') === 0 || ((backN || isNew) && visitor)) {
     splash.hidden = true; html.classList.remove('booting');
     if (backN && visitor) { restoreDone = true; setTimeout(function () { toast('Witaj ponownie, ' + visitorName() + '! Twoje złote piłki wróciły: ' + backN + ' z ' + HUNT_TOTAL + '.'); }, 700); }
   }
