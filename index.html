@@ -1076,8 +1076,9 @@
   .hello {
     display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 12px;
     padding: 12px 12px 12px 12px; border-radius: 16px; border: 1px solid var(--line);
-    background: rgba(6, 26, 21, .92);
+    background: linear-gradient(135deg, rgba(17, 70, 54, .92), rgba(10, 42, 33, .9)); box-shadow: 0 14px 30px rgba(2, 10, 8, .35);
   }
+  .avatar.sym-av { font-size: 25px; background: radial-gradient(circle at 35% 30%, #fff4c7, #f0c35a 60%, #c8912e) !important; box-shadow: 0 0 0 2px rgba(240, 195, 90, .35), 0 6px 14px rgba(0, 0, 0, .35); }
   .avatar { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; font: 700 13px/1 var(--score); color: var(--ink); text-transform: uppercase; }
   .avatar.big { width: 46px; height: 46px; font-size: 20px; }
   .hello-hi { font: 700 20px/1.15 var(--display); }
@@ -1094,6 +1095,20 @@
   .navcard.gold { border-style: dashed; border-color: rgba(240, 195, 90, .65); background: linear-gradient(135deg, rgba(240, 195, 90, .16), rgba(240, 195, 90, .04)); }
   .navcard .ico { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 14px; background: rgba(2, 10, 8, .35); }
   .navcard .ico svg { width: 30px; height: 30px; }
+  .navcard .ico svg.gi { width: 44px; height: 44px; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .35)); }
+  .navcard:not(.gold) .ico { width: 54px; height: 54px; border-radius: 15px; background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 62%), linear-gradient(160deg, #174d3b, #0a2a21);
+    box-shadow: inset 0 0 0 1px rgba(220, 238, 78, .28), inset 0 -6px 12px rgba(0, 0, 0, .25), 0 8px 16px rgba(0, 0, 0, .3); }
+  .nav-label { margin: 6px 2px 0; font: 600 13px/1 var(--score); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+  .nc-meter { display: block; height: 6px; margin-top: 9px; border-radius: 99px; background: rgba(2, 10, 8, .5); overflow: hidden; }
+  .nc-meter i { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f0c35a, #dcee4e); transition: width .9s var(--out); }
+  .nc-dots { display: flex; align-items: center; gap: 5px; margin-top: 9px; }
+  .nc-dots i { width: 15px; height: 15px; border-radius: 50%; background: rgba(2, 10, 8, .5); box-shadow: inset 0 0 0 1px rgba(240, 195, 90, .4); }
+  .nc-dots i.on { background: radial-gradient(circle at 35% 30%, #fff4c7, #f0c35a 55%, #a87518); box-shadow: 0 0 8px rgba(240, 195, 90, .55); }
+  .nc-dots i:nth-child(3), .nc-dots i:nth-child(5) { margin-right: 5px; }
+  .nc-state { display: inline-flex; width: fit-content; margin-top: 9px; padding: 5px 10px 4px; border-radius: 99px; font: 600 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase;
+    background: rgba(2, 10, 8, .5); color: var(--mist); }
+  .nc-state.ok { color: #8ff0b6; background: rgba(91, 227, 143, .14); }
+  .nc-state.go { color: var(--gold); background: rgba(240, 195, 90, .14); }
   .navcard.gold .ico { background: none; }
   .navcard.gold .ico svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px rgba(240, 195, 90, .6)); animation: twinkle-gold 3s ease-in-out infinite; will-change: transform; }
   .navcard strong { display: block; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; }
@@ -1241,6 +1256,7 @@
   .live-top .lt-n { align-self: center; margin-left: auto; font: 600 12px/1 var(--score); letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
   .host-sign { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: rgba(240, 195, 90, .1); border: 1px solid rgba(240, 195, 90, .35); font-size: 14px; line-height: 1.4; color: var(--mist); }
   .host-sign b { color: var(--gold); }
+  .tool.host-danger { color: #ffb3bd; }
   .hs-ico { flex: none; width: 36px; height: 36px; }
   .hs-ico svg { display: block; width: 100%; height: 100%; }
   .rank .pos { width: 22px; font: 700 15px/1 var(--score); color: var(--mist); }
@@ -2141,12 +2157,13 @@
   </div>
 
   <nav class="navcards layer gutter" aria-label="Co dalej">
-    <a class="navcard" href="#list" data-rv><span class="ico"><svg style="stroke:#f0c35a;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>
-      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">13 zapakowanych prezentów czeka na rozpakowanie.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+    <p class="nav-label">Co dalej?</p>
+    <a class="navcard" href="#list" data-rv><span class="ico"><svg class="gi" viewBox="0 0 48 48" aria-hidden="true"><g stroke="none"><g transform="rotate(14 37 9)"><rect x="31" y="4" width="12" height="9" rx="1.4" fill="#2fae6b"/><rect x="35.8" y="4" width="2.4" height="9" fill="#f6d27a"/><path d="M37 4c-1.8-2.6-4.4-2-3.4 0zM37 4c1.8-2.6 4.4-2 3.4 0z" fill="#f6d27a"/></g><rect x="5" y="13" width="38" height="26" rx="3" fill="#f6efe0"/><path d="M5.4 37.6 19 26.5M42.6 37.6 29 26.5" stroke="#d9c9a8" stroke-width="1.4"/><path d="M5 16a3 3 0 0 1 3-3h32a3 3 0 0 1 3 3L24 30z" fill="#ebe0c8"/><path d="M5.6 14.6 24 28.4l18.4-13.8" fill="none" stroke="#d9c9a8" stroke-width="1.2"/><circle cx="24" cy="28.5" r="5.4" fill="#c62a41"/><circle cx="24" cy="28.5" r="5.4" fill="none" stroke="#8f1a2c" stroke-width="1"/><path d="M21.8 26.6c1.2.9 1.2 2.9 0 3.8M26.2 26.6c-1.2.9-1.2 2.9 0 3.8" stroke="#f6d27a" stroke-width="1.1" fill="none"/><path d="M8 4.5l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="#fff4c7"/></g></svg></span>
+      <span><strong>List Huberta do Mikołaja</strong><span class="sub" id="card-gifts-sub">13 zapakowanych prezentów czeka na rozpakowanie.</span><span class="nc-meter" aria-hidden="true"><i id="card-gifts-bar"></i></span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
     <a class="navcard gold" href="#szukanie" data-rv><span class="ico"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg></span>
-      <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
-    <a class="navcard" href="#turniej" data-rv><span class="ico"><svg style="stroke:#dcee4e;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="9.5" cy="8.5" rx="5.5" ry="6.5" transform="rotate(-38 9.5 8.5)"/><path d="M13.6 13.4 20.5 21"/><circle cx="18.5" cy="6" r="2"/></svg></span>
-      <span><strong>Turniej świąteczny</strong><span class="sub" id="card-game-sub">Siedem gier na żywo i niespodzianka na koniec. Wejście przez złoty puchar na dole.</span><span class="live-pill" id="card-game-live" hidden><i></i>Gra trwa</span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+      <span><strong>Mikołaj zgubił 7 złotych piłek</strong><span class="sub" id="card-hunt-sub">Są ukryte na wszystkich zakładkach. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.</span><span class="nc-dots" id="card-hunt-dots" aria-hidden="true"></span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
+    <a class="navcard" href="#turniej" data-rv><span class="ico"><svg class="gi" viewBox="0 0 48 48" aria-hidden="true"><g stroke="none"><path d="M15 11h-4a4.5 4.5 0 0 0 4.5 7.5M33 11h4a4.5 4.5 0 0 1-4.5 7.5" fill="none" stroke="#c8912e" stroke-width="2.6"/><path d="M14 7h20v9a10 10 0 0 1-20 0z" fill="#f0c35a"/><path d="M17 8.5h3.2v8a7 7 0 0 0 2 5" fill="none" stroke="#fff4c7" stroke-width="1.6" opacity=".7"/><path d="M24 11.2l1.3 2.7 3 .4-2.2 2.1.5 3-2.6-1.4-2.6 1.4.5-3-2.2-2.1 3-.4z" fill="#fff4c7"/><rect x="22" y="25.5" width="4" height="5.5" fill="#c8912e"/><rect x="16.5" y="30.5" width="15" height="5" rx="1.5" fill="#8a5d12"/><rect x="14" y="35.5" width="20" height="4.5" rx="1.6" fill="#f0c35a"/><rect x="19" y="32" width="10" height="2" rx=".8" fill="#f6d27a" opacity=".8"/><circle cx="39" cy="31" r="5.2" fill="#dcee4e"/><path d="M35 29.3c2.2 1.2 2.2 2.6 0 3.8M43 29.3c-2.2 1.2-2.2 2.6 0 3.8" stroke="#fff" stroke-width="1.1" fill="none"/><path d="M8 25l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="#fff4c7"/></g></svg></span>
+      <span><strong>Turniej świąteczny</strong><span class="sub" id="card-game-sub">Siedem gier na żywo i niespodzianka na koniec. Wejście przez złoty puchar na dole.</span><span class="live-pill" id="card-game-live" hidden><i></i>Gra trwa</span><span class="nc-state" id="card-game-state" hidden></span></span><svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 4l5 5-5 5"/></svg></a>
   </nav>
 
   <footer class="layer">
@@ -2376,6 +2393,8 @@
             <button type="button" class="tool quiet" id="host-safe">Zmień znak w sejfie</button>
             <button type="button" class="cta wide" id="host-go">Rozpocznij turniej</button>
             <button type="button" class="tool quiet" id="host-final" hidden>Zakończ i pokaż wyniki</button>
+            <button type="button" class="tool quiet" id="host-preview">Podgląd wejścia gościa</button>
+            <button type="button" class="tool quiet host-danger" id="host-reset">Resetuj turniej</button>
             <div class="boss-launch" id="boss-launch-lobby" hidden></div>
           </div>
           <p class="card-label" id="people-label">Na stronie teraz</p>
@@ -3067,6 +3086,8 @@
     });
     if (next) next.classList.add('next');
     count.textContent = 'Odpakowane ' + n + ' z ' + GIFTS.length;
+    var cgb = byId('card-gifts-bar');
+    if (cgb) cgb.style.width = (GIFTS.length ? n / GIFTS.length * 100 : 0).toFixed(1) + '%';
     var cgs = byId('card-gifts-sub');
     if (cgs) cgs.textContent = n === GIFTS.length ? 'Wszystkie prezenty odpakowane. Brawo!' : (n ? 'Odpakowane ' + n + ' z ' + GIFTS.length + '. Reszta czeka.' : GIFTS.length + ' zapakowanych prezentów czeka na rozpakowanie.');
     rewrapBtn.hidden = n === 0;
@@ -3515,6 +3536,9 @@
     badge.classList.toggle('has-coupon', !!t);
     ['b', 's', 'z'].forEach(function (k) { badge.classList.toggle('tier-' + k, t === k); });
     badge.setAttribute('aria-label', 'Złote piłki: ' + n + ' z ' + HUNT_TOTAL + (t ? ', masz ' + TIER_ADJ[t] + ' kupon' : '') + '. Pokaż postęp i kupon.');
+    var hdots = byId('card-hunt-dots'), hd = '';
+    for (var di = 0; di < HUNT_TOTAL; di++) hd += '<i' + (di < n ? ' class="on"' : '') + '></i>';
+    if (hdots) hdots.innerHTML = hd;
     var sub = byId('card-hunt-sub');
     if (n === 0) sub.textContent = 'Każdy ma je schowane gdzie indziej. Za 3 brązowy kupon, za 5 srebrny, za 7 złoty.';
     else if (!t) sub.textContent = 'Masz ' + n + ' z ' + HUNT_TOTAL + '. Do brązowego kuponu brakuje ' + (BRONZE_AT - n) + '.';
@@ -3900,11 +3924,12 @@
   function renderHello() {
     var n = visitorName() || 'Gościu', av = byId('hello-av');
     byId('hello-name').textContent = n;
-    av.textContent = n.charAt(0); av.style.background = avColor(n);
+    var sy = visitor && visitor.sym ? symOf(visitor.sym) : null;
+    av.textContent = sy ? sy[1] : n.charAt(0); av.style.background = sy ? '' : avColor(n); av.classList.toggle('sym-av', !!sy);
     var sub = byId('hello-sub');
     if (!FB) { sub.textContent = 'Miło Cię widzieć na Biegunie Północnym.'; return; }
     var others = onlineList().filter(function (p) { return p.uid !== myUid; }).map(function (p) { return p.name; });
-    sub.textContent = others.length ? 'Teraz na stronie są też: ' + listNames(others) + '.' : 'Na razie jesteś tu sam. Mikołaj czasem zagląda.';
+    sub.textContent = others.length ? 'Teraz na stronie są też: ' + listNames(others) + '.' : 'Na razie nikogo więcej tu nie ma. Mikołaj czasem zagląda.';
   }
 
   byId('splash-skip').addEventListener('click', function () { closeSplash(); });
@@ -3983,7 +4008,7 @@
   var SYMBOLS = [['balwan', '⛄', 'Bałwan'], ['piernik', '🍪', 'Piernik'], ['swieczka', '🕯️', 'Świeczka'], ['skarpeta', '🧦', 'Skarpeta'], ['lizak', '🍭', 'Lizak'],
     ['rekawiczki', '🧤', 'Rękawiczki'], ['mikolaj', '🎅', 'Mikołaj'], ['sanki', '🛷', 'Sanki'], ['kakao', '☕', 'Kakao']];
   var pickedSym = '', nameTries = 0, nameLock = 0, lockName = '';
-  function symOf(id) { for (var i = 0; i < SYMBOLS.length; i++) if (SYMBOLS[i][0] === id) return SYMBOLS[i]; return null; }
+  function symOf(id) { if (!SYMBOLS) return null; for (var i = 0; i < SYMBOLS.length; i++) if (SYMBOLS[i][0] === id) return SYMBOLS[i]; return null; }
   function acctKey(name, sym) { return fnv(SALT + '|konto|' + normName(name) + '|' + sym); }
   byId('sym-grid').innerHTML = SYMBOLS.map(function (x) {
     return '<button type="button" class="sym" data-sym="' + x[0] + '" aria-pressed="false"><span class="se" aria-hidden="true">' + x[1] + '</span><span class="sl">' + x[2] + '</span></button>';
@@ -6234,6 +6259,23 @@ function createSafe(opts) {
   byId('host-safe').addEventListener('click', function () { openSafeFlow(true); });
   byId('join-btn').addEventListener('click', function () { openSafeFlow(false); });
   byId('host-final').addEventListener('click', finishTournament);
+  /* Yeti (the host) can wipe the tournament: closed safe, no sign, nobody joined, no games played. Scores of old rounds stay, but a new tournament ignores them. */
+  var resetReady = false;
+  byId('host-reset').addEventListener('click', function () {
+    var b = byId('host-reset');
+    if (!FB || !isHost || b.disabled) return;
+    if (roundLive(gameState)) { toast('Poczekaj, aż skończy się runda.'); return; }
+    if (!resetReady) { resetReady = true; b.textContent = 'Na pewno? Stuknij jeszcze raz'; setTimeout(function () { resetReady = false; b.textContent = 'Resetuj turniej'; }, 4000); return; }
+    resetReady = false; b.textContent = 'Resetuję…'; b.disabled = true;
+    Promise.all([FB.D.update(R('game'), { state: null, gate: null, history: null }), FB.D.set(R('safe'), null), FB.D.set(R('joins'), null)]).then(function () {
+      b.disabled = false; b.textContent = 'Resetuj turniej'; autoJoinFor = '';
+      if (!gameActive) { byId('game-results').hidden = true; byId('game-play').hidden = true; byId('game-lobby').hidden = false; resultsFor = 0; }
+      renderLobby();
+      toast('Turniej wyzerowany. Sejf jest zamknięty, możesz zacząć od nowa.');
+    }, function () { b.disabled = false; b.textContent = 'Resetuj turniej'; toast('Nie udało się wyzerować. Sprawdź internet.'); });
+  });
+  /* see the guests' way in: the safe in join mode (or closed), with all its animations */
+  byId('host-preview').addEventListener('click', function () { safeApi().open(gate && gate.open ? 'join' : 'closed'); });
   byId('res-next').addEventListener('click', hostNext);
   byId('res-back').addEventListener('click', function () {
     var inGra = byId('game-results').parentNode === byId('slot-gra');
@@ -6284,9 +6326,21 @@ function createSafe(opts) {
     var b = e.target.closest('[data-tg]'); if (!b) return;
     trainGame = b.getAttribute('data-tg'); renderTraining();
   });
+  function gameCardState() {
+    var el = byId('card-game-state'), st = gameState, t = '', k = '';
+    if (!el) return;
+    if (FB && !roundLive(st)) {
+      if (st && st.session && !st.final) { t = 'Turniej trwa · za nami ' + (st.idx + 1) + ' z ' + GAME_ORDER.length; k = 'go'; }
+      else if (st && st.final) t = 'Turniej zakończony';
+      else if (gate && gate.open) { t = joinedNow() ? 'Jesteś w turnieju ✓' : 'Sejf otwarty: dołącz!'; k = joinedNow() ? 'ok' : 'go'; }
+      else if (gateLoaded) t = 'Sejf jeszcze zamknięty';
+    }
+    el.hidden = !t; el.textContent = t; el.className = 'nc-state' + (k ? ' ' + k : '');
+  }
   function renderLobby() {
     drawIcons();
     renderTraining();
+    gameCardState();
     var ppl = byId('game-people'), status = byId('game-status'), label = byId('people-label');
     var go = byId('host-go'), fin = byId('host-final'), sc = byId('standings-card');
     if (!FB) {
