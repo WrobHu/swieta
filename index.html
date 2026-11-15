@@ -871,12 +871,11 @@
   .reward h3 { font: 900 28px/1.1 var(--display); letter-spacing: -.015em; text-wrap: balance; }
   .reward p { font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
   .unlock-close { margin-top: 10px; }
-  .scan-go { max-width: 320px; min-height: 58px; font-size: 17px; }
-  .scan-ok { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; background: rgba(91, 227, 143, .16); border: 1px solid rgba(91, 227, 143, .5);
-    font: 700 16px/1 var(--score); letter-spacing: .12em; text-transform: uppercase; color: #8ff0b6; }
-  .scan-wait { width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(240, 195, 90, .25); border-top-color: var(--gold); animation: scan-spin .9s linear infinite; }
-  @keyframes scan-spin { to { transform: rotate(360deg); } }
-  .rw-ready { width: 100%; }
+  .gift-no-card { gap: 4px; padding: 22px 20px 20px; }
+  .gift-no-label { margin-top: 10px; font: 700 15px/1 var(--score) !important; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+  .gift-no { font: 900 clamp(96px, 34vw, 140px)/.95 var(--display) !important; letter-spacing: -.03em; color: var(--ink) !important; }
+  .gift-no-for { font-size: 17px !important; }
+  .gift-no-for b { color: var(--ink); }
 
 
   /* ---------- app shell: boot splash, views, tab bar ---------- */
@@ -2706,8 +2705,8 @@
   var GIFT_TIERS = { toptop: 'TOP TOP prezent', top: 'TOP prezent', mocny: 'Mocny prezent', fajny: 'Fajny prezent', drob: 'Drobiazg do skarpety' };
   var TIER_ORDER = ['toptop', 'top', 'mocny', 'fajny', 'drob'];
   var GIFTS = [
-    { cat: 'any', icon: 'gift', tier: 'toptop', tease: 'Cokolwiek, i tak się ucieszę', nolink: true, name: 'Niespodzianka od Mikołajów',
-      desc: 'Cokolwiek to będzie, będę się cieszył. Zdaję się na wszystkich Mikołajów: wybierzcie sami, a ja obiecuję szczery uśmiech przy rozpakowywaniu.',
+    { cat: 'any', icon: 'gift', tier: 'toptop', tease: 'Pomysł, na który sam bym nie wpadł', nolink: true, name: 'Niespodzianka spoza listy',
+      desc: 'Wszystko niżej to podpowiedzi. Ten prezent jest dla Mikołajów z własnym pomysłem: coś, na co sam bym nie wpadł, a od razu by mi się spodobało. Jeśli macie taki pomysł, to jest jego miejsce.',
       price: 'dowolna', url: '' },
     { cat: 'gra', icon: 'mouse', tier: 'top', tease: 'Coś dla gracza LoL-a', name: 'Myszka Logitech G PRO X2 SUPERSTRIKE',
       desc: 'Dużo gram w LoL-a, a ta myszka jest dużo lżejsza od mojej. Odciąży nadgarstek, który musi być w formie na korcie. Pssssst: nie mówcie Domi, nowa myszka to trochę mniej czasu dla niej. PPS To drogi prezent, więc warto podpytać Elfową Mamę Hubiego. Dołoży się praktycznie do wszystkiego, jeśli dobrze się ją podejdzie.',
@@ -3086,7 +3085,7 @@
       var gold = ['#f0c35a', '#fff4c7', '#cf2e45', '#ffffff'];
       setTimeout(function () { shards(x - 70, y - 10, gold); shards(x + 70, y - 10, gold); }, 140);
       setTimeout(function () { shards(x, y - 40, gold); }, 300);
-      toast(li.classList.contains('tier-toptop') ? 'TOP TOP! Mikołaje, wybór należy do Was.' : 'TOP prezent! Dobry wybór, Mikołaju.');
+      toast(li.classList.contains('tier-toptop') ? 'TOP TOP! Tu liczy się Wasz pomysł.' : 'TOP prezent! Dobry wybór, Mikołaju.');
     }
     try { if (navigator.vibrate) navigator.vibrate(li.classList.contains('tier-top') ? [20, 40, 60] : 14); } catch (e) {}
     li.classList.remove('wrapped'); li.classList.add('open');
@@ -3719,17 +3718,13 @@
         '<p class="coupon-for">dla</p><p class="coupon-name" id="coupon-name"></p>' +
         '<p class="coupon-lvl" aria-label="Znalezione złote piłki: ' + n + ' z ' + HUNT_TOTAL + '">' + dots + '<span>' + n + ' z ' + HUNT_TOTAL + ' piłek</span></p>' +
         '<div class="coupon-qr" id="coupon-qr"></div>' +
-        '<p class="coupon-text">Pokaż ten kod Hubertowi w Święta. Gdy go zeskanuje i zatwierdzi, na Twoim telefonie pojawi się prezent do otwarcia.</p>' +
+        '<p class="coupon-text">Pokaż ten kod Hubertowi w Święta. Po zeskanowaniu zobaczy, który prezent jest Twój.</p>' +
         '<div class="coupon-foot"><div class="coupon-meta"><span class="coupon-no">Nr ' + cp.code + '</span>' +
         '<span class="coupon-date">Wydany ' + (isNaN(when) ? '' : when.toLocaleDateString('pl-PL', DATE_FMT)) + '</span></div>' + COUPON_STAMP + '</div>' +
       '</div>';
     byId('coupon-name').textContent = holder.name;
     drawQR(byId('coupon-qr'), cp.url, tier);
     if (nt) area.insertAdjacentHTML('beforeend', '<p class="coupon-next">Znajdź jeszcze ' + (TIER_AT[nt] - n) + ', a kupon zmieni się na ' + TIER_ADJ[nt] + '.</p>');
-    if (myReward && myReward.tier && typeof myReward.code === 'string') {
-      area.insertAdjacentHTML('afterbegin', '<button type="button" class="cta wide rw-ready" id="rw-open">Kupon zatwierdzony! Otwórz prezent</button>');
-      byId('rw-open').addEventListener('click', function () { showReward(true); });
-    }
   }
 
   function openSheet() { go('szukanie'); }
@@ -3760,7 +3755,7 @@
     var m = /^#kupon-([bsz])-((?:[0-9a-f]{2}){1,96})-([0-9a-f]{6})(?:-([A-Za-z0-9_-]{6,64}))?$/.exec(h);
     if (!m) return { ok: false };
     var name = fromHex(m[2]);
-    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3], key: toHex(normName(name)), scan: true };
+    return { ok: !!name && couponCode(m[1], m[2]) === m[3], tier: m[1], name: name, code: m[3] };
   }
   function rewardFor(c) { var pool = REWARDS[c.tier]; return pool[parseInt(c.code.slice(0, 4), 16) % pool.length]; }
   function showUnlock(c) {
@@ -3779,86 +3774,18 @@
     }
     eb.textContent = { b: 'Brązowy kupon · 3 z 7 piłek', s: 'Srebrny kupon · 5 z 7 piłek', z: 'Złoty kupon · 7 z 7 piłek' }[c.tier];
     title.textContent = c.name;
-    if (c.scan) { renderScan(); return; }
-    sub.textContent = c.received ? 'Hubert zatwierdził Twój kupon! Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.' : 'Stuknij w paczkę i zobacz, co dla Ciebie przygotowano.';
-    showGift();
-  }
-  /* Hubert scans a guest's QR: the page checks he is the host, then one tap approves it and the gift appears on the guest's phone */
-  var scanTimer = 0, hostChecked = false;
-  function renderScan() {
-    var c = current, sub = byId('unlock-sub');
-    if (!c || !c.scan || unlock.hidden) return;
-    clearTimeout(scanTimer);
-    if (!FB || !hostChecked) {
-      sub.textContent = 'Łączę się z serwerem…';
-      ubody.innerHTML = '<span class="scan-wait" aria-hidden="true"></span>';
-      scanTimer = setTimeout(function () {
-        if (current !== c || (FB && hostChecked)) return;
-        sub.textContent = 'Nie ma połączenia z serwerem. Sprawdź internet i zeskanuj kod jeszcze raz albo otwórz prezent na tym telefonie.';
-        ubody.innerHTML = '<button type="button" class="tool" id="scan-here">Otwórz prezent tutaj</button>';
-        byId('scan-here').addEventListener('click', showGift);
-      }, 9000);
-      return;
+    sub.textContent = 'Kupon nr ' + c.code.toUpperCase() + '. Wręcz prezent o tym numerze.';
+    ubody.innerHTML = '<div class="reward gift-no-card ' + c.tier + '"><span class="reward-chip">' + { b: 'Brązowy kupon', s: 'Srebrny kupon', z: 'Złoty kupon' }[c.tier] + '</span>' +
+      '<p class="gift-no-label">Prezent nr</p><p class="gift-no">' + GIFT_NO[c.tier] + '</p><p class="gift-no-for">dla: <b></b></p></div>';
+    ubody.querySelector('.gift-no-for b').textContent = c.name;
+    try { if (navigator.vibrate) navigator.vibrate([30, 40, 60]); } catch (e) {}
+    if (!still) {
+      ubody.firstChild.animate([{ opacity: 0, transform: 'scale(.6) rotate(-4deg)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: SPRING });
+      setTimeout(function () { var r = ubody.getBoundingClientRect(); shards(r.left + r.width / 2, r.top + 90, ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e', '#ffffff']); }, 250);
     }
-    if (visitor && toHex(normName(visitor.name)) === c.key && !isHost) {
-      sub.textContent = 'To Twój kupon. Pokaż ten kod Hubertowi: gdy go zatwierdzi, prezent pojawi się na Twoim telefonie.';
-      ubody.innerHTML = '';
-      return;
-    }
-    if (!isHost) {
-      sub.textContent = 'Ten kupon zatwierdza Hubert. Potem ' + c.name + ' zobaczy na swoim telefonie prezent do otwarcia.';
-      ubody.innerHTML = '<button type="button" class="tool quiet" id="scan-host">Jestem Hubertem, mam kod</button>';
-      byId('scan-host').addEventListener('click', openHost);
-      return;
-    }
-    sub.textContent = 'Sprawdzam kupon…';
-    ubody.innerHTML = '<span class="scan-wait" aria-hidden="true"></span>';
-    FB.D.get(R('rewards/' + c.key)).then(function (snap) {
-      if (current !== c) return;
-      var r = snap.val(), same = !!(r && r.tier === c.tier);
-      sub.textContent = same ? 'Ten kupon jest już zatwierdzony. ' + c.name + ' ma prezent na swoim telefonie.' : 'Zatwierdź kupon, a ' + c.name + ' zobaczy na swoim telefonie prezent do otwarcia.';
-      ubody.innerHTML = same ? '<p class="scan-ok">✓ Zatwierdzony</p>' : '<button type="button" class="cta wide scan-go" id="scan-go">Zatwierdzam prezent</button>';
-      if (!same) byId('scan-go').addEventListener('click', approveScan);
-    }, function () {
-      if (current === c) { sub.textContent = 'Nie udało się sprawdzić kuponu. Sprawdź internet i zeskanuj kod jeszcze raz.'; ubody.innerHTML = ''; }
-    });
   }
-  function approveScan() {
-    var c = current, b = byId('scan-go');
-    if (!c || !b || b.disabled) return;
-    b.disabled = true; b.textContent = 'Zatwierdzam…';
-    FB.D.set(R('rewards/' + c.key), { tier: c.tier, code: c.code, name: c.name.slice(0, 40), at: FB.D.serverTimestamp() }).then(function () {
-      if (current !== c) return;
-      byId('unlock-sub').textContent = 'Gotowe! ' + c.name + ' widzi już na swoim telefonie prezent do otwarcia.';
-      ubody.innerHTML = '<p class="scan-ok">✓ Zatwierdzony</p>';
-      try { if (navigator.vibrate) navigator.vibrate([30, 40, 60]); } catch (e) {}
-      if (!still) { var r = ubody.getBoundingClientRect(); shards(r.left + r.width / 2, r.top + 20, ['#f0c35a', '#fff4c7', '#dcee4e', '#ffffff']); }
-    }, function () {
-      if (current !== c) return;
-      b.disabled = false; b.textContent = 'Zatwierdzam prezent';
-      byId('unlock-sub').textContent = 'Nie udało się zapisać. Sprawdź internet i spróbuj jeszcze raz.';
-    });
-  }
-  /* the guest's side: an approved coupon pops up as a gift to open, once per approval */
-  var myReward = null, rewardTimer = 0, rewardOff = null, rewardKey = '';
-  function watchReward() {
-    if (!FB || !visitor) return;
-    var k = toHex(normName(visitor.name));
-    if (!k || k === rewardKey) return;
-    if (rewardOff) try { rewardOff(); } catch (e) {}
-    rewardKey = k; myReward = null;
-    rewardOff = FB.D.onValue(R('rewards/' + k), function (s) { myReward = s.val(); showReward(false); if (currentView === 'szukanie') renderSheet(); }, noop);
-  }
-  function showReward(force) {
-    var r = myReward;
-    clearTimeout(rewardTimer);
-    if (!r || !/^[bsz]$/.test(r.tier) || !/^[0-9a-f]{6}$/.test(r.code || '')) return;
-    if (!force && restore('mikolaj-nagroda', '') === r.tier + r.code) return;
-    var sf = byId('safe');
-    if (!force && (!byId('splash').hidden || gameActive || !unlock.hidden || (sf && !sf.hidden))) { rewardTimer = setTimeout(showReward, 2500); return; }
-    showUnlock({ ok: true, received: true, tier: r.tier, code: r.code, name: r.name || visitorName() || 'Gość' });
-    try { if (navigator.vibrate) navigator.vibrate([60, 50, 60, 50, 160]); } catch (e) {}
-  }
+  /* which gift Hubert hands over for each coupon */
+  var GIFT_NO = { b: 1, s: 2, z: 3 };
   function showGift() {
     var c = current, theme = { b: 'w2', s: 'w1', z: 'w0' }[c.tier];
     ubody.innerHTML = '<button type="button" class="big-gift ' + theme + '" id="big-gift" aria-label="Odpakuj nagrodę">' +
@@ -3876,7 +3803,6 @@
       byId('reward-name').textContent = rw.name;
       byId('reward-desc').textContent = rw.desc;
       byId('unlock-sub').textContent = 'Wesołych Świąt!';
-      if (c.received) store('mikolaj-nagroda', c.tier + c.code);
       if (!still) {
         ubody.firstChild.animate([{ opacity: 0, transform: 'scale(.7) rotate(-3deg)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: SPRING });
         var cols = ['#f0c35a', '#fff4c7', '#cf2e45', '#dcee4e', '#ffffff'];
@@ -4012,7 +3938,6 @@
     closeSplash();
     restoreDone = false;
     setTimeout(function () { if (byId('name-card').hidden) showNameCard(restoreCandidate()); }, still ? 0 : 700);
-    watchReward();
     if (pendingRound) { var st = pendingRound; pendingRound = null; onGameState(st); }
   });
 
@@ -4883,8 +4808,7 @@ function createSafe(opts) {
       if (added) { store('mikolaj-zlote', found); updateBadge(false); if (currentView === 'szukanie') renderSheet(); }
       syncFound();
     }).catch(noop);
-    D.get(R('hosts/' + myUid)).then(function (s) { hostChecked = true; if (s.exists()) becomeHost(true); else renderScan(); }).catch(function () { hostChecked = true; renderScan(); });
-    watchReward();
+    D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
     if (currentView === 'szukanie') renderSheet();
     D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); tryRestore(); }, noop);
     D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
@@ -4918,7 +4842,6 @@ function createSafe(opts) {
     FB.D.onValue(R('safe'), function (s) { var v = s.val(); safeSign = v && v.sign || null; hostAutoJoin(); renderLobby(); }, noop);
     renderLobby();
     if (!silent) toast('Witaj, Yeti! Możesz rozpocząć rundę.');
-    renderScan();
   }
   function openHost() {
     var m = byId('host-modal');
