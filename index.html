@@ -943,6 +943,22 @@
   .splash.typing h1 { font-size: 34px; }
   .splash-form label { font: 700 22px/1.1 var(--display); color: var(--snow); }
   .splash-help { font-size: 14px; color: var(--mist); }
+  .sym-label { margin-top: 6px; font: 700 18px/1.1 var(--display); color: var(--snow); }
+  .sym-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .sym { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 66px; padding: 8px 4px 7px; border-radius: 14px;
+    border: 1px solid var(--line); background: linear-gradient(180deg, rgba(18, 72, 55, .9), rgba(7, 32, 25, .92)); color: var(--snow); cursor: pointer;
+    transition: transform .15s, border-color .2s, box-shadow .2s, background .2s; -webkit-tap-highlight-color: transparent; }
+  .sym:active { transform: scale(.95); }
+  .sym .se { font-size: 26px; line-height: 1; transition: transform .3s cubic-bezier(.34, 1.4, .5, 1); }
+  .sym .sl { font: 600 11px/1 var(--score); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); }
+  .sym[aria-pressed=true] { border-color: var(--gold); background: linear-gradient(180deg, rgba(54, 92, 46, .95), rgba(14, 48, 34, .95)); box-shadow: 0 0 0 2px var(--gold), 0 0 20px rgba(240, 195, 90, .3); }
+  .sym[aria-pressed=true] .se { transform: scale(1.18) rotate(-6deg); }
+  .sym[aria-pressed=true] .sl { color: var(--gold); }
+  .sym-grid.err { animation: sym-shake .4s ease-out; }
+  @keyframes sym-shake { 25% { transform: translateX(-7px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+  .splash-go { margin-top: 4px; }
+  .nc-sym { font-size: 30px; line-height: 1; margin-right: 10px; vertical-align: -3px; }
+  .nc-symname { display: block; margin-top: 6px; font: 700 13px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
   .splash-hello { font: 700 24px/1.2 var(--display); color: var(--snow); }
   .splash-hello b { color: var(--ball); font-style: italic; }
   .sp-go { min-width: 200px; margin-top: 6px; box-shadow: 0 10px 26px rgba(240, 195, 90, .3); }
@@ -1682,9 +1698,12 @@
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
     <form class="splash-form" id="splash-form" novalidate hidden>
       <label for="visitor-name">Jak masz na imię?</label>
-      <p class="splash-help">To Twoje konto: tym samym imieniem wrócisz do swoich złotych piłek, nawet na innym telefonie. Dwie Anie w rodzinie? Dopisz coś, np. „Ania K.”.</p>
-      <div class="field-row"><input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" enterkeyhint="go" placeholder="Tu wpisz imię/pseudonim" aria-describedby="splash-err"><button class="cta" type="submit">Wchodzę</button></div>
+      <p class="splash-help">Imię i symbol to Twoje konto. Zapamiętaj oba: tylko z nimi wrócisz do swoich złotych piłek, np. na innym telefonie.</p>
+      <input class="field" id="visitor-name" name="visitor-name" maxlength="20" autocomplete="nickname" enterkeyhint="done" placeholder="Tu wpisz imię/pseudonim" aria-describedby="splash-err">
+      <p class="sym-label" id="sym-label">Wybierz swój symbol</p>
+      <div class="sym-grid" id="sym-grid" role="group" aria-labelledby="sym-label"></div>
       <p class="splash-err" id="splash-err" role="alert" hidden>Wpisz imię albo pseudonim, żeby wejść.</p>
+      <button class="cta wide splash-go" id="splash-go" type="submit">Wchodzę</button>
     </form>
     <p class="splash-hello" id="splash-hello" hidden></p>
     <button type="button" class="cta sp-go" id="splash-skip" hidden>Wchodzę</button>
@@ -1693,7 +1712,7 @@
 <div class="modal-back" id="name-card" hidden>
   <div class="modal nc-modal" role="dialog" aria-modal="true" aria-labelledby="nc-title">
     <p class="nc-kicker">Twoje konto</p>
-    <h2 id="nc-title">Zapamiętaj swoje imię</h2>
+    <h2 id="nc-title">Zapamiętaj imię i symbol</h2>
     <p class="nc-name" id="nc-name"></p>
     <p class="nc-text" id="nc-text"></p>
     <p class="nc-shot" id="nc-shot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.6"/></svg>Najlepiej zrób teraz zrzut ekranu, żeby nie zapomnieć.</p>
@@ -3873,11 +3892,15 @@
     if (formOnly) {
       if (!still) splash.animate([{ opacity: 0, transform: 'scale(1.05)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)' });
       byId('visitor-name').value = visitorName();
+      pickedSym = visitor && visitor.sym || ''; markSym();
       appear(form);
       setTimeout(function () { byId('visitor-name').focus(); }, 300);
       return;
     }
-    if (visitor) {
+    if (visitor && !visitor.sym) {
+      byId('visitor-name').value = visitorName();
+      setTimeout(function () { appear(form); }, still ? 0 : 2350);
+    } else if (visitor) {
       hello.innerHTML = 'Cześć, <b></b>!';
       hello.querySelector('b').textContent = visitor.name;
       setTimeout(function () { appear(hello); appear(skip); }, still ? 0 : 2350);
@@ -3919,19 +3942,74 @@
     vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
   })();
   var nameIn = byId('visitor-name'), nameErr = byId('splash-err');
+  /* the account is the name plus one of nine Christmas symbols (different from the tournament signs in the safe) */
+  var SYMBOLS = [['balwan', '⛄', 'Bałwan'], ['piernik', '🍪', 'Piernik'], ['swieczka', '🕯️', 'Świeczka'], ['skarpeta', '🧦', 'Skarpeta'], ['lizak', '🍭', 'Lizak'],
+    ['rekawiczki', '🧤', 'Rękawiczki'], ['mikolaj', '🎅', 'Mikołaj'], ['sanki', '🛷', 'Sanki'], ['kakao', '☕', 'Kakao']];
+  var pickedSym = '', nameTries = 0, nameLock = 0, lockName = '';
+  function symOf(id) { for (var i = 0; i < SYMBOLS.length; i++) if (SYMBOLS[i][0] === id) return SYMBOLS[i]; return null; }
+  function acctKey(name, sym) { return fnv(SALT + '|konto|' + normName(name) + '|' + sym); }
+  byId('sym-grid').innerHTML = SYMBOLS.map(function (x) {
+    return '<button type="button" class="sym" data-sym="' + x[0] + '" aria-pressed="false"><span class="se" aria-hidden="true">' + x[1] + '</span><span class="sl">' + x[2] + '</span></button>';
+  }).join('');
+  function markSym() { [].forEach.call(byId('sym-grid').children, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-sym') === pickedSym ? 'true' : 'false'); }); }
+  byId('sym-grid').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sym]');
+    if (!b) return;
+    pickedSym = b.getAttribute('data-sym'); markSym(); nameErr.hidden = true;
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch (x) {}
+  });
+  function nameError(msg, onGrid) {
+    nameErr.textContent = msg; nameErr.hidden = false;
+    var el = onGrid ? byId('sym-grid') : nameIn;
+    if (!onGrid) { nameIn.classList.add('err'); nameIn.focus(); }
+    el.classList.remove('err'); void el.offsetWidth; if (onGrid) el.classList.add('err');
+    if (!onGrid && !still) nameIn.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(7px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 360, easing: 'ease-out' });
+  }
+  /* wait (briefly) for the list of players, so a taken name can be checked */
+  var playersLoaded = false;
+  function whenPlayers(ms) {
+    return new Promise(function (res) {
+      var t0 = Date.now();
+      (function poll() { if (playersLoaded || !FIREBASE_CONFIG || Date.now() - t0 > ms) res(); else setTimeout(poll, 120); })();
+    });
+  }
+  /* someone else already has this name with a different symbol */
+  function nameTaken(name, key) {
+    var me = normName(name), same = false, other = false;
+    Object.keys(players).forEach(function (u) {
+      var pp = players[u];
+      if (u === myUid || !pp || !pp.key || normName(pp.name) !== me) return;
+      if (pp.key === key) same = true; else other = true;
+    });
+    return other && !same;
+  }
   nameIn.addEventListener('focus', function () { splash.classList.add('typing'); splash.scrollTop = 0; splash.scrollLeft = 0; });
   nameIn.addEventListener('blur', function () { setTimeout(function () { if (document.activeElement !== nameIn) splash.classList.remove('typing'); }, 150); });
   nameIn.addEventListener('input', function () { if (nameIn.value.trim()) { nameErr.hidden = true; nameIn.classList.remove('err'); } });
+  var checking = false;
   byId('splash-form').addEventListener('submit', function (e) {
     e.preventDefault();
+    if (checking) return;
     var v = nameIn.value.replace(/\s+/g, ' ').trim().slice(0, 20);
-    if (!v) {
-      nameErr.hidden = false; nameIn.classList.add('err'); nameIn.focus();
-      if (!still) nameIn.parentNode.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(7px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }], { duration: 360, easing: 'ease-out' });
-      return;
-    }
+    if (!v) { nameError('Wpisz imię albo pseudonim, żeby wejść.', false); return; }
+    if (!pickedSym) { nameIn.blur(); nameError('Wybierz jeszcze swój symbol.', true); return; }
+    if (Date.now() < nameLock && normName(v) === lockName) { nameError('Za dużo prób. Poczekaj ' + Math.ceil((nameLock - Date.now()) / 1000) + ' s.', true); return; }
     nameIn.blur(); splash.classList.remove('typing');
-    visitor = { name: v, since: (visitor && visitor.since) || new Date().toISOString() };
+    var go = byId('splash-go'), key = acctKey(v, pickedSym);
+    checking = true; go.disabled = true; go.textContent = 'Sprawdzam…';
+    whenPlayers(5000).then(function () {
+      checking = false; go.disabled = false; go.textContent = 'Wchodzę';
+      if (nameTaken(v, key)) {
+        nameTries++;
+        if (nameTries % 3 === 0) { nameLock = Date.now() + 30000; lockName = normName(v); }
+        nameError(nameTries % 3 === 0 ? 'To imię ma już ktoś inny. Za dużo prób, poczekaj 30 s.' : 'To imię ma już ktoś inny albo to nie Twój symbol. Jeśli jesteś nową osobą, dopisz coś do imienia, np. „' + v + ' K.”.', true);
+        return;
+      }
+      acceptName(v, pickedSym);
+    });
+  });
+  function acceptName(v, sym) {
+    visitor = { name: v, sym: sym, since: (visitor && visitor.since) || new Date().toISOString() };
     store('mikolaj-gosc', visitor);
     renderHello(); syncPlayer(); renderLobby();
     if (currentView === 'szukanie') renderSheet();
@@ -3939,17 +4017,17 @@
     restoreDone = false;
     setTimeout(function () { if (byId('name-card').hidden) showNameCard(restoreCandidate()); }, still ? 0 : 700);
     if (pendingRound) { var st = pendingRound; pendingRound = null; onGameState(st); }
-  });
+  }
 
   /* ---------- the name is the account: the same name on another phone (or after clearing the browser) brings the balls back ---------- */
   function normName(n) { return String(n || '').replace(/\s+/g, ' ').trim().toLowerCase(); }
   var restoreDone = false, ncRestore = null;
   function restoreCandidate() {
-    if (!visitor || !myUid) return null;
-    var me = normName(visitor.name), since = +restore('mikolaj-reset-at', 0) || 0, best = null;
+    if (!visitor || !myUid || !visitor.sym) return null;
+    var key = acctKey(visitor.name, visitor.sym), me = normName(visitor.name), since = +restore('mikolaj-reset-at', 0) || 0, best = null;
     Object.keys(players).forEach(function (u) {
       var pp = players[u];
-      if (u === myUid || !pp || normName(pp.name) !== me || typeof pp.seed !== 'number' || pp.seed < 1 || !pp.found) return;
+      if (u === myUid || !pp || pp.key !== key || normName(pp.name) !== me || typeof pp.seed !== 'number' || pp.seed < 1 || !pp.found) return;
       if (since && (pp.lastSeen || 0) < since) return;
       var ids = huntLayout(pp.seed).ids, f = Object.keys(pp.found).filter(function (id) { return ids.indexOf(id) !== -1; });
       if (f.length <= found.length) return;
@@ -3977,11 +4055,13 @@
     var card = byId('name-card'), wasHidden = card.hidden;
     ncRestore = b || null;
     if (b) restoreDone = true;
-    byId('nc-name').textContent = visitorName();
-    byId('nc-title').textContent = b ? 'Witaj ponownie!' : 'Zapamiętaj swoje imię';
+    var sy = visitor && symOf(visitor.sym);
+    byId('nc-name').innerHTML = (sy ? '<span class="nc-sym" aria-hidden="true">' + sy[1] + '</span>' : '') + '<span class="nc-nm"></span>' + (sy ? '<span class="nc-symname">symbol: ' + sy[2] + '</span>' : '');
+    byId('nc-name').querySelector('.nc-nm').textContent = visitorName();
+    byId('nc-title').textContent = b ? 'Witaj ponownie!' : 'Zapamiętaj imię i symbol';
     byId('nc-text').textContent = b
       ? 'Znalazłem Twoje konto: ' + b.found.length + ' z ' + HUNT_TOTAL + ' złotych piłek. Stuknij, a wczytam je na tym telefonie.'
-      : 'To Twoje konto na tej stronie. Gdy wyczyścisz przeglądarkę, zmienisz telefon albo otworzysz stronę w innej aplikacji, wpisz dokładnie to samo imię. Wrócą Twoje złote piłki i kupon.';
+      : 'To Twoje konto na tej stronie. Gdy wyczyścisz przeglądarkę, zmienisz telefon albo otworzysz stronę w innej aplikacji, wpisz to samo imię i wybierz ten sam symbol. Wrócą Twoje złote piłki i kupon. Nikt inny nie wejdzie na Twoje konto bez symbolu.';
     byId('nc-shot').hidden = !!b;
     byId('nc-ok').textContent = b ? 'Wczytaj moje piłki' : 'Zrobione, wchodzę';
     card.hidden = false;
@@ -4810,7 +4890,7 @@ function createSafe(opts) {
     }).catch(noop);
     D.get(R('hosts/' + myUid)).then(function (s) { if (s.exists()) becomeHost(true); }).catch(noop);
     if (currentView === 'szukanie') renderSheet();
-    D.onValue(R('players'), function (s) { players = s.val() || {}; renderHello(); renderLobby(); renderPanel(); tryRestore(); }, noop);
+    D.onValue(R('players'), function (s) { players = s.val() || {}; playersLoaded = true; renderHello(); renderLobby(); renderPanel(); tryRestore(); }, noop);
     D.onValue(R('game/gate'), function (s) { gate = s.val(); gateLoaded = true; hostAutoJoin(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('joins/' + myUid), function (s) { myJoin = s.val(); renderLobby(); if (joinedNow() && gameState) onGameState(gameState); }, noop);
     D.onValue(R('game/state'), function (s) { gsLoaded = true; onGameState(s.val()); }, noop);
@@ -4820,7 +4900,7 @@ function createSafe(opts) {
   function couponTier() { return TIER_ADJ[tierOf(found.length)] || ''; }
   function syncPlayer() {
     if (!FB || !myUid || !visitor) return;
-    FB.D.update(R('players/' + myUid), { name: visitor.name, lastSeen: FB.D.serverTimestamp(), foundCount: found.length, coupon: couponTier(), seed: HUNT.seed }).catch(noop);
+    FB.D.update(R('players/' + myUid), { name: visitor.name, key: visitor.sym ? acctKey(visitor.name, visitor.sym) : null, lastSeen: FB.D.serverTimestamp(), foundCount: found.length, coupon: couponTier(), seed: HUNT.seed }).catch(noop);
   }
   function syncFound() {
     if (!FB || !myUid) return;
