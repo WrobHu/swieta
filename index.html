@@ -139,10 +139,12 @@
   .moon-rise { animation: moon-rise 2.8s var(--out) .15s both; }
   @keyframes moon-rise { from { transform: translateY(180px); } }
   .halo { transform-box: fill-box; transform-origin: center; animation: halo 5.5s ease-in-out infinite alternate; }
+  .halo.wide { animation-duration: 8s; animation-delay: -3s; }
+  .halo.ring { animation-duration: 6.5s; animation-direction: alternate-reverse; }
   @keyframes halo { from { opacity: .7; transform: scale(.94); } to { opacity: 1; transform: scale(1.05); } }
 
   /* sleigh team */
-  .team-in { animation: team-in 3.4s var(--out) 1s both; }
+  .team-in { animation: team-in 3.2s var(--out) .45s both; }
   @keyframes team-in { from { transform: translate(-520px, 130px); } }
   .team-drift { animation: drift 7s ease-in-out infinite alternate; }
   @keyframes drift { from { transform: translate(-5px, 4px) rotate(.8deg); } to { transform: translate(7px, -5px) rotate(-1.4deg); } }
@@ -157,10 +159,10 @@
   .hind { transform-origin: 30px 42px; animation-name: hind; }
   .far.fore { animation-name: fore-far; }
   .far.hind { animation-name: hind-far; }
-  @keyframes fore { from { transform: rotate(-14deg); } to { transform: rotate(38deg); } }
-  @keyframes fore-far { from { transform: rotate(4deg); } to { transform: rotate(52deg); } }
-  @keyframes hind { from { transform: rotate(14deg); } to { transform: rotate(-36deg); } }
-  @keyframes hind-far { from { transform: rotate(-2deg); } to { transform: rotate(-50deg); } }
+  @keyframes fore { from { transform: rotate(-20deg); } to { transform: rotate(32deg); } }
+  @keyframes fore-far { from { transform: rotate(-8deg); } to { transform: rotate(44deg); } }
+  @keyframes hind { from { transform: rotate(18deg); } to { transform: rotate(-38deg); } }
+  @keyframes hind-far { from { transform: rotate(6deg); } to { transform: rotate(-48deg); } }
   #arm { transform-origin: 71px 29px; }
   .head { transform-box: view-box; transform-origin: 72px 18px; animation: nod .5s ease-in-out infinite alternate; }
   @keyframes nod { from { transform: rotate(-3deg); } to { transform: rotate(4deg); } }
@@ -174,11 +176,37 @@
   .nose { fill: var(--berry-lit); }
   .nose-glow { transform-box: fill-box; transform-origin: center; animation: nose 1.4s ease-in-out infinite alternate; }
   @keyframes nose { from { opacity: .55; transform: scale(.8); } to { opacity: 1; transform: scale(1.25); } }
-  .dust circle { opacity: 0; transform-box: fill-box; transform-origin: center; animation: dust 2.2s ease-out infinite; }
+  .dust > * { opacity: 0; transform-box: fill-box; transform-origin: center; animation: dust 2.2s ease-out infinite; }
   @keyframes dust {
-    0% { opacity: 0; transform: translate(0, 0) scale(1); }
-    12% { opacity: 1; }
-    100% { opacity: 0; transform: translate(-96px, 30px) scale(.15); }
+    0% { opacity: 0; transform: translate(0, 0) scale(.6); }
+    10% { opacity: 1; transform: translate(calc(var(--dx, -96px) * .08), calc(var(--dy, 30px) * .08)) scale(1.25); }
+    100% { opacity: 0; transform: translate(var(--dx, -96px), var(--dy, 30px)) scale(.15); }
+  }
+  .tail { animation: tail 1.9s ease-in-out infinite alternate; }
+  @keyframes tail { from { opacity: .6; } to { opacity: 1; } }
+  .tail .fl { stroke-dasharray: 30 9 13 12; animation: flow .8s linear infinite; }
+  .tail .fl.two { animation-duration: 1.05s; } .tail .fl.three { animation-duration: .95s; animation-delay: -.4s; }
+  @keyframes flow { to { stroke-dashoffset: -64; } }
+  .sl-aura { transform-box: fill-box; transform-origin: center; animation: aura 3.1s ease-in-out infinite alternate; }
+  @keyframes aura { from { opacity: .62; transform: scale(.95); } to { opacity: 1; transform: scale(1.07); } }
+  .sl-under { animation: under 1.2s ease-in-out infinite alternate; }
+  @keyframes under { from { opacity: .6; } to { opacity: 1; } }
+  /* reindeer: every leg bends at the knee, and each hoof leaves a small glowing print on the air that drifts back and fades */
+  .shin { transform-box: view-box; animation-duration: .5s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+  .fs { transform-origin: 72px 49.5px; animation-name: shin-f; }
+  .far .fs { transform-origin: 66px 53px; }
+  .hs { transform-origin: 16.5px 50px; animation-name: shin-h; }
+  .far .hs { transform-origin: 23px 53px; }
+  @keyframes shin-f { from { transform: rotate(-26deg); } to { transform: rotate(56deg); } }
+  @keyframes shin-h { from { transform: rotate(10deg); } to { transform: rotate(-64deg); } }
+  .dtail { transform-box: fill-box; transform-origin: 100% 60%; animation: dtail .5s ease-in-out infinite alternate; }
+  @keyframes dtail { from { transform: rotate(-12deg); } to { transform: rotate(16deg); } }
+  .hp { opacity: 0; transform-box: fill-box; transform-origin: center; animation: hp 3s linear infinite; }
+  @keyframes hp {
+    0% { opacity: 0; transform: translate(0, 0) scale(.3); }
+    2.5% { opacity: 1; transform: translate(-1px, 0) scale(1.3); }
+    7% { opacity: .95; transform: translate(-3px, .4px) scale(1); }
+    72%, 100% { opacity: 0; transform: translate(-70px, 10px) scale(.65); }
   }
 
   .pines-far { fill: var(--pine-far); }
@@ -210,7 +238,7 @@
     position: absolute; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px)); top: 14px;
     display: inline-flex; align-items: center; gap: 7px;
     font: 600 12px/1.2 var(--score); letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
-    animation: fade 1s ease-out 4.5s both; transition: opacity .4s;
+    animation: fade 1s ease-out 3.4s both; transition: opacity .4s;
   }
   .hint::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ball); box-shadow: 0 0 10px var(--ball); }
   .hint.gone { opacity: 0; }
@@ -218,7 +246,7 @@
   .hero-copy { margin-top: -86px; display: flex; flex-direction: column; gap: 10px; }
   .eyebrow {
     font: 600 14px/1.2 var(--score); letter-spacing: .18em; text-transform: uppercase; color: var(--gold);
-    animation: fade-up .9s var(--out) 1.1s both;
+    animation: fade-up .9s var(--out) .35s both;
   }
   h1 { font: 900 clamp(46px, 14.4vw, 64px)/.94 var(--display); letter-spacing: -.025em; text-shadow: 0 4px 30px rgba(4, 18, 16, .8); }
   h1 em { font-style: italic; color: var(--ball); }
@@ -227,11 +255,11 @@
     padding: .34em .08em .12em .02em; margin: -.34em -.08em -.12em -.02em;
   }
   .w > * { display: inline-block; animation: rise 1.1s var(--out) both; }
-  .w:nth-child(1) > * { animation-delay: 1.2s; }
-  .w:nth-child(2) > * { animation-delay: 1.3s; }
-  .w:nth-child(3) > * { animation-delay: 1.45s; }
+  .w:nth-child(1) > * { animation-delay: .45s; }
+  .w:nth-child(2) > * { animation-delay: .57s; }
+  .w:nth-child(3) > * { animation-delay: .72s; }
   @keyframes rise { from { transform: translateY(125%) rotate(4deg); opacity: 0; } 30% { opacity: 1; } }
-  .lead { color: var(--mist); max-width: 34ch; text-shadow: 0 2px 14px rgba(4, 18, 16, .8); animation: fade-up 1s var(--out) 1.7s both; }
+  .lead { color: var(--mist); max-width: 34ch; text-shadow: 0 2px 14px rgba(4, 18, 16, .8); animation: fade-up 1s var(--out) .95s both; }
   @keyframes fade-up { from { opacity: 0; transform: translateY(14px); } }
 
   /* ---------- scoreboard ---------- */
@@ -288,24 +316,42 @@
   .sig-svg { display: block; width: 100%; height: auto; overflow: visible; }
   .sig-p { fill: none; stroke: #1f3c73; stroke-width: 2.6px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .letter.signed .sig-p { stroke-dashoffset: 0; }
-  .sig-tip { fill: #f6cf6a; opacity: 0; filter: drop-shadow(0 0 4px rgba(240, 195, 90, .95)) drop-shadow(0 0 1px #fff); transition: opacity .25s; pointer-events: none; }
-  .sig-p { filter: drop-shadow(0 .4px .3px rgba(31, 60, 115, .35)); }
+  .sig-tip { fill: #f6cf6a; opacity: 0; pointer-events: none; }
+  /* fresh ink: the last stretch behind the nib is lighter and a touch wider, then it dries into the line */
+  .sig-w { fill: none; stroke: #6b98f0; stroke-width: 3.4px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0 2; opacity: 0; transition: opacity .8s ease-out; pointer-events: none; }
+  /* the pen that writes the letter and signs it; its nib sits exactly on the point it is moved to */
+  .lt-pen { position: absolute; z-index: 4; left: 0; top: 0; width: 52px; height: 52px; margin: -47.1px 0 0 -4.9px; transform-origin: 4.9px 47.1px; pointer-events: none; opacity: 0; transition: opacity .35s; will-change: transform, opacity; }
+  .lt-pen svg { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 9.4% 90.6%; }
+  .lt-pen.idle svg { animation: pen-idle 1.6s ease-in-out infinite alternate; }
+  @keyframes pen-idle { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-5px) rotate(4deg); } }
+  .wd { display: inline-block; }
+  .letter.writing .wd { visibility: hidden; }
+  .letter.writing .wd.on { visibility: visible; animation: wd-in calc(var(--wl, 60ms) * var(--wf, 1)) linear both, wd-dry 1.5s ease-out both; }
+  @keyframes wd-in { from { clip-path: inset(-30% 100% -30% -8%); } to { clip-path: inset(-30% -12% -30% -8%); } }
+  @keyframes wd-dry { from { color: #2f5fd6; } }
   .sig-t { font: 400 98px/1 "Mrs Saint Delafield", "Segoe Script", cursive; fill: #1f3c73; fill-opacity: 0; stroke: #1f3c73; stroke-width: 1.1; stroke-dasharray: 900; stroke-dashoffset: 900; }
   .sig-fl { fill: none; stroke: #1f3c73; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .sig-ball { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; }
   .sig-spark path { transform-box: fill-box; transform-origin: center; opacity: 0; }
   .letter.sign .sig-t { animation: sig-draw 2.3s cubic-bezier(.45, 0, .4, 1) forwards, sig-ink .9s ease-out 1.5s forwards; }
   .letter.sign .sig-fl { animation: sig-fl .75s cubic-bezier(.6, 0, .3, 1) 2.05s forwards; }
-  .letter.sign .sig-ball { animation: sig-ball 1.1s cubic-bezier(.3, 0, .5, 1) var(--sig-end, 2.7s) forwards; }
+  .letter.sign .sig-ball { animation: sig-ball 1.25s linear var(--sig-end, 2.7s) forwards; }
   .letter.sign .sig-spark path { animation: sig-spark .9s ease-out calc(var(--sig-end, 2.7s) + .6s) forwards; }
   .letter.sign .sig-spark path + path { animation-delay: calc(var(--sig-end, 2.7s) + .75s); }
   @keyframes sig-draw { to { stroke-dashoffset: 0; } }
   @keyframes sig-ink { to { fill-opacity: 1; stroke-width: .3; } }
   @keyframes sig-fl { to { stroke-dashoffset: 0; } }
+  /* falling speeds up, rising slows down: each stretch has its own easing, so the bounce never hesitates on the ground */
   @keyframes sig-ball {
-    0% { opacity: 0; transform: translateY(-60px) scale(.6); } 15% { opacity: 1; }
-    45% { transform: translateY(16px) scale(1.12, .84); } 62% { transform: translateY(-14px) scale(.96, 1.04); }
-    80% { transform: translateY(16px) scale(1.05, .92); } 100% { opacity: 1; transform: translateY(14px); }
+    0% { opacity: 0; transform: translateY(-64px) scale(.6); animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+    9% { opacity: 1; }
+    36% { transform: translateY(14px) scale(1); animation-timing-function: ease-out; }
+    42% { transform: translateY(14px) scale(1.15, .8); animation-timing-function: cubic-bezier(.2, .65, .45, 1); }
+    60% { transform: translateY(-14px) scale(.97, 1.04); animation-timing-function: cubic-bezier(.55, 0, .8, .35); }
+    76% { transform: translateY(14px) scale(1.07, .9); animation-timing-function: cubic-bezier(.2, .65, .45, 1); }
+    86% { transform: translateY(6px) scale(1); animation-timing-function: cubic-bezier(.55, 0, .8, .35); }
+    95% { transform: translateY(14px) scale(1.03, .96); animation-timing-function: ease-out; }
+    100% { opacity: 1; transform: translateY(14px) scale(1); }
   }
   @keyframes sig-spark { 0% { opacity: 0; transform: scale(.2) rotate(0); } 40% { opacity: 1; transform: scale(1.2) rotate(45deg); } 100% { opacity: 0; transform: scale(.4) rotate(90deg); } }
   .letter.unfold { animation: lt-unfold .9s var(--out) both; }
@@ -930,40 +976,57 @@
   .splash::after { background-size: 300px 300px; opacity: .3; transform: scale(1.6); animation: sp-snow-b 16s linear infinite; }
   @keyframes sp-snow { from { transform: translateY(0); } to { transform: translateY(210px); } }
   @keyframes sp-snow-b { from { transform: translate(0, 0) scale(1.6); } to { transform: translate(-40px, 300px) scale(1.6); } }
-  .sp-sky { position: absolute; left: 0; top: 0; width: 100%; height: 50vh; pointer-events: none; }
+  /* the sky is split into layers that only ever move or fade as a whole, so the phone can leave them to the compositor */
+  .sp-skybox { position: absolute; left: 0; top: 0; width: 100%; height: 50vh; pointer-events: none; }
+  .sp-sky { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .sp-tw { animation: star 2.6s ease-in-out infinite alternate; }
+  .sp-halo { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 50%; opacity: .8; will-change: transform, opacity;
+    background: radial-gradient(closest-side, rgba(255, 246, 216, .5), rgba(255, 246, 216, .2) 38%, rgba(214, 240, 226, .07) 68%, rgba(214, 240, 226, 0)); }
+  .splash.go .sp-halo { animation: fade 2.2s ease-out .1s backwards, sp-halo 4.6s ease-in-out 2.3s infinite alternate; }
+  .sp-halo.two { --ho: .8; opacity: .5; background: radial-gradient(closest-side, rgba(255, 246, 216, 0) 52%, rgba(255, 246, 216, .16) 60%, rgba(255, 246, 216, 0) 72%); }
+  .splash.go .sp-halo.two { animation: fade 2.6s ease-out .4s backwards, sp-halo 6.2s ease-in-out 3s infinite alternate-reverse; }
+  @keyframes sp-halo { to { opacity: var(--ho, 1); transform: scale(1.1); } }
+  .sp-fly { position: absolute; left: 0; top: 0; will-change: transform; }
+  .sp-fly svg { display: block; overflow: visible; }
+  .splash:not(.go) .sp-fly { visibility: hidden; }
+  .sp-dot { position: absolute; left: 0; top: 0; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #f0c35a; opacity: 0; box-shadow: 0 0 7px rgba(240, 195, 90, .85); will-change: transform, opacity; }
+  .sp-dot.w { background: #fff; box-shadow: 0 0 7px rgba(255, 255, 255, .8); }
+  .sp-bloom { position: absolute; z-index: 3; left: 0; top: 0; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%; opacity: 0; pointer-events: none; will-change: transform, opacity;
+    background: radial-gradient(closest-side, rgba(255, 252, 214, .95), rgba(220, 238, 78, .5) 30%, rgba(240, 195, 90, .18) 60%, rgba(240, 195, 90, 0)); }
+  .splash:not(.go):not(.rest) .splash-inner { visibility: hidden; }
   .sp-hills { position: absolute; left: 0; bottom: 0; width: 100%; height: 26vh; pointer-events: none; }
-  .sp-stars circle { fill: var(--snow); }
-  .sp-stars .tw { animation: star 2.6s ease-in-out infinite alternate; }
-  .sp-moon { animation: fade 2s ease-out .1s both; }
+  .sp-sky circle.st { fill: var(--snow); }
+  .splash.go .sp-moon { animation: fade 2s ease-out .1s both; }
   .splash-inner { position: relative; z-index: 2; width: min(100%, 380px); display: flex; flex-direction: column; align-items: center; gap: 14px; }
   .splash-stage { position: relative; width: 120px; height: 150px; }
   .splash-stage::before {
     content: ""; position: absolute; left: -40px; right: -40px; bottom: -30px; height: 120px; border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(220, 238, 78, .22), rgba(220, 238, 78, 0)); animation: fade 1s ease-out 1.7s both;
+    background: radial-gradient(closest-side, rgba(220, 238, 78, .22), rgba(220, 238, 78, 0));
   }
-  .splash-ball { position: absolute; left: 28px; bottom: 18px; width: 64px; height: 64px; animation: s-drop 1.4s cubic-bezier(.3, 0, .7, 1) 1.2s both; filter: drop-shadow(0 0 18px rgba(220, 238, 78, .45)); }
-  .splash-ball svg { width: 100%; height: 100%; display: block; animation: s-spin 1.4s linear 1.2s both; }
-  @keyframes s-drop {
-    0% { transform: translateY(-175px) scale(.3); opacity: 0; } 8% { opacity: 1; }
-    38% { transform: translateY(0) scale(1.08, .86); }
-    52% { transform: translateY(-74px) scale(.96, 1.04); } 66% { transform: translateY(0) scale(1.05, .9); }
-    78% { transform: translateY(-26px); } 88% { transform: translateY(0) scale(1.02, .96); } 100% { transform: translateY(0); opacity: 1; }
-  }
-  @keyframes s-spin { to { transform: rotate(720deg); } }
-  .splash-shadow { position: absolute; left: 30px; bottom: 10px; width: 60px; height: 10px; border-radius: 50%; background: rgba(0, 0, 0, .45); filter: blur(3px); animation: s-shadow 1.4s cubic-bezier(.3, 0, .7, 1) 1.2s both; }
-  @keyframes s-shadow { 0% { transform: scale(.2); opacity: 0; } 38%, 66%, 88%, 100% { transform: scale(1); opacity: 1; } 52% { transform: scale(.5); opacity: .5; } }
+  .splash.go .splash-stage::before { animation: fade 1s ease-out var(--land, 1.73s) both; }
+  /* the ball: one element carries it sideways, one up and down (and squashes it), the picture inside spins.
+     No filters here: the glow is its own soft disc, so nothing has to be repainted while the ball flies */
+  .splash-ball { position: absolute; left: 28px; bottom: 18px; width: 64px; height: 64px; will-change: transform, opacity; }
+  .sb-y { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: 50% 100%; will-change: transform; }
+  .sb-glow { position: absolute; left: -24px; top: -24px; right: -24px; bottom: -24px; border-radius: 50%; background: radial-gradient(closest-side, rgba(220, 238, 78, .4), rgba(220, 238, 78, .13) 56%, rgba(220, 238, 78, 0)); }
+  .sb-y svg { position: relative; width: 100%; height: 100%; display: block; will-change: transform; }
+  .splash-shadow { position: absolute; left: 22px; bottom: 6px; width: 76px; height: 16px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .55), rgba(0, 0, 0, .28) 55%, rgba(0, 0, 0, 0)); will-change: transform, opacity; }
   .sp-burst { position: absolute; left: 60px; bottom: 18px; width: 0; height: 0; }
-  .sp-burst::before { content: ""; position: absolute; left: -30px; top: -14px; width: 60px; height: 22px; margin-top: 3px; border-radius: 50%; border: 1.5px solid var(--ball); opacity: 0; animation: sp-ring .8s var(--out) 1.73s both; }
+  .sp-burst::before { content: ""; position: absolute; left: -30px; top: -14px; width: 60px; height: 22px; margin-top: 3px; border-radius: 50%; border: 1.5px solid var(--ball); opacity: 0; }
+  .splash.go .sp-burst::before { animation: sp-ring .8s var(--out) var(--land, 1.73s) both; }
   @keyframes sp-ring { 0% { opacity: 0; transform: scale(.3); } 2% { opacity: .8; } 100% { opacity: 0; transform: scale(1.7); } }
-  .sp-burst i { position: absolute; left: -2px; top: -6px; width: 4px; height: 12px; border-radius: 2px; background: var(--gold); opacity: 0; transform-origin: 50% 100%; animation: sp-spark .75s var(--out) 1.73s both; }
+  .sp-burst i { position: absolute; left: -2px; top: -6px; width: 4px; height: 12px; border-radius: 2px; background: var(--gold); opacity: 0; transform-origin: 50% 100%; }
+  .splash.go .sp-burst i { animation: sp-spark .75s var(--out) var(--land, 1.73s) both; }
   .sp-burst i:nth-child(even) { background: var(--ball); height: 9px; }
   @keyframes sp-spark { 0% { opacity: 0; transform: rotate(var(--a)) translateY(-4px) scaleY(.3); } 18% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-54px) scaleY(1); } }
   .splash h1 { font: 900 clamp(44px, 14vw, 60px)/.94 var(--display); letter-spacing: -.025em; }
   .splash h1 em { font-style: italic; color: var(--ball); }
-  .splash .w:nth-child(1) > * { animation-delay: 1.78s; }
-  .splash .w:nth-child(2) > * { animation-delay: 1.9s; }
-  .splash .w:nth-child(3) > * { animation-delay: 2.05s; }
-  .splash .eyebrow { animation-delay: 1.62s; }
+  .splash .w > *, .splash .eyebrow { animation: none; }
+  .splash.go .w > * { animation: rise 1.1s var(--out) both; }
+  .splash.go .w:nth-child(1) > * { animation-delay: calc(var(--land, 1.73s) + .05s); }
+  .splash.go .w:nth-child(2) > * { animation-delay: calc(var(--land, 1.73s) + .17s); }
+  .splash.go .w:nth-child(3) > * { animation-delay: calc(var(--land, 1.73s) + .32s); }
+  .splash.go .eyebrow { animation: fade-up .9s var(--out) calc(var(--land, 1.73s) - .1s) both; }
   .splash-form { width: 100%; display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 8px; }
   .field::placeholder { color: rgba(168, 195, 183, .55); }
   .field.err { border-color: #ff8b9a; box-shadow: 0 0 0 3px rgba(255, 139, 154, .18); }
@@ -1461,7 +1524,8 @@
 
   /* light mode, switched on automatically when a device cannot keep up */
   .lite .aurora, .lite .grain { display: none; }
-  .lite .stars .tw, .lite .dust circle, .lite .smoke circle, .lite .twk, .lite .glint, .lite .halo { animation: none; }
+  .lite .stars .tw, .lite .dust > *, .lite .smoke circle, .lite .twk, .lite .glint, .lite .halo, .lite .tail, .lite .tail .fl, .lite .sl-aura, .lite .sl-under { animation: none; }
+  .lite .hp { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -1703,6 +1767,19 @@
       <stop offset="0" stop-color="#ff5a6e" stop-opacity=".95"/>
       <stop offset="1" stop-color="#ff5a6e" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="sleighGlow">
+      <stop offset="0" stop-color="#ffe6ad" stop-opacity=".6"/><stop offset=".45" stop-color="#ffd58a" stop-opacity=".4"/>
+      <stop offset=".72" stop-color="#f6c765" stop-opacity=".15"/><stop offset="1" stop-color="#f0c35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="runnerGlow">
+      <stop offset="0" stop-color="#fff3c8" stop-opacity=".85"/><stop offset=".5" stop-color="#ffd98a" stop-opacity=".3"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tailGrad" gradientUnits="userSpaceOnUse" x1="10" y1="60" x2="-175" y2="104">
+      <stop offset="0" stop-color="#fff0c0" stop-opacity=".6"/><stop offset=".35" stop-color="#f0c35a" stop-opacity=".28"/><stop offset="1" stop-color="#f0c35a" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="hoofGlow">
+      <stop offset="0" stop-color="#fff3c8" stop-opacity=".9"/><stop offset=".45" stop-color="#ffd98a" stop-opacity=".35"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
     <radialGradient id="lampGlow">
       <stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/>
       <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
@@ -1736,7 +1813,8 @@
     </linearGradient>
     <linearGradient id="tbSnow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9ddd5"/></linearGradient>
     <linearGradient id="spGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3f0ea"/><stop offset="1" stop-color="#8fb3a6"/></linearGradient>
-    <radialGradient id="spMoonGlow"><stop offset="0" stop-color="#fff6d8" stop-opacity=".45"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="spMoonGlow"><stop offset="0" stop-color="#fff6d8" stop-opacity=".6"/><stop offset=".5" stop-color="#fff6d8" stop-opacity=".3"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="spMoonFace" cx=".38" cy=".34" r=".75"><stop offset="0" stop-color="#fffdf1"/><stop offset=".65" stop-color="#f1ecd4"/><stop offset="1" stop-color="#d8d2b4"/></radialGradient>
     <radialGradient id="fb" cx=".36" cy=".3" r=".8">
       <stop offset="0" stop-color="#fbffa6"/><stop offset=".5" stop-color="#dcee4e"/><stop offset="1" stop-color="#9db528"/>
     </radialGradient>
@@ -1778,12 +1856,15 @@
 <button type="button" class="hunt-badge" id="hunt-badge" aria-label="Złote piłki: postęp i kupon"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#gball"/></svg><span id="hunt-count">0</span><span class="of">/7</span></button>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="splash" id="splash">
-  <svg class="sp-sky" viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g class="sp-stars" id="sp-stars"></g>
-    <g class="sp-moon"><circle cx="292" cy="58" r="46" fill="url(#spMoonGlow)"/><circle cx="292" cy="58" r="15" fill="#f6f1dc"/><circle cx="287" cy="54" r="3" fill="#d8d1b2" opacity=".6"/><circle cx="296" cy="63" r="3.8" fill="#d8d1b2" opacity=".6"/></g>
-    <g id="sp-trail"></g>
-    <g id="sp-team" transform="translate(120 120) rotate(-12) scale(.5)"></g>
-  </svg>
+  <div class="sp-skybox" id="sp-skybox" aria-hidden="true">
+    <svg class="sp-sky sp-tw" id="sp-stars-b" viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice"></svg>
+    <i class="sp-halo" id="sp-halo"></i><i class="sp-halo two" id="sp-halo2"></i>
+    <svg class="sp-sky" id="sp-stars-a" viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice">
+      <g class="sp-moon"><circle cx="292" cy="58" r="30" fill="url(#spMoonGlow)"/><circle cx="292" cy="58" r="15" fill="url(#spMoonFace)"/><circle cx="287" cy="54" r="3" fill="#d8d1b2" opacity=".6"/><circle cx="296" cy="63" r="3.8" fill="#d8d1b2" opacity=".6"/><circle cx="289" cy="65" r="1.6" fill="#d8d1b2" opacity=".5"/><circle cx="292" cy="58" r="14.7" fill="none" stroke="#fffbe6" stroke-opacity=".6" stroke-width=".7"/></g>
+    </svg>
+    <div id="sp-trail"></div>
+    <div class="sp-fly" id="sp-fly"><svg id="sp-teamsvg" viewBox="-30 -24 460 120"><g id="sp-team"></g></svg></div>
+  </div>
   <svg class="sp-hills" viewBox="0 0 390 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
     <path d="M-10 70C40 44 90 40 140 56S240 40 290 52 370 38 400 46V120H-10Z" fill="#0f382d"/>
     <g fill="#082119">
@@ -1795,7 +1876,7 @@
     <g transform="translate(250 66)"><rect x="0" y="10" width="26" height="14" fill="#3b2a22"/><path d="M-3 11 13 0 29 11Z" fill="#e6f2ec"/><rect x="5" y="14" width="5" height="5" fill="#ffcf70"/><rect x="16" y="14" width="5" height="5" fill="#ffcf70"/><circle cx="13" cy="17" r="13" fill="#ffcf70" opacity=".12"/></g>
   </svg>
   <div class="splash-inner">
-    <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="sp-burst"><i style="--a:-80deg"></i><i style="--a:-55deg"></i><i style="--a:-30deg"></i><i style="--a:-10deg"></i><i style="--a:10deg"></i><i style="--a:30deg"></i><i style="--a:55deg"></i><i style="--a:80deg"></i></div><div class="splash-ball"><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div>
+    <div class="splash-stage" aria-hidden="true"><div class="splash-shadow"></div><div class="sp-burst"><i style="--a:-80deg"></i><i style="--a:-55deg"></i><i style="--a:-30deg"></i><i style="--a:-10deg"></i><i style="--a:10deg"></i><i style="--a:30deg"></i><i style="--a:55deg"></i><i style="--a:80deg"></i></div><div class="splash-ball"><div class="sb-y"><i class="sb-glow"></i><svg viewBox="0 0 40 40"><use href="#ball"/></svg></div></div></div>
     <p class="eyebrow">Świąteczna zabawa dla całej rodziny</p>
     <h1><span class="w"><span>Gem,</span></span> <span class="w"><span>set,</span></span> <span class="w"><em>Święta!</em></span></h1>
     <form class="splash-form" id="splash-form" novalidate hidden>
@@ -1810,6 +1891,7 @@
     <p class="splash-hello" id="splash-hello" hidden></p>
     <button type="button" class="cta sp-go" id="splash-skip" hidden>Wchodzę</button>
   </div>
+  <i class="sp-bloom" id="sp-bloom" aria-hidden="true"></i>
 </div>
 <div class="modal-back" id="name-card" hidden>
   <div class="modal nc-modal" role="dialog" aria-modal="true" aria-labelledby="nc-title">
@@ -1878,9 +1960,26 @@
       <svg class="scene" id="scene" viewBox="0 0 390 520" role="img" aria-label="Zaśnieżony kort tenisowy nocą na Biegunie Północnym. Nad lasem świeci księżyc, a po niebie lecą czerwone sanie Świętego Mikołaja z workiem prezentów i rakietą w dłoni, ciągnięte przez trzy renifery. Pierwszy z nich ma świecący czerwony nos. Siatka kortu jest ozdobiona lampkami.">
         <defs>
           <radialGradient id="halo">
-            <stop offset="0" stop-color="#fff6d8" stop-opacity=".42"/>
-            <stop offset=".3" stop-color="#e9f1d8" stop-opacity=".14"/>
+            <stop offset="0" stop-color="#fff6d8" stop-opacity=".6"/>
+            <stop offset=".24" stop-color="#fff3d2" stop-opacity=".3"/>
+            <stop offset=".55" stop-color="#e9f1d8" stop-opacity=".1"/>
             <stop offset="1" stop-color="#bfe3d4" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="haloWide">
+            <stop offset="0" stop-color="#eaf6e4" stop-opacity=".2"/>
+            <stop offset=".5" stop-color="#cdebdc" stop-opacity=".07"/>
+            <stop offset="1" stop-color="#bfe3d4" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="haloRing">
+            <stop offset=".5" stop-color="#fff6d8" stop-opacity="0"/>
+            <stop offset=".6" stop-color="#fff6d8" stop-opacity=".17"/>
+            <stop offset=".7" stop-color="#fff6d8" stop-opacity=".03"/>
+            <stop offset="1" stop-color="#fff6d8" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="moonCorona">
+            <stop offset=".45" stop-color="#fffbe6" stop-opacity=".75"/>
+            <stop offset=".62" stop-color="#fff6d8" stop-opacity=".34"/>
+            <stop offset="1" stop-color="#fff6d8" stop-opacity="0"/>
           </radialGradient>
           <radialGradient id="moonFace" cx=".38" cy=".34" r=".75">
             <stop offset="0" stop-color="#fffdf1"/>
@@ -1949,7 +2048,10 @@
 
         <g class="par-moon">
           <g class="moon-rise">
-            <circle class="halo" cx="292" cy="96" r="92" fill="url(#halo)"/>
+            <circle class="halo wide" cx="292" cy="96" r="165" fill="url(#haloWide)"/>
+            <circle class="halo" cx="292" cy="96" r="100" fill="url(#halo)"/>
+            <circle class="halo ring" cx="292" cy="96" r="112" fill="url(#haloRing)"/>
+            <circle cx="292" cy="96" r="44" fill="url(#moonCorona)"/>
             <circle cx="292" cy="96" r="21" fill="url(#moonFace)"/>
             <g fill="#cfc8a6" fill-opacity=".55">
               <circle cx="285" cy="90" r="4.2"/><circle cx="298.5" cy="100" r="5.4"/><circle cx="288" cy="105" r="2.4"/>
@@ -1962,9 +2064,17 @@
         <!-- sleigh team: built here, deer added by script so each one gallops on its own beat -->
         <g transform="translate(30 204) rotate(-11) scale(.77)">
           <g class="par-team"><g class="team-in"><g class="team-drift" id="team">
+            <g class="tail" fill="none" stroke="url(#tailGrad)" stroke-linecap="round">
+              <path d="M8 60C-34 66-90 82-172 108" stroke-width="9" opacity=".22"/>
+              <path class="fl" d="M8 60C-34 66-90 82-172 108" stroke-width="2.6"/>
+              <path class="fl two" d="M5 43C-30 49-70 60-128 81" stroke-width="1.7" opacity=".8"/>
+              <path class="fl three" d="M5 73C-26 79-58 89-106 105" stroke-width="1.4" opacity=".75"/>
+            </g>
             <g class="dust" id="dust"></g>
             <path d="M109 31Q159 47 206 38M206 38Q248 49 288 38M288 38Q330 49 370 38" fill="none" stroke="#f0c35a" stroke-width="1.1" stroke-opacity=".9"/>
             <g class="bob">
+              <ellipse class="sl-aura" cx="60" cy="44" rx="112" ry="68" fill="url(#sleighGlow)"/>
+              <ellipse class="sl-under" cx="56" cy="78" rx="74" ry="10" fill="url(#runnerGlow)"/>
               <!-- runners -->
               <path d="M31 59 28 75M86 59 90 75" stroke="#c8922e" stroke-width="2.6" stroke-linecap="round"/>
               <path d="M1 69C-2 72-1 76 5 76H94C112 76 122 64 117 55 113 48.5 104.5 49.5 104.5 55.5 104.5 59.5 108.5 61 110.8 58" fill="none" stroke="#7d5212" stroke-width="3.8" stroke-linecap="round"/>
@@ -2354,6 +2464,15 @@
         <div class="sig" aria-label="Podpis: Hubert" role="img">
           <svg class="sig-svg" id="sig-svg" viewBox="-4 -4 333 133" data-total="3000" aria-hidden="true"><path class="sig-p" pathLength="1" d="M8 28.3Q6 30.3 6 45.3Q6 60.3 7.7 87.5Q9.3 114.7 10.5 82.8Q11.7 51 13 50.8Q14.3 50.7 15.5 51.3Q16.7 52 21.2 59.2Q25.7 66.3 31.7 73.2Q37.7 80 41 81.7Q44.3 83.3 50.8 83.5Q57.3 83.7 60.2 81.8Q63 80 66.8 75.3Q70.7 70.7 73 67.3Q75.3 64 80.3 54.7Q85.3 45.3 88 38Q90.7 30.7 91 24Q91.3 17.3 88.2 17.2Q85 17 83 18Q81 19 78 23.3Q75 27.7 72 35.3Q69 43 67.7 49.8Q66.3 56.7 66 64.2Q65.7 71.7 65.7 87.3Q65.7 103 66.7 106.2L67.7 109.3" data-d="0" data-l="534"/><path class="sig-p" pathLength="1" d="M80.7 77.7Q80 94.7 82.7 101.7Q85.3 108.7 86.7 110.3Q88 112 89 112.3Q90 112.7 91.5 112Q93 111.3 94 107Q95 102.7 95.5 86.7Q96 70.7 98.8 85.3Q101.7 100 103.5 105.2Q105.3 110.3 106.7 111Q108 111.7 109.3 111.3Q110.7 111 113.7 104.3L116.7 97.7" data-d="840" data-l="286"/><path class="sig-p" pathLength="1" d="M123.7 32Q125 71.3 126.3 80.3Q127.7 89.3 129 93Q130.3 96.7 132.8 98.8Q135.3 101 139.3 100.7Q143.3 100.3 145.8 96.7Q148.3 93 149.7 90Q151 87 152 83.7Q153 80.3 153.3 77.2Q153.7 74 153.7 68.5Q153.7 63 152.5 62Q151.3 61 145.2 60.8Q139 60.7 137.8 61.2Q136.7 61.7 132.3 65Q128 68.3 126.3 70.3Q124.7 72.3 122.7 75.8Q120.7 79.3 119.3 84.3L118 89.3" data-d="1431" data-l="310"/><path class="sig-p" pathLength="1" d="M150.3 87Q157.7 89.7 167.8 89.5Q178 89.3 179 88.7Q180 88 183.2 84.3Q186.3 80.7 187.2 77.2Q188 73.7 187.8 68.7Q187.7 63.7 186.7 62.5Q185.7 61.3 183.8 60.8Q182 60.3 178 60.3Q174 60.3 172.2 62.3Q170.3 64.3 169.5 67.2Q168.7 70 168.7 77Q168.7 84 169.7 86.3Q170.7 88.7 173.5 91.3Q176.3 94 178.5 94.7Q180.7 95.3 187.8 95.3Q195 95.3 199.7 92L204.3 88.7" data-d="2019" data-l="264"/><path class="sig-p" pathLength="1" d="M192.7 88.3Q192.7 79 193.5 77.2Q194.3 75.3 197.5 71Q200.7 66.7 202.5 64.8Q204.3 63 206.3 61.8Q208.3 60.7 210.3 60.7Q212.3 60.7 213.2 62Q214 63.3 214.2 75.7Q214.3 88 226 50Q237.7 12 238.7 9.8Q239.7 7.7 240.5 6.8Q241.3 6 242 6Q242.7 6 243.7 7.3Q244.7 8.7 245.8 13.3Q247 18 250.3 39.3Q253.7 60.7 256 70.5Q258.3 80.3 260.7 86.7L263 93" data-d="2466" data-l="387"/><path class="sig-p" pathLength="1" d="M198 29Q212 31.3 217.7 33.5Q223.3 35.7 255.3 50.7L287.3 65.7" data-d="2930" data-l="70"/><circle class="sig-tip" id="sig-tip" cx="0" cy="0" r="3.4"/><g class="sig-ball"><circle cx="309.3" cy="33.8" r="8" fill="url(#sgBall)"/><path d="M302.9 29.8c3.4 2.3 4.1 6.2 2.6 9.6" fill="none" stroke="#fffbe8" stroke-width="1.2" stroke-linecap="round"/></g><g class="sig-spark" fill="#f0c35a"><path d="M323.3 19.8l1.4 3.8 3.8 1.4-3.8 1.4-1.4 3.8-1.4-3.8-3.8-1.4 3.8-1.4z"/><path d="M291.3 15.8l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g></svg>
         </div>
+        <div class="lt-pen" id="lt-pen" aria-hidden="true"><svg viewBox="0 0 64 64"><g transform="translate(6 58) rotate(-45)">
+          <path d="M0 0 11.5-3.3V3.3Z" fill="url(#sgGold)"/><path d="M2.6 0H10" stroke="#7d5212" stroke-width=".7" stroke-linecap="round"/><circle cx="8.6" cy="0" r=".9" fill="#7d5212"/>
+          <path d="M11.5-3.3 22-4.3V4.3L11.5 3.3Z" fill="#14213d"/>
+          <rect x="22" y="-4.6" width="3.2" height="9.2" rx=".9" fill="url(#sgGold)"/>
+          <rect x="25.2" y="-4.4" width="35" height="8.8" rx="2.2" fill="#1f3c73"/>
+          <path d="M27.5-2.5H56" stroke="#8fb0ee" stroke-opacity=".6" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M31-4.4V-6.6H49" fill="none" stroke="#c8922e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="59" y="-4.4" width="5.5" height="8.8" rx="2.6" fill="url(#sgGold)"/>
+        </g></svg></div>
       </article>
     </div>
   <section class="wishes layer gutter" aria-labelledby="wishes-title">
@@ -2646,12 +2765,20 @@
     var dl = 'animation-delay:' + delay + 's';
     var FAR = '#4a2c17', FAR2 = '#3a2312', NEAR2 = '#6a4325', HOOF = '#1b110a', TUFT = '#efe2c8';
     function hoof(cx, cy) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="2" ry="1.6" fill="' + HOOF + '"/>'; }
-    return '<g transform="translate(' + x + ' ' + y + ')"><g class="gal" style="' + dl + '">' +
+    var dlFar = 'animation-delay:' + (delay - .07).toFixed(2) + 's', dlShin = 'animation-delay:' + (delay + .05).toFixed(2) + 's', dlShinFar = 'animation-delay:' + (delay - .02).toFixed(2) + 's';
+    /* three prints per hoof, one a second: the newest pops under the hoof, the older ones trail behind */
+    function prints(px, py, at) {
+      var h = '<g transform="translate(' + px + ' ' + py + ') rotate(-8)">';
+      for (var k = 0; k < 3; k++) h += '<g class="hp" style="animation-delay:' + (delay + at + k - 3).toFixed(2) + 's"><circle r="8.5" fill="url(#hoofGlow)"/>' +
+        '<path d="M-3 2.6C-4.2-.6-2.9-3.6-.8-3.9.4-1.6.2 1-.5 2.8ZM3 2.6C4.2-.6 2.9-3.6.8-3.9-.4-1.6-.2 1 .5 2.8Z" fill="#fff6d0"/></g>';
+      return h + '</g>';
+    }
+    return '<g transform="translate(' + x + ' ' + y + ')">' + prints(81, 57, .08) + prints(6, 58, .92) + '<g class="gal" style="' + dl + '">' +
       /* far legs, in shadow */
-      '<g class="leg far hind" style="' + dl + '">' + limb(33, 44, 23, 53, 6.5, 3.4, FAR) + limb(23, 53, 12, 58, 2.6, 2, FAR2) + hoof(10.8, 58.4) + '</g>' +
-      '<g class="leg far fore" style="' + dl + '">' + limb(58, 44, 66, 53, 6, 3.1, FAR) + limb(66, 53, 64.5, 62, 2.5, 2, FAR2) + hoof(64.4, 62.8) + '</g>' +
+      '<g class="leg far hind" style="' + dlFar + '">' + limb(33, 44, 23, 53, 6.5, 3.4, FAR) + '<g class="shin hs" style="' + dlShinFar + '">' + limb(23, 53, 12, 58, 2.6, 2, FAR2) + hoof(10.8, 58.4) + '</g></g>' +
+      '<g class="leg far fore" style="' + dlFar + '">' + limb(58, 44, 66, 53, 6, 3.1, FAR) + '<g class="shin fs" style="' + dlShinFar + '">' + limb(66, 53, 64.5, 62, 2.5, 2, FAR2) + hoof(64.4, 62.8) + '</g></g>' +
       /* tail */
-      '<path d="M25.5 34.5C21.5 31 17.6 31.2 16.4 33.6 19 36 22 37 25.6 37.4Z" fill="' + TUFT + '"/>' +
+      '<path class="dtail" style="' + dl + '" d="M25.5 34.5C21.5 31 17.6 31.2 16.4 33.6 19 36 22 37 25.6 37.4Z" fill="' + TUFT + '"/>' +
       /* body and neck in one piece */
       '<path fill="url(#dCoat)" d="M25 36C26 30 34 28.5 42 29 50 29.5 56 28.5 60 27 63 23 67 17 71 12.5L77 20C75 25 73.2 31 70.8 36.5 69.6 41 67.5 45 63 48 55 51.5 42 52.5 33 50.5 27 49 23.5 45 23.5 40.5 23.5 38.5 24 37 25 36Z"/>' +
       '<path fill="url(#dBelly)" d="M31 47.5C39 51 52 51.5 61.5 47.6 65.6 45.4 68 41.6 68.8 37.4 66.4 43 60.4 46.2 52 47.6 44 48.8 37 48.6 31 47.5Z"/>' +
@@ -2665,10 +2792,10 @@
       '<g class="bell" style="' + dl + '"><circle cx="66.6" cy="31.6" r="1.7" fill="url(#sgGold)"/><path d="M65.8 32.4H67.4" stroke="#7d5212" stroke-width=".5"/></g>' +
       '<g class="bell" style="animation-delay:' + (delay - .2) + 's"><circle cx="68.6" cy="36.4" r="1.7" fill="url(#sgGold)"/><path d="M67.8 37.2H69.4" stroke="#7d5212" stroke-width=".5"/></g>' +
       /* near legs */
-      '<g class="leg hind" style="' + dl + '">' + limb(29, 41, 16.5, 50, 9.5, 3.8, 'url(#dCoat)') + limb(16.5, 50, 5.5, 52, 2.9, 2.2, NEAR2) +
-        '<circle cx="7" cy="51.8" r="1.8" fill="' + TUFT + '"/>' + hoof(4.6, 52.3) + '</g>' +
-      '<g class="leg fore" style="' + dl + '">' + limb(61, 42, 72, 49.5, 7.5, 3.5, 'url(#dCoat)') + limb(72, 49.5, 74.6, 59, 2.8, 2.2, NEAR2) +
-        '<circle cx="74.4" cy="57.6" r="1.7" fill="' + TUFT + '"/>' + hoof(74.9, 60) + '</g>' +
+      '<g class="leg hind" style="' + dl + '">' + limb(29, 41, 16.5, 50, 9.5, 3.8, 'url(#dCoat)') + '<g class="shin hs" style="' + dlShin + '">' + limb(16.5, 50, 5.5, 52, 2.9, 2.2, NEAR2) +
+        '<circle cx="7" cy="51.8" r="1.8" fill="' + TUFT + '"/>' + hoof(4.6, 52.3) + '</g><circle cx="16.5" cy="50" r="1.9" fill="#7e5030"/></g>' +
+      '<g class="leg fore" style="' + dl + '">' + limb(61, 42, 72, 49.5, 7.5, 3.5, 'url(#dCoat)') + '<g class="shin fs" style="' + dlShin + '">' + limb(72, 49.5, 74.6, 59, 2.8, 2.2, NEAR2) +
+        '<circle cx="74.4" cy="57.6" r="1.7" fill="' + TUFT + '"/>' + hoof(74.9, 60) + '</g><circle cx="72" cy="49.5" r="1.75" fill="#7e5030"/></g>' +
       /* head with antlers, nodding with the gallop */
       '<g class="head" style="' + dl + '">' +
         '<path d="M74.6 9.6C73 5 70.4 2 66.8 0M72.2 4.4C69.6 4.6 67.6 6 66.6 8M70.6 1.6C70 -1.6 68 -3.6 65.4 -4.6" fill="none" stroke="#9c8058" stroke-width="1.6" stroke-linecap="round"/>' +
@@ -2756,10 +2883,15 @@
     var team = byId('team'), holder = tmp.firstChild;
     while (holder.firstChild) team.appendChild(holder.firstChild);
 
-    var dust = byId('dust');
-    for (i = 0; i < 3; i++) {
-      var dc = svg('circle', { cx: (-6 + rnd() * 16).toFixed(1), cy: (38 + rnd() * 34).toFixed(1), r: (1 + rnd() * 1.5).toFixed(1), fill: i % 3 ? '#f0c35a' : '#fff' });
-      dc.style.animationDelay = (-i * .73).toFixed(2) + 's';
+    /* stardust behind the sleigh: small grains and a few four-point stars, each on its own path and beat */
+    var dust = byId('dust'), dr = mulberry(7);
+    for (i = 0; i < 12; i++) {
+      var qx = -8 + dr() * 20, qy = 34 + dr() * 40, qs = 2 + dr() * 1.6, dc;
+      if (i % 4 === 0) dc = svg('path', { d: 'M' + f1(qx) + ' ' + f1(qy - qs) + 'L' + f1(qx + qs * .26) + ' ' + f1(qy - qs * .26) + ' ' + f1(qx + qs) + ' ' + f1(qy) + ' ' + f1(qx + qs * .26) + ' ' + f1(qy + qs * .26) + ' ' + f1(qx) + ' ' + f1(qy + qs) + ' ' + f1(qx - qs * .26) + ' ' + f1(qy + qs * .26) + ' ' + f1(qx - qs) + ' ' + f1(qy) + ' ' + f1(qx - qs * .26) + ' ' + f1(qy - qs * .26) + 'Z', fill: '#fff6d0' });
+      else dc = svg('circle', { cx: f1(qx), cy: f1(qy), r: (.8 + dr() * 1.3).toFixed(1), fill: i % 3 ? '#f0c35a' : '#fff' });
+      dc.style.animationDelay = (-dr() * 2.6).toFixed(2) + 's';
+      dc.style.animationDuration = (1.7 + dr() * 1.3).toFixed(2) + 's';
+      dc.style.setProperty('--dx', (-64 - dr() * 76).toFixed(0) + 'px'); dc.style.setProperty('--dy', (14 + dr() * 34).toFixed(0) + 'px');
       dust.appendChild(dc);
     }
 
@@ -4009,18 +4141,54 @@
     splashDone = true;
     if (location.hash !== '#start' && location.hash.indexOf('#kupon-') !== 0) location.hash = 'start';
     splash.onclick = null;
-    if (still || !splash.animate) { splash.hidden = true; html.classList.remove('booting'); flushPending(); return; }
-    var a = splash.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.07)' }], { duration: 640, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
-    setTimeout(function () { html.classList.remove('booting'); }, 160);
-    a.onfinish = function () { splash.hidden = true; a.cancel(); flushPending(); };
+    function done() { splash.hidden = true; splash.classList.remove('go'); splash.classList.add('rest'); flushPending(); }
+    if (still || !splash.animate) { html.classList.remove('booting'); done(); return; }
+    /* the way in: the words step back, the ball is served straight up, light blooms where it stood
+       and the whole night scene opens towards you. Only movement and fading, so it stays smooth on a phone */
+    var inner = splash.querySelector('.splash-inner'), ball = splash.querySelector('.splash-ball'), run = [];
+    var br = ball.getBoundingClientRect(), sr = splash.getBoundingClientRect();
+    var cx = br.left + br.width / 2 - sr.left + splash.scrollLeft, cy = br.top + br.height / 2 - sr.top + splash.scrollTop;
+    if (!br.width) { cx = sr.width / 2; cy = sr.height * .34 + splash.scrollTop; }
+    Array.prototype.forEach.call(inner.children, function (c) {
+      if (c.hidden || c.classList.contains('splash-stage')) return;
+      run.push(c.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(16px)' }], { duration: 230, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' }));
+    });
+    run.push(ball.querySelector('.sb-y').animate([
+      { transform: 'translateY(0) scale(1)', easing: 'ease-out' },
+      { transform: 'translateY(0) scale(1.18,.76)', offset: .2, easing: 'cubic-bezier(.5,0,.85,.45)' },
+      { transform: 'translateY(' + (-(cy + 110)).toFixed(0) + 'px) scale(.6)' }], { duration: 560, fill: 'forwards' }));
+    run.push(ball.querySelector('svg').animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(540deg)' }], { duration: 560, easing: 'ease-in', fill: 'forwards' }));
+    run.push(splash.querySelector('.splash-shadow').animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.3)' }], { duration: 420, delay: 110, easing: 'ease-in', fill: 'forwards' }));
+    var bloom = byId('sp-bloom');
+    bloom.style.transform = 'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px)';
+    run.push(bloom.animate([
+      { opacity: 0, transform: 'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px) scale(.25)' },
+      { opacity: .95, offset: .28 },
+      { opacity: 0, transform: 'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px) scale(8)' }], { duration: 760, delay: 110, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'both' }));
+    splash.style.transformOrigin = cx.toFixed(1) + 'px ' + cy.toFixed(1) + 'px';
+    var a = splash.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(1.5)' }], { duration: 600, delay: 250, easing: 'cubic-bezier(.55,0,.3,1)', fill: 'forwards' });
+    setTimeout(function () { html.classList.remove('booting'); }, 330);
+    var bar = byId('tabbar');
+    if (bar && bar.animate) bar.animate([{ transform: 'translateY(120%)' }, { transform: 'none' }], { duration: 760, delay: 520, easing: 'cubic-bezier(.3,1.25,.5,1)', fill: 'backwards' });
+    a.onfinish = function () { done(); a.cancel(); run.forEach(function (x) { x.cancel(); }); splash.style.transformOrigin = ''; };
   }
-  function appear(el) {
-    el.hidden = false;
-    if (!still) el.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: OUT });
+  /* when the form (or the hello line) arrives the title has to move up: it glides there instead of jumping */
+  function appearAll(els) {
+    var stage = splash.querySelector('.splash-stage'), y0 = stage.getBoundingClientRect().top;
+    els.forEach(function (el) { el.hidden = false; });
+    if (still) return;
+    els.forEach(function (el, k) { el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 560, delay: 60 + k * 70, easing: OUT, fill: 'backwards' }); });
+    var d = y0 - stage.getBoundingClientRect().top;
+    if (Math.abs(d) > 2) [stage, splash.querySelector('.eyebrow'), splash.querySelector('h1')].forEach(function (m) {
+      if (m) m.animate([{ transform: 'translateY(' + d.toFixed(1) + 'px)' }, { transform: 'none' }], { duration: 680, easing: OUT });
+    });
   }
+  function appear(el) { appearAll([el]); }
   function startSplash(formOnly) {
     var form = byId('splash-form'), hello = byId('splash-hello'), skip = byId('splash-skip');
     splashDone = false; splash.hidden = false; form.hidden = true; hello.hidden = true; skip.hidden = true;
+    if (!splash.classList.contains('go')) splash.classList.add('rest');
+    var after = still ? 0 : spLand + 1020;
     if (formOnly) {
       if (!still) splash.animate([{ opacity: 0, transform: 'scale(1.05)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)' });
       byId('visitor-name').value = visitorName();
@@ -4032,40 +4200,98 @@
     }
     if (visitor && !visitor.sym) {
       byId('visitor-name').value = visitorName();
-      setTimeout(function () { appear(form); }, still ? 0 : 2350);
+      setTimeout(function () { appear(form); }, after);
     } else if (visitor) {
       hello.innerHTML = 'Cześć, <b></b>!';
       hello.querySelector('b').textContent = visitor.name;
-      setTimeout(function () { appear(hello); appear(skip); }, still ? 0 : 2350);
+      setTimeout(function () { appearAll([hello, skip]); }, after);
     } else {
-      setTimeout(function () { appear(form); }, still ? 0 : 2350);
+      setTimeout(function () { appear(form); }, after);
     }
   }
-  /* the splash scene: a copy of the hero's sleigh team flies across the night sky and drops the ball */
+  /* the splash scene: a copy of the hero's sleigh team flies across the night sky; halfway over, Santa serves
+     a ball down to the middle of the screen, where it lands, bounces twice and settles before the title rises */
+  var spLand = 1730;
   function splashScene() {
     var host = byId('sp-team'), team = byId('team');
     if (!host || !team || host.firstChild) return;
-    var cl = team.cloneNode(true);
+    var cl = team.cloneNode(true), armC = cl.querySelector('#arm');
     cl.removeAttribute('id');
     Array.prototype.forEach.call(cl.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
     host.appendChild(cl);
-    var stars = byId('sp-stars'), r = mulberry(99), tw = [0, 1].map(function (k) { var g = svg('g', { 'class': 'tw' }); g.style.animationDelay = (-k * 1.3) + 's'; stars.appendChild(g); return g; });
-    for (var k = 0; k < 46; k++) tw[k % 2].appendChild(svg('circle', { cx: (r() * 390).toFixed(1), cy: (r() * 230).toFixed(1), r: (.35 + r() * .95).toFixed(2), opacity: (.35 + r() * .6).toFixed(2) }));
-    if (still || !host.animate) return;
-    var P0 = [-250, 255], P1 = [185, 70], P2 = [640, 14], N = 18, START = 150, DUR = 2300, frames = [], trail = byId('sp-trail');
-    function at(t) { var u = 1 - t; return [u * u * P0[0] + 2 * u * t * P1[0] + t * t * P2[0], u * u * P0[1] + 2 * u * t * P1[1] + t * t * P2[1]]; }
+    var r = mulberry(99), sa = byId('sp-stars-a'), sb = byId('sp-stars-b'), k;
+    for (k = 0; k < 46; k++) {
+      var st = svg('circle', { 'class': 'st', cx: (r() * 390).toFixed(1), cy: (r() * 230).toFixed(1), r: (.35 + r() * .95).toFixed(2), opacity: (.35 + r() * .6).toFixed(2) });
+      if (k % 2) sb.appendChild(st); else sa.insertBefore(st, sa.firstChild);
+    }
+    var box = byId('sp-skybox'), fly = byId('sp-fly'), W = box.clientWidth, Hh = box.clientHeight;
+    if (still || !fly.animate || !W || !Hh) { splash.classList.add('rest'); return; }
+    /* the same picture as a 390 x 300 drawing that covers the box (cropped at the sides on a phone) */
+    var sc = Math.max(W / 390, Hh / 300), ox = (W - 390 * sc) / 2, oy = (Hh - 300 * sc) / 2, u = .5 * sc;
+    function scr(p) { return [ox + p[0] * sc, oy + p[1] * sc]; }
+    var mc = scr([292, 58]);
+    [['sp-halo', 190], ['sp-halo2', 300]].forEach(function (h) {
+      var el = byId(h[0]), d = h[1] * sc;
+      el.style.width = el.style.height = d.toFixed(1) + 'px'; el.style.left = (mc[0] - d / 2).toFixed(1) + 'px'; el.style.top = (mc[1] - d / 2).toFixed(1) + 'px';
+    });
+    var tsv = byId('sp-teamsvg');
+    tsv.style.width = (460 * u).toFixed(1) + 'px'; tsv.style.height = (120 * u).toFixed(1) + 'px';
+    fly.style.left = (-30 * u).toFixed(1) + 'px'; fly.style.top = (-24 * u).toFixed(1) + 'px';
+    fly.style.transformOrigin = (30 * u).toFixed(1) + 'px ' + (24 * u).toFixed(1) + 'px';
+    var P0 = [-250, 255], P1 = [185, 70], P2 = [640, 14], N = 24, START = 150, DUR = 2500, frames = [], trail = byId('sp-trail');
+    function at(t) { var v = 1 - t; return [v * v * P0[0] + 2 * v * t * P1[0] + t * t * P2[0], v * v * P0[1] + 2 * v * t * P1[1] + t * t * P2[1]]; }
     function slope(t) { return Math.atan2(2 * (1 - t) * (P1[1] - P0[1]) + 2 * t * (P2[1] - P1[1]), 2 * (1 - t) * (P1[0] - P0[0]) + 2 * t * (P2[0] - P1[0])) * 180 / Math.PI * .75; }
-    for (k = 0; k <= N; k++) { var q = at(k / N); frames.push({ transform: 'translate(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px) rotate(' + slope(k / N).toFixed(1) + 'deg) scale(.5)' }); }
-    host.animate(frames, { duration: DUR, delay: START, easing: 'linear', fill: 'both' });
+    /* where Santa's racket is on the screen at flight position t */
+    function racketAt(t) { var q = scr(at(t)), a = slope(t) * Math.PI / 180, lx = 102 * u, ly = 2 * u; return [q[0] + lx * Math.cos(a) - ly * Math.sin(a), q[1] + lx * Math.sin(a) + ly * Math.cos(a)]; }
+    for (k = 0; k <= N; k++) { var q = scr(at(k / N)); frames.push({ transform: 'translate(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px) rotate(' + slope(k / N).toFixed(1) + 'deg)' }); }
+    fly.animate(frames, { duration: DUR, delay: START, easing: 'linear', fill: 'both' });
     for (k = 2; k < 30; k++) {
-      var t = k / 30, pt = at(t), a = slope(t) * Math.PI / 180, ox = 4, oy = 30;
-      var x = pt[0] + ox * Math.cos(a) - oy * Math.sin(a), y = pt[1] + ox * Math.sin(a) + oy * Math.cos(a);
-      var c = svg('circle', { cx: (x + (r() - .5) * 8).toFixed(1), cy: (y + (r() - .5) * 8).toFixed(1), r: (.8 + r() * 1.6).toFixed(2), fill: k % 3 ? '#f0c35a' : '#ffffff' });
-      c.style.transformBox = 'fill-box'; c.style.transformOrigin = 'center';
+      var t = k / 30, pt = at(t), an = slope(t) * Math.PI / 180;
+      var tp = scr([pt[0] + 4 * Math.cos(an) - 30 * Math.sin(an) + (r() - .5) * 8, pt[1] + 4 * Math.sin(an) + 30 * Math.cos(an) + (r() - .5) * 8]);
+      var c = document.createElement('i'), sz = (1.6 + r() * 3.2) * sc;
+      c.className = 'sp-dot' + (k % 3 ? '' : ' w'); c.style.width = c.style.height = sz.toFixed(1) + 'px'; c.style.margin = (-sz / 2).toFixed(1) + 'px 0 0 ' + (-sz / 2).toFixed(1) + 'px';
       trail.appendChild(c);
-      c.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1.3)', offset: .15 }, { opacity: 0, transform: 'translate(-6px, 14px) scale(.2)' }],
+      var tr = 'translate(' + tp[0].toFixed(1) + 'px,' + tp[1].toFixed(1) + 'px)';
+      c.animate([{ opacity: 0, transform: tr + ' scale(.4)' }, { opacity: 1, transform: tr + ' scale(1.3)', offset: .15 }, { opacity: 0, transform: 'translate(' + (tp[0] - 8).toFixed(1) + 'px,' + (tp[1] + 18).toFixed(1) + 'px) scale(.2)' }],
         { duration: 1300 + r() * 500, delay: START + t * DUR, easing: 'ease-out', fill: 'both' });
     }
+    /* the serve: when the racket is a third of the way across, the ball leaves it and falls to its place */
+    var ball = splash.querySelector('.splash-ball'), by = ball.querySelector('.sb-y'), pic = by.querySelector('svg'), shadow = splash.querySelector('.splash-shadow');
+    var ts = .3; while (ts < .7 && racketAt(ts)[0] < W * .3) ts += .005;
+    var S = racketAt(ts), br = ball.getBoundingClientRect(), bx = box.getBoundingClientRect();
+    var dx = S[0] - (br.left + br.width / 2 - bx.left), dy = S[1] - (br.top + br.height / 2 - bx.top);
+    var T0 = START + ts * DUR, FL = clamp(Math.sqrt(Math.abs(dy)) * 40, 480, 680), ALL = FL + 980;
+    function o(ms) { return +(ms / ALL).toFixed(4); }
+    var UP = 'cubic-bezier(.2,.65,.45,1)', DOWN = 'cubic-bezier(.55,0,.8,.35)';
+    ball.animate([{ transform: 'translateX(' + dx.toFixed(1) + 'px)' }, { transform: 'translateX(0)' }], { duration: FL, delay: T0, easing: 'linear', fill: 'both' });
+    ball.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 90, delay: T0, fill: 'both' });
+    by.animate([
+      { offset: 0, transform: 'translateY(' + dy.toFixed(1) + 'px) scale(.15)', easing: 'cubic-bezier(.45,0,.9,.6)' },
+      { offset: o(FL), transform: 'translateY(0) scale(1)', easing: 'ease-out' },
+      { offset: o(FL + 70), transform: 'translateY(0) scale(1.15,.78)', easing: UP },
+      { offset: o(FL + 300), transform: 'translateY(-78px) scale(.97,1.04)', easing: DOWN },
+      { offset: o(FL + 530), transform: 'translateY(0) scale(1.01,.98)', easing: 'ease-out' },
+      { offset: o(FL + 590), transform: 'translateY(0) scale(1.08,.89)', easing: UP },
+      { offset: o(FL + 730), transform: 'translateY(-25px) scale(.99,1.02)', easing: DOWN },
+      { offset: o(FL + 870), transform: 'translateY(0) scale(1.04,.95)', easing: 'ease-out' },
+      { offset: 1, transform: 'translateY(0) scale(1)' }], { duration: ALL, delay: T0, fill: 'both' });
+    pic.animate([{ transform: 'rotate(-1080deg)' }, { transform: 'rotate(0deg)' }], { duration: ALL, delay: T0, easing: 'cubic-bezier(.2,.55,.3,1)', fill: 'both' });
+    shadow.animate([
+      { offset: 0, opacity: 0, transform: 'scale(.2)', easing: 'cubic-bezier(.6,0,.9,.6)' },
+      { offset: o(FL), opacity: 1, transform: 'scale(1)', easing: UP },
+      { offset: o(FL + 300), opacity: .45, transform: 'scale(.55)', easing: DOWN },
+      { offset: o(FL + 530), opacity: 1, transform: 'scale(1)', easing: UP },
+      { offset: o(FL + 730), opacity: .75, transform: 'scale(.82)', easing: DOWN },
+      { offset: o(FL + 870), opacity: 1, transform: 'scale(1)' },
+      { offset: 1, opacity: 1, transform: 'scale(1)' }], { duration: ALL, delay: T0, fill: 'both' });
+    if (armC && armC.animate) {
+      armC.style.transformBox = 'view-box'; armC.style.transformOrigin = '71px 29px';
+      armC.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-46deg)', offset: .36 }, { transform: 'rotate(42deg)', offset: .6 }, { transform: 'rotate(0deg)' }],
+        { duration: 720, delay: Math.max(0, T0 - 430), easing: 'ease-in-out' });
+    }
+    spLand = T0 + FL;
+    splash.style.setProperty('--land', (spLand / 1000).toFixed(2) + 's');
+    splash.classList.add('go');
   }
   /* the splash follows the visible part of the screen, so the keyboard never cuts the form off */
   (function () {
@@ -4232,50 +4458,149 @@
   }
   window.addEventListener('resize', moveInd);
   window.addEventListener('load', moveInd);
-  /* the letter unfolds, and Hubert signs it when the signature comes into view */
-  var letterEl = byId('letter'), sigIO = null;
-  var sigRaf = 0;
-  /* the pen moves at one steady speed along all strokes, easing in and out, with a glowing nib at its tip */
+  /* the letter unfolds and writes itself: a fountain pen runs along the lines while every word is drawn in
+     from left to right in fresh blue ink that dries darker. The pen then waits by the last line and,
+     once the signature is on screen, signs it stroke by stroke, lifting between the strokes */
+  var letterEl = byId('letter'), penEl = byId('lt-pen'), sigIO = null, sigRaf = 0, ltRaf = 0;
+  var ltWords = null, ltWritten = false, ltBusy = false, ltFast = false, sigWanted = false, ltTimer = 0, ltFollow = false;
+  /* the page follows the pen down the letter until the reader touches the screen: from then on it is theirs */
+  ['touchstart', 'wheel', 'mousedown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { ltFollow = false; }, { passive: true }); });
+  var pen = { x: 0, y: 0, l: 1 };
+  function penTo(x, y, lift, dt, snap) {
+    var k = snap ? 1 : Math.min(1, dt * 26);
+    pen.x += (x - pen.x) * k; pen.y += (y - pen.y) * k; pen.l += (lift - pen.l) * Math.min(1, dt * 16);
+    penEl.style.transform = 'translate(' + pen.x.toFixed(1) + 'px,' + (pen.y - pen.l * 6).toFixed(1) + 'px) rotate(' + (pen.l * -8).toFixed(1) + 'deg)';
+  }
+  function prepLetter() {
+    if (ltWords) return;
+    ltWords = [];
+    Array.prototype.forEach.call(letterEl.querySelectorAll(':scope > p'), function (pp, pi) {
+      var frag = document.createDocumentFragment();
+      pp.textContent.split(/(\s+)/).forEach(function (w) {
+        if (!w) return;
+        if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(' ')); return; }
+        var sp = document.createElement('span'); sp.className = 'wd'; sp.textContent = w; frag.appendChild(sp);
+        ltWords.push({ el: sp, p: pp, pi: pi, n: w.length });
+      });
+      pp.textContent = ''; pp.appendChild(frag);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#sig-svg .sig-p'), function (pth) {
+      var w = pth.cloneNode(false); w.setAttribute('class', 'sig-w'); pth.parentNode.insertBefore(w, pth.nextSibling);
+    });
+  }
+  function endWriting(now) {
+    cancelAnimationFrame(ltRaf); clearTimeout(ltTimer);
+    ltBusy = false; ltWritten = true;
+    var last = ltWords[ltWords.length - 1];
+    if (last) penTo(last.p.offsetLeft + last.el.offsetLeft + last.el.offsetWidth + 10, last.p.offsetTop + last.el.offsetTop + last.el.offsetHeight * .72, 1, 1, true);
+    penEl.classList.add('idle');
+    if (now) letterEl.classList.remove('writing');
+    else ltTimer = setTimeout(function () { letterEl.classList.remove('writing'); }, 1700);
+    if (ltFollow && !now) {
+      var sg = letterEl.querySelector('.sig'), want = letterEl.getBoundingClientRect().top + window.scrollY + sg.offsetTop + sg.offsetHeight / 2 - window.innerHeight * .46;
+      if (want > window.scrollY) window.scrollTo({ top: want, behavior: 'smooth' });
+    }
+    if (sigWanted) setTimeout(signLetter, 320);
+  }
+  function writeLetter() {
+    var CH = 7, t = 0, i = 0, vt = 0, last = 0, prevP = -1, topY = letterEl.getBoundingClientRect().top + window.scrollY;
+    ltWords.forEach(function (w) {
+      w.el.classList.remove('on');
+      if (w.pi !== prevP) { t += prevP < 0 ? 0 : 150; prevP = w.pi; }
+      w.t0 = t; w.d = Math.max(34, w.n * CH); t += w.d + 10 + (/[.!?:]$/.test(w.el.textContent) ? 80 : 0);
+      w.el.style.setProperty('--wl', w.d + 'ms');
+      w.x = w.p.offsetLeft + w.el.offsetLeft; w.y = w.p.offsetTop + w.el.offsetTop + w.el.offsetHeight * .72; w.w = w.el.offsetWidth;
+    });
+    ltBusy = true; ltFast = false;
+    letterEl.style.setProperty('--wf', '1');
+    penEl.classList.remove('idle'); penEl.style.opacity = '1';
+    pen.x = ltWords[0].x - 26; pen.y = ltWords[0].y - 30; pen.l = 1;
+    function step(now) {
+      var dt = Math.min(.25, (now - (last || now)) / 1000); last = now;
+      /* the reader scrolled ahead to the signature on their own: the pen hurries to catch up */
+      if (sigWanted && !ltFollow && !ltFast) { ltFast = true; letterEl.style.setProperty('--wf', '.2'); }
+      vt += dt * 1000 * (ltFast ? 7 : 1);
+      while (i < ltWords.length && vt >= ltWords[i].t0) { ltWords[i].el.classList.add('on'); i++; }
+      var w = ltWords[Math.max(0, i - 1)], pr = clamp((vt - w.t0) / w.d, 0, 1), far = Math.abs(w.y - pen.y) > 12;
+      penTo(w.x + w.w * pr, w.y + Math.sin(vt / 26) * 1.3, far ? 1 : .12, dt, false);
+      if (ltFollow) {
+        var over = topY + pen.y - window.scrollY - window.innerHeight * .56;
+        if (over > 0) window.scrollTo({ top: window.scrollY + Math.min(36, over * Math.min(1, dt * 7)), behavior: 'instant' });
+      }
+      if (i >= ltWords.length && vt >= w.t0 + w.d) { endWriting(false); return; }
+      ltRaf = requestAnimationFrame(step);
+    }
+    ltRaf = requestAnimationFrame(step);
+  }
+  letterEl.addEventListener('click', function () { if (ltBusy) { ltWords.forEach(function (w) { w.el.classList.add('on'); }); endWriting(true); } });
   function signLetter() {
     if (letterEl.classList.contains('sign')) return;
-    var svgS = byId('sig-svg'), ps = Array.prototype.slice.call(svgS.querySelectorAll('.sig-p')), tip = byId('sig-tip');
+    var svgS = byId('sig-svg'), ps = Array.prototype.slice.call(svgS.querySelectorAll('.sig-p')), ws = Array.prototype.slice.call(svgS.querySelectorAll('.sig-w'));
     var lens = ps.map(function (pth) { try { return pth.getTotalLength() || 1; } catch (e) { return 60; } });
-    var GAP = 22, total = lens.reduce(function (a, b) { return a + b; }, 0) + GAP * Math.max(0, ps.length - 1);
-    var D = Math.round(clamp(total * 2.6, 1700, 2600));
-    letterEl.style.setProperty('--sig-end', (D / 1000 + .05).toFixed(2) + 's');
+    /* each stroke takes as long as it is long; between two strokes the pen lifts and travels */
+    var GAP = 130, at0 = [], durs = [], D = 0;
+    lens.forEach(function (l, k) { durs.push(clamp(l * 1.65, 230, 1050)); at0.push(D); D += durs[k] + (k < lens.length - 1 ? GAP : 0); });
+    D = Math.round(D);
+    letterEl.style.setProperty('--sig-end', (D / 1000 + .12).toFixed(2) + 's');
     letterEl.classList.add('sign');
     if (still || !window.requestAnimationFrame) { letterEl.classList.add('signed'); return; }
-    var t0 = performance.now();
-    function ease(x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+    var box = letterEl.querySelector('.sig'), kx = box.clientWidth / 333, bx = box.offsetLeft, by = box.offsetTop;
+    function toPen(pt) { return [bx + (pt.x + 4) * kx, by + (pt.y + 4) * kx]; }
+    function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+    var starts = ps.map(function (pth) { try { return toPen(pth.getPointAtLength(0)); } catch (e) { return [bx, by]; } });
+    var t0 = 0, last = 0;
+    penEl.classList.remove('idle'); penEl.style.opacity = '1';
     function step(now) {
-      var pr = Math.min(1, (now - t0) / D), at = ease(pr) * total, acc = 0, tp = null;
+      if (!t0) t0 = now + 260;   /* a moment for the pen to reach the first stroke */
+      var dt = Math.min(.25, (now - (last || now)) / 1000), el = now - t0, drawn = false, next = starts[0]; last = now;
       for (var i = 0; i < ps.length; i++) {
-        var f = clamp((at - acc) / lens[i], 0, 1);
-        ps[i].style.strokeDashoffset = (1 - f).toFixed(4);
-        if (f > 0 && f < 1 && !tp) { try { tp = ps[i].getPointAtLength(f * lens[i]); } catch (e) {} }
-        acc += lens[i] + GAP;
+        var f = clamp((el - at0[i]) / durs[i], 0, 1), e = ease(f), seg = Math.min(.2, 46 / lens[i]);
+        ps[i].style.strokeDashoffset = (1 - e).toFixed(4);
+        if (ws[i]) {
+          if (f > 0 && f < 1) { ws[i].style.strokeDasharray = seg.toFixed(4) + ' 2'; ws[i].style.strokeDashoffset = (seg - e).toFixed(4); ws[i].style.opacity = '1'; }
+          else ws[i].style.opacity = '0';
+        }
+        if (f > 0 && f < 1) { try { var q = toPen(ps[i].getPointAtLength(e * lens[i])); penTo(q[0], q[1], 0, dt, true); drawn = true; } catch (err) {} }
+        if (f <= 0 && next === starts[0] && i > 0 && el > at0[i - 1]) next = starts[i];
       }
-      if (tip) {
-        if (tp && pr < 1) { tip.setAttribute('cx', tp.x.toFixed(1)); tip.setAttribute('cy', tp.y.toFixed(1)); tip.style.opacity = '1'; }
-        else tip.style.opacity = '0';
-      }
-      if (pr < 1) sigRaf = requestAnimationFrame(step); else letterEl.classList.add('signed');
+      if (!drawn && el < D) penTo(next[0], next[1], 1, dt, false);
+      if (el < D) { sigRaf = requestAnimationFrame(step); return; }
+      letterEl.classList.add('signed');
+      ws.forEach(function (w) { w.style.opacity = '0'; });
+      /* done: the pen lifts off the paper and leaves */
+      var from = penEl.style.transform;
+      if (penEl.animate) penEl.animate([{ transform: from, opacity: 1 }, { transform: 'translate(' + (pen.x + 46).toFixed(1) + 'px,' + (pen.y - 58).toFixed(1) + 'px) rotate(-24deg)', opacity: 0 }], { duration: 620, easing: 'cubic-bezier(.4,0,.2,1)' });
+      penEl.style.opacity = '0';
     }
     sigRaf = requestAnimationFrame(step);
   }
   function playLetter() {
-    letterEl.classList.remove('unfold', 'sign', 'signed');
-    cancelAnimationFrame(sigRaf);
+    letterEl.classList.remove('unfold', 'sign', 'signed', 'writing');
+    cancelAnimationFrame(sigRaf); cancelAnimationFrame(ltRaf); clearTimeout(ltTimer);
+    ltBusy = false; sigWanted = false;
     Array.prototype.forEach.call(document.querySelectorAll('#sig-svg .sig-p'), function (pth) { pth.style.strokeDashoffset = ''; });
-    if (byId('sig-tip')) byId('sig-tip').style.opacity = '0';
+    Array.prototype.forEach.call(document.querySelectorAll('#sig-svg .sig-w'), function (pth) { pth.style.opacity = '0'; });
+    penEl.style.opacity = '0'; penEl.classList.remove('idle');
     if (still) { letterEl.classList.add('sign', 'signed'); return; }
+    prepLetter();
     void letterEl.offsetWidth;
     letterEl.classList.add('unfold');
+    if (!ltWritten && ltWords.length) {
+      /* first visit: the words stay hidden until the pen reaches them */
+      letterEl.classList.add('writing');
+      ltWords.forEach(function (w) { w.el.classList.remove('on'); });
+      ltTimer = setTimeout(writeLetter, 520);
+      ltBusy = true; ltFollow = true;
+    }
     if (sigIO) sigIO.disconnect();
+    function wantSig() {
+      sigWanted = true;
+      if (!ltBusy) setTimeout(signLetter, 500);   /* still writing: the pen signs as soon as it gets there */
+    }
     if ('IntersectionObserver' in window) {
-      sigIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { setTimeout(signLetter, 500); sigIO.disconnect(); } }); }, { threshold: .7 });
+      sigIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { wantSig(); sigIO.disconnect(); } }); }, { threshold: .7 });
       sigIO.observe(letterEl.querySelector('.sig'));
-    } else setTimeout(signLetter, 1200);
+    } else setTimeout(wantSig, 1200);
   }
   /* the trophy in the middle of the tab bar: the way into the tournament (the safe) */
 /* Sejf Mikołaja — createSafe(opts) builds its own DOM (#safe) on first open. */
