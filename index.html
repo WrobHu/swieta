@@ -4480,7 +4480,7 @@
      from left to right in fresh blue ink that dries darker. The pen then waits by the last line and,
      once the signature is on screen, signs it stroke by stroke, lifting between the strokes */
   var letterEl = byId('letter'), penEl = byId('lt-pen'), sigIO = null, sigRaf = 0, ltRaf = 0;
-  var ltWords = null, ltWritten = false, ltBusy = false, ltFast = false, sigWanted = false, ltTimer = 0, ltFollow = false;
+  var ltWords = null, ltWritten = false, ltBusy = false, sigWanted = false, ltTimer = 0, ltFollow = false;
   /* the page follows the pen down the letter until the reader touches the screen: from then on it is theirs */
   ['touchstart', 'wheel', 'mousedown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { ltFollow = false; }, { passive: true }); });
   var pen = { x: 0, y: 0, l: 1 };
@@ -4506,7 +4506,7 @@
       var w = pth.cloneNode(false); w.setAttribute('class', 'sig-w'); pth.parentNode.insertBefore(w, pth.nextSibling);
     });
   }
-  function endWriting(now) {
+  function endWriting(now, signIn) {
     cancelAnimationFrame(ltRaf); clearTimeout(ltTimer);
     ltBusy = false; ltWritten = true;
     var last = ltWords[ltWords.length - 1];
@@ -4518,26 +4518,35 @@
       var sg = letterEl.querySelector('.sig'), want = letterEl.getBoundingClientRect().top + window.scrollY + sg.offsetTop + sg.offsetHeight / 2 - window.innerHeight * .46;
       if (want > window.scrollY) window.scrollTo({ top: want, behavior: 'smooth' });
     }
-    if (sigWanted) setTimeout(signLetter, 320);
+    if (sigWanted) setTimeout(signLetter, signIn || 320);
   }
   function writeLetter() {
-    var CH = 7, t = 0, i = 0, vt = 0, last = 0, prevP = -1, topY = letterEl.getBoundingClientRect().top + window.scrollY;
+    var CH = 20, t = 0, i = 0, vt = 0, last = 0, prevP = -1, topY = letterEl.getBoundingClientRect().top + window.scrollY;
     ltWords.forEach(function (w) {
       w.el.classList.remove('on');
-      if (w.pi !== prevP) { t += prevP < 0 ? 0 : 150; prevP = w.pi; }
-      w.t0 = t; w.d = Math.max(34, w.n * CH); t += w.d + 10 + (/[.!?:]$/.test(w.el.textContent) ? 80 : 0);
+      if (w.pi !== prevP) { t += prevP < 0 ? 0 : 380; prevP = w.pi; }
+      w.el.style.animation = '';
+      w.t0 = t; w.d = Math.max(60, w.n * CH); t += w.d + 30 + (/[.!?:]$/.test(w.el.textContent) ? 220 : /,$/.test(w.el.textContent) ? 90 : 0);
       w.el.style.setProperty('--wl', w.d + 'ms');
       w.x = w.p.offsetLeft + w.el.offsetLeft; w.y = w.p.offsetTop + w.el.offsetTop + w.el.offsetHeight * .72; w.w = w.el.offsetWidth;
     });
-    ltBusy = true; ltFast = false;
-    letterEl.style.setProperty('--wf', '1');
+    ltBusy = true;
     penEl.classList.remove('idle'); penEl.style.opacity = '1';
     pen.x = ltWords[0].x - 26; pen.y = ltWords[0].y - 30; pen.l = 1;
     function step(now) {
       var dt = Math.min(.25, (now - (last || now)) / 1000); last = now;
-      /* the reader scrolled ahead to the signature on their own: the pen hurries to catch up */
-      if (sigWanted && !ltFollow && !ltFast) { ltFast = true; letterEl.style.setProperty('--wf', '.2'); }
-      vt += dt * 1000 * (ltFast ? 7 : 1);
+      /* the reader scrolled on to the signature before the pen got there: the pace never changes,
+         the rest of the text just fades in softly and the pen goes to sign */
+      if (sigWanted && !ltFollow && i < ltWords.length) {
+        for (var k = i; k < ltWords.length; k++) {
+          var el = ltWords[k].el;
+          el.style.animation = 'none'; el.classList.add('on');
+          if (el.animate) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: Math.min(600, (k - i) * 9), easing: 'ease-out', fill: 'backwards' });
+        }
+        endWriting(false, 900);
+        return;
+      }
+      vt += dt * 1000;
       while (i < ltWords.length && vt >= ltWords[i].t0) { ltWords[i].el.classList.add('on'); i++; }
       var w = ltWords[Math.max(0, i - 1)], pr = clamp((vt - w.t0) / w.d, 0, 1), far = Math.abs(w.y - pen.y) > 12;
       penTo(w.x + w.w * pr, w.y + Math.sin(vt / 26) * 1.3, far ? 1 : .12, dt, false);
