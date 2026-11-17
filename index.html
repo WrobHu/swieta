@@ -312,7 +312,9 @@
   .letter .lt-hi { font-weight: 600; font-size: 27px; }
   .letter .lt-bye { margin-top: 2px; }
   .lt-seal { position: absolute; right: -4px; top: -16px; width: 70px; height: 70px; transform: rotate(14deg); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4)); }
-  .sig { position: relative; width: min(100%, 290px); margin: 0 0 0 -6px; }
+  .sig { position: relative; width: min(76%, 232px); margin: 6px -4px 0 auto; }
+  .sig-cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+  .letter.signed.inked .sig-p { stroke-dashoffset: 1; }
   .sig-svg { display: block; width: 100%; height: auto; overflow: visible; }
   .sig-p { fill: none; stroke: #1f3c73; stroke-width: 2.6px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .letter.signed .sig-p { stroke-dashoffset: 0; }
@@ -329,9 +331,10 @@
   /* a word under the pen is uncovered exactly as far as the nib has got; its ink is fresh blue and dries dark afterwards */
   .letter.writing .wd.on { visibility: visible; color: #2f5fd6; }
   .letter.writing .wd.dry { color: inherit; transition: color 1.6s ease-out; }
-  .lt-note { display: flex; align-items: center; gap: 8px; min-height: 20px; font-size: 13px; line-height: 1.4; color: var(--mist); opacity: 0; transition: opacity .5s; }
+  .lt-note { align-self: flex-start; display: flex; align-items: center; gap: 8px; min-height: 30px; margin: -2px 0 -6px; padding: 0; border: 0; background: none; cursor: pointer;
+    font: 600 13px/1.3 var(--body); color: var(--gold); text-decoration: underline; text-underline-offset: 3px; opacity: 0; pointer-events: none; transition: opacity .5s; -webkit-tap-highlight-color: transparent; }
   .lt-note::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-  .lt-note.on { opacity: 1; }
+  .lt-note.on { opacity: 1; pointer-events: auto; }
   .sig-t { font: 400 98px/1 "Mrs Saint Delafield", "Segoe Script", cursive; fill: #1f3c73; fill-opacity: 0; stroke: #1f3c73; stroke-width: 1.1; stroke-dasharray: 900; stroke-dashoffset: 900; }
   .sig-fl { fill: none; stroke: #1f3c73; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .sig-ball { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; }
@@ -2450,7 +2453,7 @@
       <p class="eyebrow">List</p>
       <h1>List do <em>Mikołaja</em></h1>
       <p class="vlead">Kilka słów od Huberta, a pod spodem prezenty do rozpakowania.</p>
-      <p class="lt-note" id="lt-note" aria-hidden="true">Stuknij w list, żeby zobaczyć całość od razu.</p>
+      <button type="button" class="lt-note" id="lt-note" tabindex="-1">Pokaż cały list od razu</button>
     </header>
     <div class="layer gutter">
       <article class="letter" id="letter" aria-label="List Huberta do Mikołaja">
@@ -4484,7 +4487,7 @@
      from left to right in fresh blue ink that dries darker. The pen then waits by the last line and,
      once the signature is on screen, signs it stroke by stroke, lifting between the strokes */
   var letterEl = byId('letter'), penEl = byId('lt-pen'), sigIO = null, sigRaf = 0, ltRaf = 0;
-  var ltWords = null, ltWritten = false, ltBusy = false, sigWanted = false, ltTimer = 0, ltFollow = false;
+  var ltWords = null, ltWritten = false, ltBusy = false, sigSeen = false, sigTimer = 0, ltTimer = 0, ltFollow = false;
   /* the page follows the pen down the letter until the reader touches the screen: from then on it is theirs */
   ['touchstart', 'wheel', 'mousedown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { ltFollow = false; }, { passive: true }); });
   var pen = { x: 0, y: 0, l: 1 };
@@ -4511,7 +4514,7 @@
     });
   }
   function wordDone(w) { w.el.classList.add('on', 'dry'); w.el.style.clipPath = ''; }
-  function endWriting(now, signIn) {
+  function endWriting(now) {
     cancelAnimationFrame(ltRaf); clearTimeout(ltTimer);
     ltBusy = false; ltWritten = true;
     byId('lt-note').classList.remove('on');
@@ -4524,7 +4527,7 @@
       var sg = letterEl.querySelector('.sig'), want = letterEl.getBoundingClientRect().top + window.scrollY + sg.offsetTop + sg.offsetHeight / 2 - window.innerHeight * .46;
       if (want > window.scrollY) window.scrollTo({ top: want, behavior: 'smooth' });
     }
-    if (sigWanted) setTimeout(signLetter, signIn || 420);
+    trySign();
   }
   /* One continuous movement. The whole letter is laid out as a path for the nib: along a word, across the gap
      to the next one, a breath after a comma or a full stop, a lifted swing back to the start of the next line.
@@ -4532,18 +4535,15 @@
      so the ink and the pen can never drift apart. While writing, the nib also traces small ups and downs for each
      letter, tied to how far it has travelled, not to the clock */
   function writeLetter() {
-    var V = 185, segs = [], T = 0, prev = null, topY = letterEl.getBoundingClientRect().top + window.scrollY;
+    var V = 235, segs = [], T = 0, prev = null, topY = letterEl.getBoundingClientRect().top + window.scrollY;
     ltWords.forEach(function (w) {
       w.el.classList.remove('on', 'dry'); w.el.style.animation = ''; w.el.style.clipPath = '';
       w.x = w.p.offsetLeft + w.el.offsetLeft; w.y = w.p.offsetTop + w.el.offsetTop + w.el.offsetHeight * .72; w.w = w.el.offsetWidth;
       if (prev) {
-        var txt = prev.el.textContent, rest = /[.!?:”]$/.test(txt) ? 280 : /,$/.test(txt) ? 110 : 0, newLine = Math.abs(w.y - prev.y) > 6;
-        if (w.pi !== prev.pi) rest += 340;
-        if (rest) { segs.push({ k: 2, t0: T, d: rest, x: prev.x + prev.w + 2, y: prev.y }); T += rest; }
-        var d = newLine ? 360 : Math.max(70, (w.x - prev.x - prev.w) / (V * 1.3) * 1000);
-        segs.push({ k: newLine ? 3 : 1, t0: T, d: d, x0: prev.x + prev.w + (rest ? 2 : 0), y0: prev.y, x1: w.x, y1: w.y }); T += d;
+        var newLine = Math.abs(w.y - prev.y) > 6, d = newLine ? 320 : Math.max(55, (w.x - prev.x - prev.w) / (V * 1.3) * 1000);
+        segs.push({ k: newLine ? 3 : 1, t0: T, d: d, x0: prev.x + prev.w, y0: prev.y, x1: w.x, y1: w.y }); T += d;
       }
-      var dw = Math.max(110, w.w / V * 1000);
+      var dw = Math.max(95, w.w / V * 1000);
       segs.push({ k: 0, t0: T, d: dw, w: w }); T += dw;
       prev = w;
     });
@@ -4555,18 +4555,6 @@
     function smooth(u) { return u * u * (3 - 2 * u); }
     function step(now) {
       var dt = Math.min(.1, (now - (last || now)) / 1000); last = now;
-      /* the reader scrolled on to the signature before the pen got there: the pace never changes,
-         the rest of the text just fades in softly and the pen goes to sign */
-      if (sigWanted && !ltFollow) {
-        ltWords.forEach(function (w, k) {
-          if (w.el.classList.contains('dry')) return;
-          var part = w.el.classList.contains('on');
-          wordDone(w); w.el.style.animation = 'none';
-          if (!part && w.el.animate) w.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 800, delay: Math.min(500, k * 4), easing: 'ease-out', fill: 'backwards' });
-        });
-        endWriting(false, 1000);
-        return;
-      }
       vt += dt * 1000;
       while (si < segs.length && vt >= segs[si].t0 + segs[si].d) {
         if (segs[si].k === 0) wordDone(segs[si].w);
@@ -4587,8 +4575,6 @@
         penTo(x, g.w.y + Math.sin(x * .74) * 2 + Math.sin(x * 1.93 + 1) * .9, 0, dt, true, Math.sin(x * .74 + .9) * 3.2);
       } else if (g.k === 1) {
         penTo(g.x0 + (g.x1 - g.x0) * smooth(u), g.y0 - Math.sin(u * Math.PI) * 2.5, .35, dt, true, 0);
-      } else if (g.k === 2) {
-        penTo(g.x, g.y, .6, dt, true, 0);
       } else {
         var e = smooth(u);
         penTo(g.x0 + (g.x1 - g.x0) * e, g.y0 + (g.y1 - g.y0) * e - Math.sin(u * Math.PI) * 7, 1, dt, true, 0);
@@ -4597,54 +4583,103 @@
     }
     ltRaf = requestAnimationFrame(step);
   }
-  function showLetterNow() { if (ltBusy) { ltWords.forEach(wordDone); endWriting(true); } }
-  letterEl.addEventListener('click', showLetterNow);
+  /* only this button shows the whole letter at once; scrolling or touching the letter never changes the writing */
+  byId('lt-note').addEventListener('click', function () { if (ltBusy && ltWords) { clearTimeout(ltTimer); ltWords.forEach(wordDone); endWriting(true); } });
+  /* the pen signs once the text is written and the signature is on screen */
+  function trySign() {
+    clearTimeout(sigTimer);
+    if (sigSeen && !ltBusy && !letterEl.classList.contains('sign')) sigTimer = setTimeout(function () { if (sigSeen && !ltBusy) signLetter(); }, 450);
+  }
+  /* The signature is drawn in ink on a small canvas, a short piece at a time, the way a nib lays it down:
+     the pen slows in tight curves and runs on the straights, presses harder (a wider line) on the way down and when
+     it is slow, and goes light on the upstrokes. Between two strokes it lifts and travels. The plain SVG lines
+     underneath stay as the fallback for reduced motion */
+  var sigData = null, sigCv = null;
+  function prepSig() {
+    if (sigData) return;
+    var svgS = byId('sig-svg'), ps = Array.prototype.slice.call(svgS.querySelectorAll('.sig-p'));
+    sigCv = document.createElement('canvas'); sigCv.className = 'sig-cv';
+    svgS.parentNode.insertBefore(sigCv, svgS);
+    var STEP = 1.4, V = .47;
+    sigData = ps.map(function (pth) {
+      var len = 60, n, j, pts = [], ang = [], sp = [], wd = [], tm = [0];
+      try { len = pth.getTotalLength() || 60; } catch (e) {}
+      n = Math.max(2, Math.ceil(len / STEP));
+      for (j = 0; j <= n; j++) { var q = pth.getPointAtLength(len * j / n); pts.push([q.x, q.y]); }
+      for (j = 0; j <= n; j++) { var a = pts[Math.max(0, j - 1)], c = pts[Math.min(n, j + 1)]; ang.push(Math.atan2(c[1] - a[1], c[0] - a[0])); }
+      for (j = 0; j <= n; j++) {
+        var da = Math.abs(ang[Math.min(n, j + 2)] - ang[Math.max(0, j - 2)]); if (da > Math.PI) da = 2 * Math.PI - da;
+        var curv = da / (4 * len / n), ramp = Math.min(1, .3 + j * len / n / 14, .3 + (n - j) * len / n / 14);
+        sp.push(V * (.42 + .58 / (1 + 16 * curv)) * ramp);
+      }
+      /* even out speed, then turn it and the direction into line width */
+      function avg(arr, r) { return arr.map(function (v, k) { var t = 0, m = 0; for (var o = -r; o <= r; o++) { var z = arr[k + o]; if (z != null) { t += z; m++; } } return t / m; }); }
+      sp = avg(sp, 4);
+      for (j = 0; j <= n; j++) {
+        var down = .5 + .5 * Math.sin(ang[j]), slow = 1 - sp[j] / V, edge = Math.min(1, .5 + j * len / n / 9, .5 + (n - j) * len / n / 9);
+        wd.push((1.35 + 1.55 * down + .7 * slow) * edge);
+      }
+      wd = avg(wd, 5);
+      for (j = 1; j <= n; j++) tm.push(tm[j - 1] + (len / n) / ((sp[j - 1] + sp[j]) / 2));
+      return { len: len, n: n, pts: pts, ang: ang, wd: wd, tm: tm, d: tm[n] };
+    });
+  }
   function signLetter() {
     if (letterEl.classList.contains('sign')) return;
-    var svgS = byId('sig-svg'), ps = Array.prototype.slice.call(svgS.querySelectorAll('.sig-p')), ws = Array.prototype.slice.call(svgS.querySelectorAll('.sig-w'));
-    var lens = ps.map(function (pth) { try { return pth.getTotalLength() || 1; } catch (e) { return 60; } });
-    /* each stroke takes as long as it is long; between two strokes the pen lifts and travels */
-    var GAP = 130, at0 = [], durs = [], D = 0;
-    lens.forEach(function (l, k) { durs.push(clamp(l * 1.65, 230, 1050)); at0.push(D); D += durs[k] + (k < lens.length - 1 ? GAP : 0); });
-    D = Math.round(D);
-    letterEl.style.setProperty('--sig-end', (D / 1000 + .12).toFixed(2) + 's');
+    prepSig();
+    var svgS = byId('sig-svg'), ws = Array.prototype.slice.call(svgS.querySelectorAll('.sig-w'));
+    var GAP = 170, at0 = [], D = 0;
+    sigData.forEach(function (st, k) { at0.push(D); D += st.d + (k < sigData.length - 1 ? GAP : 0); });
+    letterEl.style.setProperty('--sig-end', (D / 1000 + .4).toFixed(2) + 's');
     letterEl.classList.add('sign');
     if (still || !window.requestAnimationFrame) { letterEl.classList.add('signed'); return; }
-    var box = letterEl.querySelector('.sig'), kx = box.clientWidth / 333, bx = box.offsetLeft, by = box.offsetTop;
-    function toPen(pt) { return [bx + (pt.x + 4) * kx, by + (pt.y + 4) * kx]; }
-    function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
-    var starts = ps.map(function (pth) { try { return toPen(pth.getPointAtLength(0)); } catch (e) { return [bx, by]; } });
-    var t0 = 0, last = 0;
+    var box = letterEl.querySelector('.sig'), kx = box.clientWidth / 333, bx = box.offsetLeft, by = box.offsetTop, dpr = Math.min(window.devicePixelRatio || 1, 3);
+    sigCv.width = Math.round(box.clientWidth * dpr); sigCv.height = Math.round(box.clientHeight * dpr);
+    var cx = sigCv.getContext('2d');
+    cx.setTransform(dpr * kx, 0, 0, dpr * kx, 4 * kx * dpr, 4 * kx * dpr);
+    cx.lineCap = 'round'; cx.lineJoin = 'round'; cx.strokeStyle = '#1f3c73';
+    letterEl.classList.add('inked');
+    function toPen(q) { return [bx + (q[0] + 4) * kx, by + (q[1] + 4) * kx]; }
+    var drawn = sigData.map(function () { return 0; }), t0 = 0, last = 0;
     penEl.classList.remove('idle'); penEl.style.opacity = '1';
     function step(now) {
-      if (!t0) t0 = now + 260;   /* a moment for the pen to reach the first stroke */
-      var dt = Math.min(.25, (now - (last || now)) / 1000), el = now - t0, drawn = false, next = starts[0]; last = now;
-      for (var i = 0; i < ps.length; i++) {
-        var f = clamp((el - at0[i]) / durs[i], 0, 1), e = ease(f), seg = Math.min(.2, 46 / lens[i]);
-        ps[i].style.strokeDashoffset = (1 - e).toFixed(4);
-        if (ws[i]) {
-          if (f > 0 && f < 1) { ws[i].style.strokeDasharray = seg.toFixed(4) + ' 2'; ws[i].style.strokeDashoffset = (seg - e).toFixed(4); ws[i].style.opacity = '1'; }
-          else ws[i].style.opacity = '0';
+      if (!t0) t0 = now + 380;   /* a moment for the pen to come down to the first stroke */
+      var dt = Math.min(.1, (now - (last || now)) / 1000), el = now - t0, onPaper = false, next = sigData[0].pts[0]; last = now;
+      for (var i = 0; i < sigData.length; i++) {
+        var st = sigData[i], lt = el - at0[i];
+        if (lt <= 0) { if (i > 0 && el > at0[i - 1] && next === sigData[0].pts[0]) next = st.pts[0]; continue; }
+        /* how far along this stroke the nib is now */
+        var j = drawn[i];
+        while (j < st.n && st.tm[j + 1] <= lt) {
+          cx.lineWidth = st.wd[j + 1] / kx;
+          cx.beginPath(); cx.moveTo(st.pts[j][0], st.pts[j][1]); cx.lineTo(st.pts[j + 1][0], st.pts[j + 1][1]); cx.stroke();
+          j++;
         }
-        if (f > 0 && f < 1) { try { var q = toPen(ps[i].getPointAtLength(e * lens[i])); penTo(q[0], q[1], 0, dt, true); drawn = true; } catch (err) {} }
-        if (f <= 0 && next === starts[0] && i > 0 && el > at0[i - 1]) next = starts[i];
+        drawn[i] = j;
+        if (j < st.n) {
+          var u = (lt - st.tm[j]) / (st.tm[j + 1] - st.tm[j]), a = st.pts[j], c = st.pts[j + 1], tip = [a[0] + (c[0] - a[0]) * u, a[1] + (c[1] - a[1]) * u], pq = toPen(tip);
+          /* the unfinished bit up to the nib is drawn on the pen's side of the line each frame by the next full piece; here only the pen moves */
+          penTo(pq[0], pq[1], 0, dt, true, Math.cos(st.ang[j]) * 4);
+          onPaper = true;
+          if (ws[i]) { var f = (j + u) / st.n, seg = Math.min(.2, 40 / st.len); ws[i].style.strokeDasharray = seg.toFixed(4) + ' 2'; ws[i].style.strokeDashoffset = (seg - f).toFixed(4); ws[i].style.opacity = '.9'; }
+        } else if (ws[i]) ws[i].style.opacity = '0';
       }
-      if (!drawn && el < D) penTo(next[0], next[1], 1, dt, false);
+      if (!onPaper && el < D) { var nq = toPen(next); penTo(nq[0], nq[1], 1, dt, false, 0); }
       if (el < D) { sigRaf = requestAnimationFrame(step); return; }
       letterEl.classList.add('signed');
       ws.forEach(function (w) { w.style.opacity = '0'; });
       /* done: the pen lifts off the paper and leaves */
       var from = penEl.style.transform;
-      if (penEl.animate) penEl.animate([{ transform: from, opacity: 1 }, { transform: 'translate(' + (pen.x + 46).toFixed(1) + 'px,' + (pen.y - 58).toFixed(1) + 'px) rotate(-24deg)', opacity: 0 }], { duration: 620, easing: 'cubic-bezier(.4,0,.2,1)' });
+      if (penEl.animate) penEl.animate([{ transform: from, opacity: 1 }, { transform: 'translate(' + (pen.x + 40).toFixed(1) + 'px,' + (pen.y - 62).toFixed(1) + 'px) rotate(-24deg)', opacity: 0 }], { duration: 700, easing: 'cubic-bezier(.4,0,.2,1)' });
       penEl.style.opacity = '0';
     }
     sigRaf = requestAnimationFrame(step);
   }
   function playLetter() {
-    letterEl.classList.remove('unfold', 'sign', 'signed', 'writing');
-    cancelAnimationFrame(sigRaf); cancelAnimationFrame(ltRaf); clearTimeout(ltTimer);
-    ltBusy = false; sigWanted = false;
-    Array.prototype.forEach.call(document.querySelectorAll('#sig-svg .sig-p'), function (pth) { pth.style.strokeDashoffset = ''; });
+    letterEl.classList.remove('unfold', 'sign', 'signed', 'writing', 'inked');
+    cancelAnimationFrame(sigRaf); cancelAnimationFrame(ltRaf); clearTimeout(ltTimer); clearTimeout(sigTimer);
+    ltBusy = false; sigSeen = false;
+    if (sigCv) sigCv.width = sigCv.width;
     Array.prototype.forEach.call(document.querySelectorAll('#sig-svg .sig-w'), function (pth) { pth.style.opacity = '0'; });
     penEl.style.opacity = '0'; penEl.classList.remove('idle');
     byId('lt-note').classList.remove('on');
@@ -4660,14 +4695,10 @@
       ltBusy = true; ltFollow = true;
     }
     if (sigIO) sigIO.disconnect();
-    function wantSig() {
-      sigWanted = true;
-      if (!ltBusy) setTimeout(signLetter, 500);   /* still writing: the pen signs as soon as it gets there */
-    }
     if ('IntersectionObserver' in window) {
-      sigIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { wantSig(); sigIO.disconnect(); } }); }, { threshold: .7 });
+      sigIO = new IntersectionObserver(function (es) { es.forEach(function (e) { sigSeen = e.isIntersecting; trySign(); }); }, { threshold: .6 });
       sigIO.observe(letterEl.querySelector('.sig'));
-    } else setTimeout(wantSig, 1200);
+    } else setTimeout(function () { sigSeen = true; trySign(); }, 1200);
   }
   /* the trophy in the middle of the tab bar: the way into the tournament (the safe) */
 /* Sejf Mikołaja — createSafe(opts) builds its own DOM (#safe) on first open. */
